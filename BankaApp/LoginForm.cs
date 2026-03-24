@@ -1,11 +1,6 @@
 ﻿using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace BankaApp
@@ -13,25 +8,23 @@ namespace BankaApp
     public partial class LoginForm : Form
     {
         string connStr = "User Id=banka;Password=1234;Data Source=localhost:1521/XE;";
+
         public LoginForm()
         {
             InitializeComponent();
-            label4.Visible = true;
+            label4.Text = "";
+            label4.Visible = false;
+            textBox2.UseSystemPasswordChar = true;
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void showbtn_Click(object sender, EventArgs e)
         {
+            textBox2.UseSystemPasswordChar = !textBox2.UseSystemPasswordChar;
 
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
+            if (textBox2.UseSystemPasswordChar)
+                showbtn.Text = "Show";
+            else
+                showbtn.Text = "Hide";
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -43,20 +36,38 @@ namespace BankaApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+            string loginValue = textBox1.Text.Trim();
+            string passwordValue = textBox2.Text.Trim();
+
+            label4.Text = "";
+            label4.Visible = false;
+
+            if (string.IsNullOrWhiteSpace(loginValue) || string.IsNullOrWhiteSpace(passwordValue))
+            {
+                label4.ForeColor = Color.Red;
+                label4.Text = "Please enter username/email and password.";
+                label4.Visible = true;
+                return;
+            }
+
             try
             {
-                label4.Visible = false;
-
                 using (OracleConnection conn = new OracleConnection(connStr))
                 {
                     conn.Open();
 
-                    string query = "SELECT COUNT(*) FROM App_User WHERE Username = :username AND User_Password = :password";
+                    string query = @"
+                        SELECT COUNT(*)
+                        FROM App_User
+                        WHERE (Username = :login1 OR Email = :login2)
+                          AND User_Password = :password";
 
                     using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
-                        cmd.Parameters.Add(":username", textBox1.Text.Trim());
-                        cmd.Parameters.Add(":password", textBox2.Text.Trim());
+                        cmd.BindByName = true;
+                        cmd.Parameters.Add(":login1", OracleDbType.Varchar2).Value = loginValue;
+                        cmd.Parameters.Add(":login2", OracleDbType.Varchar2).Value = loginValue;
+                        cmd.Parameters.Add(":password", OracleDbType.Varchar2).Value = passwordValue;
 
                         int count = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -69,27 +80,29 @@ namespace BankaApp
                         else
                         {
                             label4.ForeColor = Color.Red;
-                            label4.Text = "Грешно потребителско име или парола.";
+                            label4.Text = "Invalid username/email or password.";
                             label4.Visible = true;
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (OracleException)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show("Database connection error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unexpected error occurred.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
+        private void pictureBox1_Click(object sender, EventArgs e) { }
+        private void label1_Click(object sender, EventArgs e) { }
+        private void label2_Click(object sender, EventArgs e) { }
+        private void textBox1_TextChanged(object sender, EventArgs e) { }
+        private void textBox2_TextChanged(object sender, EventArgs e) { }
+        private void pictureBox1_Click_1(object sender, EventArgs e) { }
 
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }
-
