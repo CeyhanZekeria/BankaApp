@@ -20,11 +20,7 @@ namespace BankaApp
         private void showbtn_Click(object sender, EventArgs e)
         {
             textBox2.UseSystemPasswordChar = !textBox2.UseSystemPasswordChar;
-
-            if (textBox2.UseSystemPasswordChar)
-                showbtn.Text = "Show";
-            else
-                showbtn.Text = "Hide";
+            showbtn.Text = textBox2.UseSystemPasswordChar ? "Show" : "Hide";
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -57,42 +53,45 @@ namespace BankaApp
                     conn.Open();
 
                     string query = @"
-                        SELECT COUNT(*)
-                        FROM App_User
-                        WHERE (Username = :login1 OR Email = :login2)
-                          AND User_Password = :password";
+                        SELECT ID_USER, USERNAME
+                        FROM APP_USER
+                        WHERE (USERNAME = :loginValue OR EMAIL = :loginValue)
+                          AND USER_PASSWORD = :password";
 
                     using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
                         cmd.BindByName = true;
-                        cmd.Parameters.Add(":login1", OracleDbType.Varchar2).Value = loginValue;
-                        cmd.Parameters.Add(":login2", OracleDbType.Varchar2).Value = loginValue;
+                        cmd.Parameters.Add(":loginValue", OracleDbType.Varchar2).Value = loginValue;
                         cmd.Parameters.Add(":password", OracleDbType.Varchar2).Value = passwordValue;
 
-                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                int userId = Convert.ToInt32(reader["ID_USER"]);
+                                string username = reader["USERNAME"].ToString();
 
-                        if (count > 0)
-                        {
-                            mainForn mainForm = new mainForn();
-                            mainForm.Show();
-                            this.Hide();
-                        }
-                        else
-                        {
-                            label4.ForeColor = Color.Red;
-                            label4.Text = "Invalid username/email or password.";
-                            label4.Visible = true;
+                                mainForn mainForm = new mainForn(userId, username);
+                                mainForm.Show();
+                                this.Hide();
+                            }
+                            else
+                            {
+                                label4.ForeColor = Color.Red;
+                                label4.Text = "Invalid username/email or password.";
+                                label4.Visible = true;
+                            }
                         }
                     }
                 }
             }
-            catch (OracleException)
+            catch (OracleException ex)
             {
-                MessageBox.Show("Database connection error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Database error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Unexpected error occurred.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unexpected error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -102,7 +101,5 @@ namespace BankaApp
         private void textBox1_TextChanged(object sender, EventArgs e) { }
         private void textBox2_TextChanged(object sender, EventArgs e) { }
         private void pictureBox1_Click_1(object sender, EventArgs e) { }
-
-       
     }
 }

@@ -39,7 +39,6 @@ namespace BankaApp
             this.label3 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.showbtn = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
@@ -145,17 +144,6 @@ namespace BankaApp
             this.label4.Size = new System.Drawing.Size(314, 23);
             this.label4.TabIndex = 6;
             // 
-            // label1
-            // 
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(72, 576);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(341, 128);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Welcome Back!";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
             // showbtn
             // 
             this.showbtn.BackColor = System.Drawing.SystemColors.Window;
@@ -190,7 +178,6 @@ namespace BankaApp
             this.ClientSize = new System.Drawing.Size(1344, 747);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.showbtn);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label3);
@@ -220,7 +207,6 @@ namespace BankaApp
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button showbtn;
         private System.Windows.Forms.Label label5;
     }

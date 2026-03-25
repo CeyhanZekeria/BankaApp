@@ -74,9 +74,9 @@ namespace BankaApp
             // 
             this.button1.BackColor = System.Drawing.Color.Lavender;
             this.button1.Font = new System.Drawing.Font("Arial Narrow", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button1.Location = new System.Drawing.Point(261, 471);
+            this.button1.Location = new System.Drawing.Point(166, 445);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(175, 48);
+            this.button1.Size = new System.Drawing.Size(133, 39);
             this.button1.TabIndex = 8;
             this.button1.Text = "Cancel";
             this.button1.UseVisualStyleBackColor = false;
@@ -84,12 +84,12 @@ namespace BankaApp
             // 
             // crtAccount
             // 
-            this.crtAccount.BackColor = System.Drawing.Color.SpringGreen;
+            this.crtAccount.BackColor = System.Drawing.SystemColors.Control;
             this.crtAccount.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.crtAccount.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.crtAccount.Location = new System.Drawing.Point(191, 404);
+            this.crtAccount.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.crtAccount.Location = new System.Drawing.Point(323, 438);
             this.crtAccount.Name = "crtAccount";
-            this.crtAccount.Size = new System.Drawing.Size(283, 48);
+            this.crtAccount.Size = new System.Drawing.Size(283, 51);
             this.crtAccount.TabIndex = 7;
             this.crtAccount.Text = "CREATE ACCOUNT";
             this.crtAccount.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -143,7 +143,7 @@ namespace BankaApp
             // 
             // EGN
             // 
-            this.EGN.BackColor = System.Drawing.Color.Aquamarine;
+            this.EGN.BackColor = System.Drawing.SystemColors.Control;
             this.EGN.Location = new System.Drawing.Point(20, 303);
             this.EGN.Multiline = true;
             this.EGN.Name = "EGN";
@@ -154,7 +154,7 @@ namespace BankaApp
             // 
             // adress
             // 
-            this.adress.BackColor = System.Drawing.Color.Aquamarine;
+            this.adress.BackColor = System.Drawing.SystemColors.Control;
             this.adress.Location = new System.Drawing.Point(250, 89);
             this.adress.Multiline = true;
             this.adress.Name = "adress";
@@ -218,6 +218,7 @@ namespace BankaApp
             // radioBtnWoman
             // 
             this.radioBtnWoman.AutoSize = true;
+            this.radioBtnWoman.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.radioBtnWoman.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.radioBtnWoman.Location = new System.Drawing.Point(478, 216);
             this.radioBtnWoman.Name = "radioBtnWoman";
@@ -225,7 +226,7 @@ namespace BankaApp
             this.radioBtnWoman.TabIndex = 7;
             this.radioBtnWoman.TabStop = true;
             this.radioBtnWoman.Text = "Woman";
-            this.radioBtnWoman.UseVisualStyleBackColor = true;
+            this.radioBtnWoman.UseVisualStyleBackColor = false;
             this.radioBtnWoman.CheckedChanged += new System.EventHandler(this.radioBtnWoman_CheckedChanged);
             // 
             // radioBtnMan
@@ -253,7 +254,7 @@ namespace BankaApp
             // 
             // phoneNum
             // 
-            this.phoneNum.BackColor = System.Drawing.Color.Aquamarine;
+            this.phoneNum.BackColor = System.Drawing.SystemColors.Control;
             this.phoneNum.Location = new System.Drawing.Point(20, 150);
             this.phoneNum.Multiline = true;
             this.phoneNum.Name = "phoneNum";
@@ -274,7 +275,7 @@ namespace BankaApp
             // 
             // username
             // 
-            this.username.BackColor = System.Drawing.Color.Aquamarine;
+            this.username.BackColor = System.Drawing.SystemColors.Control;
             this.username.Location = new System.Drawing.Point(20, 39);
             this.username.Multiline = true;
             this.username.Name = "username";
@@ -298,7 +299,7 @@ namespace BankaApp
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.BackColor = System.Drawing.SystemColors.Highlight;
+            this.panel2.BackColor = System.Drawing.Color.RoyalBlue;
             this.panel2.ForeColor = System.Drawing.SystemColors.Highlight;
             this.panel2.Location = new System.Drawing.Point(625, 0);
             this.panel2.Name = "panel2";
