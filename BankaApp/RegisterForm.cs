@@ -23,6 +23,8 @@ namespace BankaApp
 
             SetRoundedPanel(panel1, 30);
             panel1.Resize += panel1_Resize;
+
+
         }
 
         private void SetRoundedPanel(Panel panel, int radius)
@@ -58,6 +60,16 @@ namespace BankaApp
             string accountPart = rnd.Next(10000000, 99999999).ToString();
 
             return countryCode + checkDigits + bankCode + branchCode + accountPart;
+        }
+
+        private string GenerateRandomCardNumber()
+        {
+            return $"{rnd.Next(4000, 5000)} {rnd.Next(1000, 10000)} {rnd.Next(1000, 10000)} {rnd.Next(1000, 10000)}";
+        }
+
+        private string GenerateValidThru()
+        {
+            return DateTime.Now.AddYears(10).ToString("MM/yy");
         }
 
         private void LoadCountries()
@@ -274,12 +286,13 @@ namespace BankaApp
                                 label4.Text = "This EGN is already registered.";
                                 return;
                             }
-
+                            string generatedCardNumber = GenerateRandomCardNumber();
+                            string generatedValidThru = GenerateValidThru();
                             string appUserQuery = @"
-                                 INSERT INTO App_User
-                                 (ID_User, Username, User_Password, Email, User_Role, Phone_number, Gender, Birth_Year, Country)
-                                 VALUES
-                                 (SEQ_APP_USER.NEXTVAL, :username, :password, :email, :role, :phone, :gender, :birthyear, :country)";
+                                                          INSERT INTO App_User
+                               (ID_User, Username, User_Password, Email, User_Role, Phone_number, Gender, Birth_Year, Country, Card_Number, Valid_Thru)
+                                VALUES
+                               (SEQ_APP_USER.NEXTVAL, :username, :password, :email, :role, :phone, :gender, :birthyear, :country, :cardNumber, :validThru)";
 
                             using (OracleCommand cmdUser = new OracleCommand(appUserQuery, conn))
                             {
@@ -294,6 +307,8 @@ namespace BankaApp
                                 cmdUser.Parameters.Add(":gender", OracleDbType.Varchar2).Value = genderValue;
                                 cmdUser.Parameters.Add(":birthyear", OracleDbType.Int32).Value = birthYear;
                                 cmdUser.Parameters.Add(":country", OracleDbType.Varchar2).Value = countryValue;
+                                cmdUser.Parameters.Add(":cardNumber", OracleDbType.Varchar2).Value = generatedCardNumber;
+                                cmdUser.Parameters.Add(":validThru", OracleDbType.Varchar2).Value = generatedValidThru;
 
                                 cmdUser.ExecuteNonQuery();
                             }

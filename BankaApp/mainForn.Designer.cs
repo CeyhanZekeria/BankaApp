@@ -30,11 +30,14 @@ namespace BankaApp
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.listAccounts = new System.Windows.Forms.ListBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.AddMoney = new System.Windows.Forms.Button();
+            this.cvvShow = new System.Windows.Forms.Button();
             this.panel15 = new System.Windows.Forms.Panel();
             this.panel14 = new System.Windows.Forms.Panel();
             this.reset = new System.Windows.Forms.Button();
             this.filter = new System.Windows.Forms.Button();
-            this.cmbAccount = new System.Windows.Forms.ComboBox();
             this.cmbType = new System.Windows.Forms.ComboBox();
             this.dtpTo = new System.Windows.Forms.DateTimePicker();
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
@@ -45,9 +48,9 @@ namespace BankaApp
             this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
             this.cardNum = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.valithru = new System.Windows.Forms.Label();
             this.cardHldrName = new System.Windows.Forms.Label();
             this.validThru = new System.Windows.Forms.Label();
             this.cardHolder = new System.Windows.Forms.Label();
@@ -93,6 +96,10 @@ namespace BankaApp
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.panel1.Controls.Add(this.listAccounts);
+            this.panel1.Controls.Add(this.button3);
+            this.panel1.Controls.Add(this.AddMoney);
+            this.panel1.Controls.Add(this.cvvShow);
             this.panel1.Controls.Add(this.panel15);
             this.panel1.Controls.Add(this.panel14);
             this.panel1.Controls.Add(this.label15);
@@ -109,12 +116,51 @@ namespace BankaApp
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // listAccounts
+            // 
+            this.listAccounts.FormattingEnabled = true;
+            this.listAccounts.ItemHeight = 20;
+            this.listAccounts.Location = new System.Drawing.Point(579, 374);
+            this.listAccounts.Name = "listAccounts";
+            this.listAccounts.Size = new System.Drawing.Size(180, 24);
+            this.listAccounts.TabIndex = 11;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(405, 374);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(146, 41);
+            this.button3.TabIndex = 10;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // AddMoney
+            // 
+            this.AddMoney.Location = new System.Drawing.Point(223, 374);
+            this.AddMoney.Name = "AddMoney";
+            this.AddMoney.Size = new System.Drawing.Size(142, 41);
+            this.AddMoney.TabIndex = 9;
+            this.AddMoney.Text = "button3";
+            this.AddMoney.UseVisualStyleBackColor = true;
+            // 
+            // cvvShow
+            // 
+            this.cvvShow.Location = new System.Drawing.Point(28, 374);
+            this.cvvShow.Name = "cvvShow";
+            this.cvvShow.Size = new System.Drawing.Size(150, 41);
+            this.cvvShow.TabIndex = 8;
+            this.cvvShow.Text = "button3";
+            this.cvvShow.UseVisualStyleBackColor = true;
+            // 
             // panel15
             // 
+            this.panel15.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel15.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.panel15.Location = new System.Drawing.Point(6, 343);
+            this.panel15.Location = new System.Drawing.Point(-1, 343);
             this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(800, 10);
+            this.panel15.Size = new System.Drawing.Size(814, 10);
             this.panel15.TabIndex = 7;
             this.panel15.Paint += new System.Windows.Forms.PaintEventHandler(this.panel15_Paint);
             // 
@@ -123,7 +169,6 @@ namespace BankaApp
             this.panel14.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel14.Controls.Add(this.reset);
             this.panel14.Controls.Add(this.filter);
-            this.panel14.Controls.Add(this.cmbAccount);
             this.panel14.Controls.Add(this.cmbType);
             this.panel14.Controls.Add(this.dtpTo);
             this.panel14.Controls.Add(this.dtpFrom);
@@ -154,32 +199,24 @@ namespace BankaApp
             this.filter.Text = "Filter";
             this.filter.UseVisualStyleBackColor = false;
             // 
-            // cmbAccount
-            // 
-            this.cmbAccount.FormattingEnabled = true;
-            this.cmbAccount.Location = new System.Drawing.Point(450, 10);
-            this.cmbAccount.Name = "cmbAccount";
-            this.cmbAccount.Size = new System.Drawing.Size(137, 28);
-            this.cmbAccount.TabIndex = 11;
-            // 
             // cmbType
             // 
             this.cmbType.FormattingEnabled = true;
-            this.cmbType.Location = new System.Drawing.Point(297, 10);
+            this.cmbType.Location = new System.Drawing.Point(390, 9);
             this.cmbType.Name = "cmbType";
             this.cmbType.Size = new System.Drawing.Size(133, 28);
             this.cmbType.TabIndex = 10;
             // 
             // dtpTo
             // 
-            this.dtpTo.Location = new System.Drawing.Point(164, 10);
+            this.dtpTo.Location = new System.Drawing.Point(258, 8);
             this.dtpTo.Name = "dtpTo";
             this.dtpTo.Size = new System.Drawing.Size(92, 27);
             this.dtpTo.TabIndex = 9;
             // 
             // dtpFrom
             // 
-            this.dtpFrom.Location = new System.Drawing.Point(40, 11);
+            this.dtpFrom.Location = new System.Drawing.Point(105, 7);
             this.dtpFrom.Name = "dtpFrom";
             this.dtpFrom.Size = new System.Drawing.Size(97, 27);
             this.dtpFrom.TabIndex = 8;
@@ -197,11 +234,11 @@ namespace BankaApp
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label15.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label15.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label15.Location = new System.Drawing.Point(191, 20);
+            this.label15.Location = new System.Drawing.Point(40, 58);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(217, 38);
+            this.label15.Size = new System.Drawing.Size(133, 23);
             this.label15.TabIndex = 6;
             this.label15.Text = "Welcome Back!";
             // 
@@ -230,7 +267,7 @@ namespace BankaApp
             // panel12
             // 
             this.panel12.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.panel12.Location = new System.Drawing.Point(431, 115);
+            this.panel12.Location = new System.Drawing.Point(431, 91);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(328, 222);
             this.panel12.TabIndex = 3;
@@ -249,9 +286,9 @@ namespace BankaApp
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.panel7.Controls.Add(this.label11);
             this.panel7.Controls.Add(this.cardNum);
             this.panel7.Controls.Add(this.label12);
-            this.panel7.Controls.Add(this.valithru);
             this.panel7.Controls.Add(this.cardHldrName);
             this.panel7.Controls.Add(this.validThru);
             this.panel7.Controls.Add(this.cardHolder);
@@ -262,16 +299,26 @@ namespace BankaApp
             this.panel7.TabIndex = 1;
             this.panel7.Paint += new System.Windows.Forms.PaintEventHandler(this.panel7_Paint);
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label11.Location = new System.Drawing.Point(15, 134);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(58, 20);
+            this.label11.TabIndex = 7;
+            this.label11.Text = "label11";
+            // 
             // cardNum
             // 
             this.cardNum.AutoSize = true;
             this.cardNum.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.cardNum.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.cardNum.Location = new System.Drawing.Point(27, 64);
+            this.cardNum.Location = new System.Drawing.Point(22, 60);
             this.cardNum.Name = "cardNum";
-            this.cardNum.Size = new System.Drawing.Size(85, 25);
+            this.cardNum.Size = new System.Drawing.Size(122, 25);
             this.cardNum.TabIndex = 6;
-            this.cardNum.Text = "cardnum";
+            this.cardNum.Text = "00000000000";
             this.cardNum.Click += new System.EventHandler(this.cardNum_Click);
             // 
             // label12
@@ -279,32 +326,21 @@ namespace BankaApp
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Segoe UI", 13.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label12.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label12.Location = new System.Drawing.Point(199, 10);
+            this.label12.Location = new System.Drawing.Point(193, 11);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(72, 30);
+            this.label12.Size = new System.Drawing.Size(78, 30);
             this.label12.TabIndex = 5;
-            this.label12.Text = "Mpay";
-            // 
-            // valithru
-            // 
-            this.valithru.AutoSize = true;
-            this.valithru.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.valithru.Location = new System.Drawing.Point(27, 129);
-            this.valithru.Name = "valithru";
-            this.valithru.Size = new System.Drawing.Size(17, 20);
-            this.valithru.TabIndex = 4;
-            this.valithru.Text = "n";
-            this.valithru.Click += new System.EventHandler(this.ValidThru);
+            this.label12.Text = "Mpay ";
             // 
             // cardHldrName
             // 
             this.cardHldrName.AutoSize = true;
             this.cardHldrName.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.cardHldrName.Location = new System.Drawing.Point(160, 129);
+            this.cardHldrName.Location = new System.Drawing.Point(121, 134);
             this.cardHldrName.Name = "cardHldrName";
-            this.cardHldrName.Size = new System.Drawing.Size(17, 20);
+            this.cardHldrName.Size = new System.Drawing.Size(46, 20);
             this.cardHldrName.TabIndex = 3;
-            this.cardHldrName.Text = "n";
+            this.cardHldrName.Text = "name";
             this.cardHldrName.Click += new System.EventHandler(this.cardHldrName_Click);
             // 
             // validThru
@@ -312,7 +348,7 @@ namespace BankaApp
             this.validThru.AutoSize = true;
             this.validThru.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.validThru.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.validThru.Location = new System.Drawing.Point(27, 111);
+            this.validThru.Location = new System.Drawing.Point(15, 112);
             this.validThru.Name = "validThru";
             this.validThru.Size = new System.Drawing.Size(85, 17);
             this.validThru.TabIndex = 2;
@@ -323,7 +359,7 @@ namespace BankaApp
             this.cardHolder.AutoSize = true;
             this.cardHolder.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.cardHolder.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.cardHolder.Location = new System.Drawing.Point(160, 111);
+            this.cardHolder.Location = new System.Drawing.Point(143, 112);
             this.cardHolder.Name = "cardHolder";
             this.cardHolder.Size = new System.Drawing.Size(99, 17);
             this.cardHolder.TabIndex = 1;
@@ -717,11 +753,14 @@ namespace BankaApp
         private System.Windows.Forms.DataGridView dgvTransactions;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.ComboBox cmbAccount;
         private System.Windows.Forms.ComboBox cmbType;
         private System.Windows.Forms.DateTimePicker dtpTo;
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.Button reset;
         private System.Windows.Forms.Button filter;
+        private System.Windows.Forms.ListBox listAccounts;
+        private System.Windows.Forms.Button AddMoney;
+        private System.Windows.Forms.Button cvvShow;
+        private System.Windows.Forms.Label label11;
     }
 }

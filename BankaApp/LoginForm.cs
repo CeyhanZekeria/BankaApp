@@ -1,4 +1,5 @@
 ﻿using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -15,6 +16,7 @@ namespace BankaApp
             label4.Text = "";
             label4.Visible = false;
             textBox2.UseSystemPasswordChar = true;
+
         }
 
         private void showbtn_Click(object sender, EventArgs e)
@@ -53,10 +55,14 @@ namespace BankaApp
                     conn.Open();
 
                     string query = @"
-                        SELECT ID_USER, USERNAME
-                        FROM APP_USER
-                        WHERE (USERNAME = :loginValue OR EMAIL = :loginValue)
-                          AND USER_PASSWORD = :password";
+                SELECT au.ID_USER,
+                       au.USERNAME,
+                       au.USER_ROLE,
+                       c.CLIENT_ID
+                FROM APP_USER au
+                LEFT JOIN CLIENT c ON c.EMAIL = au.EMAIL
+                WHERE (au.USERNAME = :loginValue OR au.EMAIL = :loginValue)
+                  AND au.USER_PASSWORD = :password";
 
                     using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
@@ -70,8 +76,15 @@ namespace BankaApp
                             {
                                 int userId = Convert.ToInt32(reader["ID_USER"]);
                                 string username = reader["USERNAME"].ToString();
+                                string userRole = reader["USER_ROLE"].ToString().Trim();
 
-                                mainForn mainForm = new mainForn(userId, username);
+                                int clientId = 0;
+                                if (reader["CLIENT_ID"] != DBNull.Value)
+                                {
+                                    clientId = Convert.ToInt32(reader["CLIENT_ID"]);
+                                }
+                                clientId = userId;
+                                mainForn mainForm = new mainForn(clientId, userId, username);
                                 mainForm.Show();
                                 this.Hide();
                             }
