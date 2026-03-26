@@ -149,11 +149,11 @@ namespace BankaApp
             this.showbtn.BackColor = System.Drawing.SystemColors.Window;
             this.showbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.showbtn.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.showbtn.Location = new System.Drawing.Point(355, 355);
+            this.showbtn.Location = new System.Drawing.Point(355, 354);
             this.showbtn.Name = "showbtn";
-            this.showbtn.Size = new System.Drawing.Size(58, 25);
+            this.showbtn.Size = new System.Drawing.Size(36, 25);
             this.showbtn.TabIndex = 8;
-            this.showbtn.Text = "show";
+            this.showbtn.Text = "👁️";
             this.showbtn.UseVisualStyleBackColor = false;
             this.showbtn.Click += new System.EventHandler(this.showbtn_Click);
             // 

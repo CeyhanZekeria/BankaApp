@@ -22,7 +22,7 @@ namespace BankaApp
         private void showbtn_Click(object sender, EventArgs e)
         {
             textBox2.UseSystemPasswordChar = !textBox2.UseSystemPasswordChar;
-            showbtn.Text = textBox2.UseSystemPasswordChar ? "Show" : "Hide";
+            showbtn.Text = textBox2.UseSystemPasswordChar ? "👁" : "🚫";
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

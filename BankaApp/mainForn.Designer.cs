@@ -36,6 +36,9 @@ namespace BankaApp
             this.cvvShow = new System.Windows.Forms.Button();
             this.panel15 = new System.Windows.Forms.Panel();
             this.panel14 = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.reset = new System.Windows.Forms.Button();
             this.filter = new System.Windows.Forms.Button();
             this.cmbType = new System.Windows.Forms.ComboBox();
@@ -64,7 +67,6 @@ namespace BankaApp
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.profl = new System.Windows.Forms.Button();
-            this.homeBtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.panel8 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
@@ -78,6 +80,8 @@ namespace BankaApp
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.secrty = new System.Windows.Forms.Button();
+            this.homeBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTransactions)).BeginInit();
@@ -120,37 +124,45 @@ namespace BankaApp
             // 
             this.listAccounts.FormattingEnabled = true;
             this.listAccounts.ItemHeight = 20;
-            this.listAccounts.Location = new System.Drawing.Point(579, 374);
+            this.listAccounts.Location = new System.Drawing.Point(579, 379);
             this.listAccounts.Name = "listAccounts";
             this.listAccounts.Size = new System.Drawing.Size(180, 24);
             this.listAccounts.TabIndex = 11;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(405, 374);
+            this.button3.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.button3.Cursor = System.Windows.Forms.Cursors.Default;
+            this.button3.ForeColor = System.Drawing.Color.Green;
+            this.button3.Location = new System.Drawing.Point(392, 379);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(146, 41);
+            this.button3.Size = new System.Drawing.Size(146, 36);
             this.button3.TabIndex = 10;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Text = "Send money $";
+            this.button3.UseVisualStyleBackColor = false;
             // 
             // AddMoney
             // 
-            this.AddMoney.Location = new System.Drawing.Point(223, 374);
+            this.AddMoney.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.AddMoney.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.AddMoney.Location = new System.Drawing.Point(217, 379);
             this.AddMoney.Name = "AddMoney";
-            this.AddMoney.Size = new System.Drawing.Size(142, 41);
+            this.AddMoney.Size = new System.Drawing.Size(142, 36);
             this.AddMoney.TabIndex = 9;
-            this.AddMoney.Text = "button3";
-            this.AddMoney.UseVisualStyleBackColor = true;
+            this.AddMoney.Text = "Add money ➕";
+            this.AddMoney.UseVisualStyleBackColor = false;
             // 
             // cvvShow
             // 
-            this.cvvShow.Location = new System.Drawing.Point(28, 374);
+            this.cvvShow.Font = new System.Drawing.Font("Segoe UI Semibold", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.cvvShow.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.cvvShow.Location = new System.Drawing.Point(40, 383);
             this.cvvShow.Name = "cvvShow";
-            this.cvvShow.Size = new System.Drawing.Size(150, 41);
+            this.cvvShow.Size = new System.Drawing.Size(125, 29);
             this.cvvShow.TabIndex = 8;
-            this.cvvShow.Text = "button3";
+            this.cvvShow.Text = "Show CVV 👁️";
             this.cvvShow.UseVisualStyleBackColor = true;
+            this.cvvShow.Click += new System.EventHandler(this.cvvShow_Click_1);
             // 
             // panel15
             // 
@@ -167,6 +179,9 @@ namespace BankaApp
             // panel14
             // 
             this.panel14.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.panel14.Controls.Add(this.label18);
+            this.panel14.Controls.Add(this.label17);
+            this.panel14.Controls.Add(this.label16);
             this.panel14.Controls.Add(this.reset);
             this.panel14.Controls.Add(this.filter);
             this.panel14.Controls.Add(this.cmbType);
@@ -179,22 +194,50 @@ namespace BankaApp
             this.panel14.TabIndex = 0;
             this.panel14.Paint += new System.Windows.Forms.PaintEventHandler(this.panel14_Paint);
             // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(367, 12);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(43, 20);
+            this.label18.TabIndex = 16;
+            this.label18.Text = "Type:";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(193, 14);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(28, 20);
+            this.label17.TabIndex = 15;
+            this.label17.Text = "To:";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(13, 14);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(46, 20);
+            this.label16.TabIndex = 14;
+            this.label16.Text = "From:";
+            // 
             // reset
             // 
             this.reset.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.reset.Location = new System.Drawing.Point(676, 6);
+            this.reset.Location = new System.Drawing.Point(693, 7);
             this.reset.Name = "reset";
-            this.reset.Size = new System.Drawing.Size(94, 29);
+            this.reset.Size = new System.Drawing.Size(77, 27);
             this.reset.TabIndex = 13;
             this.reset.Text = "reset";
+            this.reset.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.reset.UseVisualStyleBackColor = false;
             // 
             // filter
             // 
             this.filter.BackColor = System.Drawing.Color.SpringGreen;
-            this.filter.Location = new System.Drawing.Point(593, 8);
+            this.filter.Location = new System.Drawing.Point(601, 8);
             this.filter.Name = "filter";
-            this.filter.Size = new System.Drawing.Size(77, 28);
+            this.filter.Size = new System.Drawing.Size(77, 27);
             this.filter.TabIndex = 12;
             this.filter.Text = "Filter";
             this.filter.UseVisualStyleBackColor = false;
@@ -202,21 +245,21 @@ namespace BankaApp
             // cmbType
             // 
             this.cmbType.FormattingEnabled = true;
-            this.cmbType.Location = new System.Drawing.Point(390, 9);
+            this.cmbType.Location = new System.Drawing.Point(416, 8);
             this.cmbType.Name = "cmbType";
             this.cmbType.Size = new System.Drawing.Size(133, 28);
             this.cmbType.TabIndex = 10;
             // 
             // dtpTo
             // 
-            this.dtpTo.Location = new System.Drawing.Point(258, 8);
+            this.dtpTo.Location = new System.Drawing.Point(240, 8);
             this.dtpTo.Name = "dtpTo";
             this.dtpTo.Size = new System.Drawing.Size(92, 27);
             this.dtpTo.TabIndex = 9;
             // 
             // dtpFrom
             // 
-            this.dtpFrom.Location = new System.Drawing.Point(105, 7);
+            this.dtpFrom.Location = new System.Drawing.Point(72, 9);
             this.dtpFrom.Name = "dtpFrom";
             this.dtpFrom.Size = new System.Drawing.Size(97, 27);
             this.dtpFrom.TabIndex = 8;
@@ -420,10 +463,11 @@ namespace BankaApp
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel6.Controls.Add(this.homeBtn);
+            this.panel6.Controls.Add(this.secrty);
             this.panel6.Controls.Add(this.panel13);
             this.panel6.Controls.Add(this.button1);
             this.panel6.Controls.Add(this.profl);
-            this.panel6.Controls.Add(this.homeBtn);
             this.panel6.Controls.Add(this.label6);
             this.panel6.Controls.Add(this.panel8);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Left;
@@ -476,34 +520,25 @@ namespace BankaApp
             // 
             this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button1.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.button1.Location = new System.Drawing.Point(11, 293);
+            this.button1.Location = new System.Drawing.Point(10, 341);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(200, 55);
             this.button1.TabIndex = 14;
             this.button1.Text = "⚙️ SETTINGS";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // profl
             // 
             this.profl.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.profl.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.profl.Location = new System.Drawing.Point(11, 232);
+            this.profl.Location = new System.Drawing.Point(10, 280);
             this.profl.Name = "profl";
             this.profl.Size = new System.Drawing.Size(200, 55);
             this.profl.TabIndex = 13;
             this.profl.Text = "👤 PROFILE";
             this.profl.UseVisualStyleBackColor = true;
-            // 
-            // homeBtn
-            // 
-            this.homeBtn.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.homeBtn.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.homeBtn.Location = new System.Drawing.Point(9, 170);
-            this.homeBtn.Name = "homeBtn";
-            this.homeBtn.Size = new System.Drawing.Size(202, 56);
-            this.homeBtn.TabIndex = 12;
-            this.homeBtn.Text = "🏠 HOME";
-            this.homeBtn.UseVisualStyleBackColor = true;
+            this.profl.Click += new System.EventHandler(this.profl_Click);
             // 
             // label6
             // 
@@ -677,6 +712,30 @@ namespace BankaApp
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
+            // secrty
+            // 
+            this.secrty.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.secrty.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.secrty.Location = new System.Drawing.Point(11, 219);
+            this.secrty.Name = "secrty";
+            this.secrty.Size = new System.Drawing.Size(200, 55);
+            this.secrty.TabIndex = 17;
+            this.secrty.Text = "🪪 Security";
+            this.secrty.UseVisualStyleBackColor = true;
+            this.secrty.Click += new System.EventHandler(this.secrty_Click);
+            // 
+            // homeBtn
+            // 
+            this.homeBtn.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.homeBtn.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.homeBtn.Location = new System.Drawing.Point(9, 160);
+            this.homeBtn.Name = "homeBtn";
+            this.homeBtn.Size = new System.Drawing.Size(202, 56);
+            this.homeBtn.TabIndex = 18;
+            this.homeBtn.Text = "🏠 HOME";
+            this.homeBtn.UseVisualStyleBackColor = true;
+            this.homeBtn.Click += new System.EventHandler(this.homeBtn_Click);
+            // 
             // mainForn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -691,6 +750,7 @@ namespace BankaApp
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel14.ResumeLayout(false);
+            this.panel14.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTransactions)).EndInit();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
@@ -739,7 +799,6 @@ namespace BankaApp
         private System.Windows.Forms.Label cardNum;
         private System.Windows.Forms.Panel panel12;
         private System.Windows.Forms.Button profl;
-        private System.Windows.Forms.Button homeBtn;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label usrName;
@@ -762,5 +821,10 @@ namespace BankaApp
         private System.Windows.Forms.Button AddMoney;
         private System.Windows.Forms.Button cvvShow;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button secrty;
+        private System.Windows.Forms.Button homeBtn;
     }
 }

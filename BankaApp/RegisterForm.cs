@@ -61,6 +61,11 @@ namespace BankaApp
 
             return countryCode + checkDigits + bankCode + branchCode + accountPart;
         }
+        private string GenerateRandomCVV()
+        {
+            Random rnd = new Random();
+            return rnd.Next(0, 1000).ToString("D3");
+        }
 
         private string GenerateRandomCardNumber()
         {
@@ -184,7 +189,8 @@ namespace BankaApp
             string emailValue = email.Text.Trim();
             string phoneValue = phoneNum.Text.Trim();
             string countryValue = cmbCountry.SelectedItem != null ? cmbCountry.SelectedItem.ToString() : "";
-            string genderValue = "";
+            string genderValue = ""; 
+            string generatedCVV = GenerateRandomCVV();
 
             int birthYear;
             int streetIdInt;
@@ -290,9 +296,9 @@ namespace BankaApp
                             string generatedValidThru = GenerateValidThru();
                             string appUserQuery = @"
                                                           INSERT INTO App_User
-                               (ID_User, Username, User_Password, Email, User_Role, Phone_number, Gender, Birth_Year, Country, Card_Number, Valid_Thru)
+                               (ID_User, Username, User_Password, Email, User_Role, Phone_number, Gender, Birth_Year, Country, Card_Number, Valid_Thru,CVV)
                                 VALUES
-                               (SEQ_APP_USER.NEXTVAL, :username, :password, :email, :role, :phone, :gender, :birthyear, :country, :cardNumber, :validThru)";
+                               (SEQ_APP_USER.NEXTVAL, :username, :password, :email, :role, :phone, :gender, :birthyear, :country, :cardNumber, :validThru,cvv)";
 
                             using (OracleCommand cmdUser = new OracleCommand(appUserQuery, conn))
                             {
@@ -309,6 +315,7 @@ namespace BankaApp
                                 cmdUser.Parameters.Add(":country", OracleDbType.Varchar2).Value = countryValue;
                                 cmdUser.Parameters.Add(":cardNumber", OracleDbType.Varchar2).Value = generatedCardNumber;
                                 cmdUser.Parameters.Add(":validThru", OracleDbType.Varchar2).Value = generatedValidThru;
+                                cmdUser.Parameters.Add(":cvv", OracleDbType.Varchar2).Value = generatedCVV;
 
                                 cmdUser.ExecuteNonQuery();
                             }
