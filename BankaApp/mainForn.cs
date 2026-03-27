@@ -62,8 +62,8 @@ namespace BankaApp
             SetRoundedPanel(panel7, 30);
             SetRoundedPanel(panel12, 30);
             SetRoundedPanel(panel13, 30);
-            SetRoundedPanel(panel14, 30);
-            SetRoundedPanel(panel15, 30);
+            SetRoundedPanel(panel14, 40);
+            SetRoundedPanel(panel15, 40);
 
             panel1.Resize += panel1_Resize;
             panel2.Resize += panel2_Resize;
@@ -715,7 +715,7 @@ namespace BankaApp
     {
         SetRoundedPanel(panel14, 30);
         SetRoundedPanel(panel13, 30);
-        SetRoundedPanel(panel15, 30);
+        SetRoundedPanel(panel15, 40);
         panel13.Invalidate();
     }
 
@@ -850,12 +850,12 @@ namespace BankaApp
 
     private void panel4_Resize(object sender, EventArgs e)
     {
-        SetRoundedPanel(panel4, 30);
+        SetRoundedPanel(panel4, 40);
     }
 
     private void panel5_Resize(object sender, EventArgs e)
     {
-        SetRoundedPanel(panel5, 30);
+        SetRoundedPanel(panel5, 40);
     }
 
     private void panel6_Resize(object sender, EventArgs e)

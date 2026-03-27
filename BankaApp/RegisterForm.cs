@@ -2,6 +2,7 @@
 using Oracle.ManagedDataAccess.Types;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -12,7 +13,7 @@ namespace BankaApp
     {
         string connStr = "User Id=banka;Password=1234;Data Source=localhost:1521/XE;";
         private static readonly Random rnd = new Random();
-
+        private bool isEnglish = true;
         public RegisterForm()
         {
             InitializeComponent();
@@ -21,12 +22,105 @@ namespace BankaApp
             pass.UseSystemPasswordChar = true;
             label4.Text = "";
 
-            SetRoundedPanel(panel1, 30);
-            panel1.Resize += panel1_Resize;
+            SetRoundedPanel(panel2, 40);
+            panel2.Resize += panel2_Resize;
 
+            button2.Width = 50;
+            button2.Height = 50;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.FlatAppearance.BorderSize = 0;
+            button2.BackColor = System.Drawing.Color.RoyalBlue;
+            button2.ForeColor = System.Drawing.Color.White;
+            MakeButtonRound(button2);
+            button2.Resize += button2_Resize;
 
+            ApplyEnglishLanguage();
         }
 
+        private void ApplyEnglishLanguage()
+        {
+            label1.Text = "Registration Form";
+
+            fullNAme.Text = "Full Name :";
+            label5.Text = "Email :";
+            label6.Text = "Phone :";
+            label7.Text = "Password :";
+            label9.Text = "Year of Birth :";
+            label10.Text = "PIN/IDN";
+
+            label11.Text = "Street :";
+            label8.Text = "Adress :";
+            label12.Text = "City :";
+            label3.Text = "Country *";
+            label2.Text = "Gender *";
+
+            radioBtnMan.Text = "Man";
+            radioBtnWoman.Text = "Woman";
+
+            crtAccount.Text = "CREATE ACCOUNT";
+            button1.Text = "Cancel";
+
+            username.PlaceholderText = "Full Name";
+            email.PlaceholderText = "email adress";
+            phoneNum.PlaceholderText = "phone";
+            pass.PlaceholderText = "password";
+            age.PlaceholderText = "Year of Birth";
+            EGN.PlaceholderText = "PIN/IDN";
+            streetId.PlaceholderText = "street";
+            adress.PlaceholderText = "adress";
+            city.PlaceholderText = "City";
+
+            button2.Text = "BG";
+            isEnglish = true;
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (isEnglish)
+                ApplyBulgarianLanguage();
+            else
+                ApplyEnglishLanguage();
+        }
+        private void ApplyBulgarianLanguage()
+        {
+            label1.Text = "Форма за регистрация";
+
+            fullNAme.Text = "Име и фамилия :";
+            label5.Text = "Имейл :";
+            label6.Text = "Телефон :";
+            label7.Text = "Парола :";
+            label9.Text = "Година на раждане :";
+            label10.Text = "ЕГН/ЛНЧ";
+
+            label11.Text = "Улица :";
+            label8.Text = "Адрес :";
+            label12.Text = "Град :";
+            label3.Text = "Държава *";
+            label2.Text = "Пол *";
+
+            radioBtnMan.Text = "Мъж";
+            radioBtnWoman.Text = "Жена";
+
+            crtAccount.Text = "СЪЗДАЙ АКАУНТ";
+            button1.Text = "Назад";
+
+            username.PlaceholderText = "Име и фамилия";
+            email.PlaceholderText = "имейл адрес";
+            phoneNum.PlaceholderText = "телефон";
+            pass.PlaceholderText = "парола";
+            age.PlaceholderText = "Година на раждане";
+            EGN.PlaceholderText = "ЕГН/ЛНЧ";
+            streetId.PlaceholderText = "улица";
+            adress.PlaceholderText = "адрес";
+            city.PlaceholderText = "град";
+
+            button2.Text = "EN";
+            isEnglish = false;
+        }
+
+        private void button2_Resize(object sender, EventArgs e)
+        {
+            MakeButtonRound(button2);
+        }
         private void SetRoundedPanel(Panel panel, int radius)
         {
             GraphicsPath path = new GraphicsPath();
@@ -41,11 +135,16 @@ namespace BankaApp
             panel.Region = new System.Drawing.Region(path);
         }
 
-        private void panel1_Resize(object sender, EventArgs e)
+        private void panel2_Resize(object sender, EventArgs e)
         {
-            SetRoundedPanel(panel1, 30);
+            SetRoundedPanel(panel2, 40);
         }
-
+        private void MakeButtonRound(Button btn)
+        {
+            GraphicsPath path = new GraphicsPath();
+            path.AddEllipse(0, 0, btn.Width, btn.Height);
+            btn.Region = new Region(path);
+        }
         private bool IsValidEGN(string egnValue)
         {
             return Regex.IsMatch(egnValue, @"^[0-9]{10}$");
@@ -71,6 +170,8 @@ namespace BankaApp
         {
             return $"{rnd.Next(4000, 5000)} {rnd.Next(1000, 10000)} {rnd.Next(1000, 10000)} {rnd.Next(1000, 10000)}";
         }
+
+
 
         private string GenerateValidThru()
         {
@@ -183,17 +284,17 @@ namespace BankaApp
 
             string usernameValue = username.Text.Trim();
             string egnValue = EGN.Text.Trim();
-            string addressValue = adress.Text.Trim();
-            string streetIdValue = streetId.Text.Trim();
+            string streetNameValue = streetId.Text.Trim(); // textbox за улица
+            string addressValue = adress.Text.Trim();      // номер
+            string cityValue = city.Text.Trim();           // ако искаш да го ползваш после
             string passwordValue = pass.Text.Trim();
             string emailValue = email.Text.Trim();
             string phoneValue = phoneNum.Text.Trim();
             string countryValue = cmbCountry.SelectedItem != null ? cmbCountry.SelectedItem.ToString() : "";
-            string genderValue = ""; 
+            string genderValue = "";
             string generatedCVV = GenerateRandomCVV();
 
             int birthYear;
-            int streetIdInt;
             int newClientId = 0;
 
             if (radioBtnMan.Checked)
@@ -203,57 +304,65 @@ namespace BankaApp
 
             if (string.IsNullOrWhiteSpace(usernameValue) ||
                 string.IsNullOrWhiteSpace(egnValue) ||
+                string.IsNullOrWhiteSpace(streetNameValue) ||
                 string.IsNullOrWhiteSpace(addressValue) ||
-                string.IsNullOrWhiteSpace(streetIdValue) ||
                 string.IsNullOrWhiteSpace(passwordValue) ||
                 string.IsNullOrWhiteSpace(emailValue) ||
                 string.IsNullOrWhiteSpace(phoneValue) ||
                 string.IsNullOrWhiteSpace(age.Text.Trim()) ||
                 string.IsNullOrWhiteSpace(genderValue))
             {
-                label4.Text = "Please fill in all required fields.";
+                label4.Text = isEnglish
+                    ? "Please fill in all required fields."
+                    : "Моля, попълнете всички задължителни полета.";
                 return;
             }
 
             if (!int.TryParse(age.Text.Trim(), out birthYear))
             {
-                label4.Text = "Birth year must be a valid number.";
+                label4.Text = isEnglish
+                    ? "Birth year must be a valid number."
+                    : "Годината на раждане трябва да е валидно число.";
                 return;
             }
 
             if (birthYear < 1900 || birthYear > DateTime.Now.Year)
             {
-                label4.Text = "Birth year is invalid.";
-                return;
-            }
-
-            if (!int.TryParse(streetIdValue, out streetIdInt))
-            {
-                label4.Text = "Street ID must be a valid number.";
+                label4.Text = isEnglish
+                    ? "Birth year is invalid."
+                    : "Невалидна година на раждане.";
                 return;
             }
 
             if (!IsValidEGN(egnValue))
             {
-                label4.Text = "EGN must contain exactly 10 digits.";
+                label4.Text = isEnglish
+                    ? "EGN must contain exactly 10 digits."
+                    : "ЕГН трябва да съдържа точно 10 цифри.";
                 return;
             }
 
             if (!IsValidEmail(emailValue))
             {
-                label4.Text = "Please enter a valid email address.";
+                label4.Text = isEnglish
+                    ? "Please enter a valid email address."
+                    : "Моля, въведете валиден имейл адрес.";
                 return;
             }
 
             if (!IsValidPhone(phoneValue))
             {
-                label4.Text = "Please enter a valid phone number.";
+                label4.Text = isEnglish
+                    ? "Please enter a valid phone number."
+                    : "Моля, въведете валиден телефонен номер.";
                 return;
             }
 
             if (!IsStrongPassword(passwordValue))
             {
-                label4.Text = "Password must be at least 8 characters and include uppercase, lowercase, number and symbol.";
+                label4.Text = isEnglish
+                    ? "Password must be at least 8 characters and include uppercase, lowercase, number and symbol."
+                    : "Паролата трябва да е поне 8 символа и да съдържа главна буква, малка буква, число и символ.";
                 return;
             }
 
@@ -267,38 +376,40 @@ namespace BankaApp
                     {
                         try
                         {
-                            if (!StreetExists(conn, transaction, streetIdInt))
-                            {
-                                label4.Text = "Invalid street ID. Please enter an existing street ID.";
-                                return;
-                            }
-
                             if (RecordExists(conn, transaction, "SELECT COUNT(*) FROM App_User WHERE Email = :val", ":val", emailValue) ||
-                                RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE Email = :val", ":val", emailValue))
+    RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE Email = :val", ":val", emailValue))
                             {
-                                label4.Text = "This email is already registered.";
+                                label4.Text = isEnglish
+                                    ? "This email is already registered."
+                                    : "Този имейл вече е регистриран.";
                                 return;
                             }
 
                             if (RecordExists(conn, transaction, "SELECT COUNT(*) FROM App_User WHERE Phone_number = :val", ":val", phoneValue) ||
                                 RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE Phone_number = :val", ":val", phoneValue))
                             {
-                                label4.Text = "This phone number is already registered.";
+                                label4.Text = isEnglish
+                                    ? "This phone number is already registered."
+                                    : "Този телефонен номер вече е регистриран.";
                                 return;
                             }
 
                             if (RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE EGN = :val", ":val", egnValue))
                             {
-                                label4.Text = "This EGN is already registered.";
+                                label4.Text = isEnglish
+                                    ? "This EGN is already registered."
+                                    : "Това ЕГН вече е регистрирано.";
                                 return;
                             }
+
                             string generatedCardNumber = GenerateRandomCardNumber();
                             string generatedValidThru = GenerateValidThru();
+
                             string appUserQuery = @"
-                                                          INSERT INTO App_User
-                               (ID_User, Username, User_Password, Email, User_Role, Phone_number, Gender, Birth_Year, Country, Card_Number, Valid_Thru,CVV)
-                                VALUES
-                               (SEQ_APP_USER.NEXTVAL, :username, :password, :email, :role, :phone, :gender, :birthyear, :country, :cardNumber, :validThru,cvv)";
+                        INSERT INTO App_User
+                        (ID_User, Username, User_Password, Email, User_Role, Phone_number, Gender, Birth_Year, Country, Card_Number, Valid_Thru, CVV)
+                        VALUES
+                        (SEQ_APP_USER.NEXTVAL, :username, :password, :email, :role, :phone, :gender, :birthyear, :country, :cardNumber, :validThru, :cvv)";
 
                             using (OracleCommand cmdUser = new OracleCommand(appUserQuery, conn))
                             {
@@ -321,11 +432,11 @@ namespace BankaApp
                             }
 
                             string clientQuery = @"
-                                INSERT INTO Client
-                                (Name, EGN, ID_Street, Adress, Phone_number, Is_Active, Email, Gender, Birth_Year, Country)
-                                VALUES
-                                (:name, :egn, :street, :adress, :phone, 1, :email, :gender, :birthyear, :country)
-                                RETURNING Client_ID INTO :newClientId";
+                        INSERT INTO Client
+                        (Name, EGN, ID_Street, Street_Name, Adress, Phone_number, Is_Active, Email, Gender, Birth_Year, Country)
+                        VALUES
+                        (:name, :egn, :streetId, :streetName, :adress, :phone, 1, :email, :gender, :birthyear, :country)
+                        RETURNING Client_ID INTO :newClientId";
 
                             using (OracleCommand cmdClient = new OracleCommand(clientQuery, conn))
                             {
@@ -334,7 +445,8 @@ namespace BankaApp
 
                                 cmdClient.Parameters.Add(":name", OracleDbType.Varchar2).Value = usernameValue;
                                 cmdClient.Parameters.Add(":egn", OracleDbType.Varchar2).Value = egnValue;
-                                cmdClient.Parameters.Add(":street", OracleDbType.Int32).Value = streetIdInt;
+                                cmdClient.Parameters.Add(":streetId", OracleDbType.Int32).Value = DBNull.Value;
+                                cmdClient.Parameters.Add(":streetName", OracleDbType.Varchar2).Value = streetNameValue;
                                 cmdClient.Parameters.Add(":adress", OracleDbType.Varchar2).Value = addressValue;
                                 cmdClient.Parameters.Add(":phone", OracleDbType.Varchar2).Value = phoneValue;
                                 cmdClient.Parameters.Add(":email", OracleDbType.Varchar2).Value = emailValue;
@@ -360,10 +472,10 @@ namespace BankaApp
                                     string generatedIban = GenerateRandomIban();
 
                                     string accountQuery = @"
-                                        INSERT INTO Account
-                                        (Account_NO, ID_Client, ID_Currency_type, Interest, Availibility)
-                                        VALUES
-                                        (:iban, :clientId, :currencyType, :interest, :availibility)";
+                                INSERT INTO Account
+                                (Account_NO, ID_Client, ID_Currency_type, Interest, Availibility)
+                                VALUES
+                                (:iban, :clientId, :currencyType, :interest, :availibility)";
 
                                     using (OracleCommand cmdAccount = new OracleCommand(accountQuery, conn))
                                     {
@@ -383,24 +495,22 @@ namespace BankaApp
                                 catch (OracleException ex)
                                 {
                                     if (ex.Number == 1 && ex.Message.ToLower().Contains("uq_account_no"))
-                                    {
                                         ibanAttempts++;
-                                    }
                                     else
-                                    {
                                         throw;
-                                    }
                                 }
                             }
 
                             if (!accountCreated)
-                            {
-                                throw new Exception("Could not create bank account automatically.");
-                            }
+                                throw new Exception(isEnglish
+                                    ? "Could not create bank account automatically."
+                                    : "Банковата сметка не можа да бъде създадена автоматично.");
 
                             transaction.Commit();
 
-                            MessageBox.Show("Account created successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            MessageBox.Show(isEnglish ? "Account created successfully." : "Акаунтът беше създаден успешно.",
+                                isEnglish ? "Success" : "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             LoginForm loginForm = new LoginForm();
                             loginForm.Show();
@@ -421,30 +531,40 @@ namespace BankaApp
                     string errorText = ex.Message.ToLower();
 
                     if (errorText.Contains("uq_app_user_email") || errorText.Contains("uq_client_email"))
-                        label4.Text = "This email is already registered.";
+                        label4.Text = isEnglish
+                            ? "This email is already registered."
+                            : "Този имейл вече е регистриран.";
                     else if (errorText.Contains("uq_app_user_phone") || errorText.Contains("uq_client_phone"))
-                        label4.Text = "This phone number is already registered.";
+                        label4.Text = isEnglish
+                            ? "This phone number is already registered."
+                            : "Този телефонен номер вече е регистриран.";
                     else if (errorText.Contains("uq_client_egn"))
-                        label4.Text = "This EGN is already registered.";
+                        label4.Text = isEnglish
+                            ? "This EGN is already registered."
+                            : "Това ЕГН вече е регистрирано.";
                     else
-                        label4.Text = "Duplicate value detected. Please check your input.";
-                }
-                else if (ex.Number == 2291)
-                {
-                    label4.Text = "Invalid street ID. Please enter an existing street ID.";
+                        label4.Text = isEnglish
+                            ? "Duplicate value detected. Please check your input."
+                            : "Открита е повтаряща се стойност. Моля, проверете данните.";
                 }
                 else if (ex.Number == 2290)
                 {
-                    label4.Text = "Invalid data. Please check your input values.";
+                    label4.Text = isEnglish
+                        ? "Invalid data. Please check your input values."
+                        : "Невалидни данни. Моля, проверете въведените стойности.";
                 }
                 else
                 {
-                    label4.Text = "Database error: " + ex.Message;
+                    label4.Text = isEnglish
+                        ? "Database error: " + ex.Message
+                        : "Грешка в базата данни: " + ex.Message;
                 }
             }
             catch (Exception ex)
             {
-                label4.Text = "Error: " + ex.Message;
+                label4.Text = isEnglish
+                    ? "Error: " + ex.Message
+                    : "Грешка: " + ex.Message;
             }
         }
 
@@ -470,5 +590,77 @@ namespace BankaApp
             form.Show();
             this.Hide();
         }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void fullNAme_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioBtnMan_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioBtnWoman_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }

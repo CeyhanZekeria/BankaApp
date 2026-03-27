@@ -29,6 +29,7 @@ namespace BankaApp
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForn));
             this.panel1 = new System.Windows.Forms.Panel();
             this.listAccounts = new System.Windows.Forms.ListBox();
             this.button3 = new System.Windows.Forms.Button();
@@ -50,6 +51,7 @@ namespace BankaApp
             this.label14 = new System.Windows.Forms.Label();
             this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.cardNum = new System.Windows.Forms.Label();
@@ -62,6 +64,8 @@ namespace BankaApp
             this.label5 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.homeBtn = new System.Windows.Forms.Button();
+            this.secrty = new System.Windows.Forms.Button();
             this.panel13 = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -80,11 +84,11 @@ namespace BankaApp
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.secrty = new System.Windows.Forms.Button();
-            this.homeBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTransactions)).BeginInit();
+            this.panel11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel7.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -105,7 +109,6 @@ namespace BankaApp
             this.panel1.Controls.Add(this.AddMoney);
             this.panel1.Controls.Add(this.cvvShow);
             this.panel1.Controls.Add(this.panel15);
-            this.panel1.Controls.Add(this.panel14);
             this.panel1.Controls.Add(this.label15);
             this.panel1.Controls.Add(this.usrName);
             this.panel1.Controls.Add(this.label14);
@@ -113,10 +116,11 @@ namespace BankaApp
             this.panel1.Controls.Add(this.panel11);
             this.panel1.Controls.Add(this.panel7);
             this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.panel14);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(223, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1047, 745);
+            this.panel1.Size = new System.Drawing.Size(1555, 993);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -124,7 +128,7 @@ namespace BankaApp
             // 
             this.listAccounts.FormattingEnabled = true;
             this.listAccounts.ItemHeight = 20;
-            this.listAccounts.Location = new System.Drawing.Point(579, 379);
+            this.listAccounts.Location = new System.Drawing.Point(989, 372);
             this.listAccounts.Name = "listAccounts";
             this.listAccounts.Size = new System.Drawing.Size(180, 24);
             this.listAccounts.TabIndex = 11;
@@ -134,7 +138,7 @@ namespace BankaApp
             this.button3.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.button3.Cursor = System.Windows.Forms.Cursors.Default;
             this.button3.ForeColor = System.Drawing.Color.Green;
-            this.button3.Location = new System.Drawing.Point(392, 379);
+            this.button3.Location = new System.Drawing.Point(773, 376);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(146, 36);
             this.button3.TabIndex = 10;
@@ -145,7 +149,7 @@ namespace BankaApp
             // 
             this.AddMoney.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.AddMoney.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.AddMoney.Location = new System.Drawing.Point(217, 379);
+            this.AddMoney.Location = new System.Drawing.Point(560, 376);
             this.AddMoney.Name = "AddMoney";
             this.AddMoney.Size = new System.Drawing.Size(142, 36);
             this.AddMoney.TabIndex = 9;
@@ -156,9 +160,9 @@ namespace BankaApp
             // 
             this.cvvShow.Font = new System.Drawing.Font("Segoe UI Semibold", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.cvvShow.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.cvvShow.Location = new System.Drawing.Point(40, 383);
+            this.cvvShow.Location = new System.Drawing.Point(329, 380);
             this.cvvShow.Name = "cvvShow";
-            this.cvvShow.Size = new System.Drawing.Size(125, 29);
+            this.cvvShow.Size = new System.Drawing.Size(147, 32);
             this.cvvShow.TabIndex = 8;
             this.cvvShow.Text = "Show CVV 👁️";
             this.cvvShow.UseVisualStyleBackColor = true;
@@ -166,13 +170,11 @@ namespace BankaApp
             // 
             // panel15
             // 
-            this.panel15.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.panel15.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel15.Location = new System.Drawing.Point(-1, 343);
             this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(814, 10);
+            this.panel15.Size = new System.Drawing.Size(1322, 13);
             this.panel15.TabIndex = 7;
             this.panel15.Paint += new System.Windows.Forms.PaintEventHandler(this.panel15_Paint);
             // 
@@ -188,16 +190,16 @@ namespace BankaApp
             this.panel14.Controls.Add(this.dtpTo);
             this.panel14.Controls.Add(this.dtpFrom);
             this.panel14.Controls.Add(this.dgvTransactions);
-            this.panel14.Location = new System.Drawing.Point(15, 454);
+            this.panel14.Location = new System.Drawing.Point(124, 524);
             this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(782, 279);
+            this.panel14.Size = new System.Drawing.Size(1045, 309);
             this.panel14.TabIndex = 0;
             this.panel14.Paint += new System.Windows.Forms.PaintEventHandler(this.panel14_Paint);
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(367, 12);
+            this.label18.Location = new System.Drawing.Point(484, 14);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(43, 20);
             this.label18.TabIndex = 16;
@@ -206,7 +208,7 @@ namespace BankaApp
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(193, 14);
+            this.label17.Location = new System.Drawing.Point(310, 16);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(28, 20);
             this.label17.TabIndex = 15;
@@ -215,7 +217,7 @@ namespace BankaApp
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(13, 14);
+            this.label16.Location = new System.Drawing.Point(130, 16);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(46, 20);
             this.label16.TabIndex = 14;
@@ -224,7 +226,7 @@ namespace BankaApp
             // reset
             // 
             this.reset.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.reset.Location = new System.Drawing.Point(693, 7);
+            this.reset.Location = new System.Drawing.Point(810, 9);
             this.reset.Name = "reset";
             this.reset.Size = new System.Drawing.Size(77, 27);
             this.reset.TabIndex = 13;
@@ -235,7 +237,7 @@ namespace BankaApp
             // filter
             // 
             this.filter.BackColor = System.Drawing.Color.SpringGreen;
-            this.filter.Location = new System.Drawing.Point(601, 8);
+            this.filter.Location = new System.Drawing.Point(718, 10);
             this.filter.Name = "filter";
             this.filter.Size = new System.Drawing.Size(77, 27);
             this.filter.TabIndex = 12;
@@ -245,21 +247,21 @@ namespace BankaApp
             // cmbType
             // 
             this.cmbType.FormattingEnabled = true;
-            this.cmbType.Location = new System.Drawing.Point(416, 8);
+            this.cmbType.Location = new System.Drawing.Point(533, 10);
             this.cmbType.Name = "cmbType";
             this.cmbType.Size = new System.Drawing.Size(133, 28);
             this.cmbType.TabIndex = 10;
             // 
             // dtpTo
             // 
-            this.dtpTo.Location = new System.Drawing.Point(240, 8);
+            this.dtpTo.Location = new System.Drawing.Point(357, 10);
             this.dtpTo.Name = "dtpTo";
             this.dtpTo.Size = new System.Drawing.Size(92, 27);
             this.dtpTo.TabIndex = 9;
             // 
             // dtpFrom
             // 
-            this.dtpFrom.Location = new System.Drawing.Point(72, 9);
+            this.dtpFrom.Location = new System.Drawing.Point(189, 11);
             this.dtpFrom.Name = "dtpFrom";
             this.dtpFrom.Size = new System.Drawing.Size(97, 27);
             this.dtpFrom.TabIndex = 8;
@@ -267,11 +269,11 @@ namespace BankaApp
             // dgvTransactions
             // 
             this.dgvTransactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTransactions.Location = new System.Drawing.Point(13, 40);
+            this.dgvTransactions.Location = new System.Drawing.Point(130, 42);
             this.dgvTransactions.Name = "dgvTransactions";
             this.dgvTransactions.RowHeadersWidth = 51;
             this.dgvTransactions.RowTemplate.Height = 29;
-            this.dgvTransactions.Size = new System.Drawing.Size(757, 227);
+            this.dgvTransactions.Size = new System.Drawing.Size(757, 247);
             this.dgvTransactions.TabIndex = 0;
             // 
             // label15
@@ -310,7 +312,7 @@ namespace BankaApp
             // panel12
             // 
             this.panel12.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.panel12.Location = new System.Drawing.Point(431, 91);
+            this.panel12.Location = new System.Drawing.Point(779, 58);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(328, 222);
             this.panel12.TabIndex = 3;
@@ -321,10 +323,21 @@ namespace BankaApp
             this.panel11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel11.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel11.Location = new System.Drawing.Point(812, 0);
+            this.panel11.Controls.Add(this.pictureBox1);
+            this.panel11.Location = new System.Drawing.Point(1320, 0);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(234, 744);
+            this.panel11.Size = new System.Drawing.Size(234, 992);
             this.panel11.TabIndex = 2;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(234, 992);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // panel7
             // 
@@ -336,9 +349,9 @@ namespace BankaApp
             this.panel7.Controls.Add(this.validThru);
             this.panel7.Controls.Add(this.cardHolder);
             this.panel7.Controls.Add(this.label10);
-            this.panel7.Location = new System.Drawing.Point(40, 159);
+            this.panel7.Location = new System.Drawing.Point(253, 135);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(288, 169);
+            this.panel7.Size = new System.Drawing.Size(308, 178);
             this.panel7.TabIndex = 1;
             this.panel7.Paint += new System.Windows.Forms.PaintEventHandler(this.panel7_Paint);
             // 
@@ -346,7 +359,7 @@ namespace BankaApp
             // 
             this.label11.AutoSize = true;
             this.label11.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label11.Location = new System.Drawing.Point(15, 134);
+            this.label11.Location = new System.Drawing.Point(22, 134);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 20);
             this.label11.TabIndex = 7;
@@ -357,7 +370,7 @@ namespace BankaApp
             this.cardNum.AutoSize = true;
             this.cardNum.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.cardNum.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.cardNum.Location = new System.Drawing.Point(22, 60);
+            this.cardNum.Location = new System.Drawing.Point(38, 59);
             this.cardNum.Name = "cardNum";
             this.cardNum.Size = new System.Drawing.Size(122, 25);
             this.cardNum.TabIndex = 6;
@@ -369,7 +382,7 @@ namespace BankaApp
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Segoe UI", 13.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label12.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label12.Location = new System.Drawing.Point(193, 11);
+            this.label12.Location = new System.Drawing.Point(206, 11);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(78, 30);
             this.label12.TabIndex = 5;
@@ -379,7 +392,7 @@ namespace BankaApp
             // 
             this.cardHldrName.AutoSize = true;
             this.cardHldrName.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.cardHldrName.Location = new System.Drawing.Point(121, 134);
+            this.cardHldrName.Location = new System.Drawing.Point(141, 134);
             this.cardHldrName.Name = "cardHldrName";
             this.cardHldrName.Size = new System.Drawing.Size(46, 20);
             this.cardHldrName.TabIndex = 3;
@@ -402,7 +415,7 @@ namespace BankaApp
             this.cardHolder.AutoSize = true;
             this.cardHolder.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.cardHolder.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.cardHolder.Location = new System.Drawing.Point(143, 112);
+            this.cardHolder.Location = new System.Drawing.Point(172, 112);
             this.cardHolder.Name = "cardHolder";
             this.cardHolder.Size = new System.Drawing.Size(99, 17);
             this.cardHolder.TabIndex = 1;
@@ -427,7 +440,7 @@ namespace BankaApp
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(40, 115);
+            this.label4.Location = new System.Drawing.Point(229, 81);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(151, 41);
             this.label4.TabIndex = 0;
@@ -456,7 +469,7 @@ namespace BankaApp
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(223, 745);
+            this.panel2.Size = new System.Drawing.Size(223, 993);
             this.panel2.TabIndex = 1;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
@@ -473,9 +486,33 @@ namespace BankaApp
             this.panel6.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(223, 745);
+            this.panel6.Size = new System.Drawing.Size(223, 993);
             this.panel6.TabIndex = 12;
             this.panel6.Paint += new System.Windows.Forms.PaintEventHandler(this.panel6_Paint_1);
+            // 
+            // homeBtn
+            // 
+            this.homeBtn.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.homeBtn.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.homeBtn.Location = new System.Drawing.Point(9, 160);
+            this.homeBtn.Name = "homeBtn";
+            this.homeBtn.Size = new System.Drawing.Size(202, 56);
+            this.homeBtn.TabIndex = 18;
+            this.homeBtn.Text = "🏠 HOME";
+            this.homeBtn.UseVisualStyleBackColor = true;
+            this.homeBtn.Click += new System.EventHandler(this.homeBtn_Click);
+            // 
+            // secrty
+            // 
+            this.secrty.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.secrty.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.secrty.Location = new System.Drawing.Point(11, 219);
+            this.secrty.Name = "secrty";
+            this.secrty.Size = new System.Drawing.Size(200, 55);
+            this.secrty.TabIndex = 17;
+            this.secrty.Text = "🪪 Security";
+            this.secrty.UseVisualStyleBackColor = true;
+            this.secrty.Click += new System.EventHandler(this.secrty_Click);
             // 
             // panel13
             // 
@@ -562,7 +599,7 @@ namespace BankaApp
             this.panel8.Controls.Add(this.label9);
             this.panel8.Location = new System.Drawing.Point(-788, 6);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(23, 1364);
+            this.panel8.Size = new System.Drawing.Size(23, 1612);
             this.panel8.TabIndex = 11;
             // 
             // panel9
@@ -575,7 +612,7 @@ namespace BankaApp
             this.panel9.Controls.Add(this.label8);
             this.panel9.Location = new System.Drawing.Point(-1262, 8);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(23, 1949);
+            this.panel9.Size = new System.Drawing.Size(23, 2197);
             this.panel9.TabIndex = 12;
             // 
             // panel10
@@ -587,7 +624,7 @@ namespace BankaApp
             this.panel10.Controls.Add(this.label7);
             this.panel10.Location = new System.Drawing.Point(-99, 0);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(23, 2500);
+            this.panel10.Size = new System.Drawing.Size(23, 2748);
             this.panel10.TabIndex = 12;
             // 
             // label7
@@ -639,7 +676,7 @@ namespace BankaApp
             this.panel3.Controls.Add(this.label1);
             this.panel3.Location = new System.Drawing.Point(-788, 6);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(0, 719);
+            this.panel3.Size = new System.Drawing.Size(0, 967);
             this.panel3.TabIndex = 11;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
@@ -653,7 +690,7 @@ namespace BankaApp
             this.panel4.Controls.Add(this.label2);
             this.panel4.Location = new System.Drawing.Point(-1262, 8);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(0, 685);
+            this.panel4.Size = new System.Drawing.Size(0, 933);
             this.panel4.TabIndex = 12;
             this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
             // 
@@ -666,7 +703,7 @@ namespace BankaApp
             this.panel5.Controls.Add(this.label3);
             this.panel5.Location = new System.Drawing.Point(-99, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(0, 651);
+            this.panel5.Size = new System.Drawing.Size(0, 899);
             this.panel5.TabIndex = 12;
             this.panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.panel5_Paint);
             // 
@@ -712,36 +749,12 @@ namespace BankaApp
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // secrty
-            // 
-            this.secrty.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.secrty.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.secrty.Location = new System.Drawing.Point(11, 219);
-            this.secrty.Name = "secrty";
-            this.secrty.Size = new System.Drawing.Size(200, 55);
-            this.secrty.TabIndex = 17;
-            this.secrty.Text = "🪪 Security";
-            this.secrty.UseVisualStyleBackColor = true;
-            this.secrty.Click += new System.EventHandler(this.secrty_Click);
-            // 
-            // homeBtn
-            // 
-            this.homeBtn.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.homeBtn.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.homeBtn.Location = new System.Drawing.Point(9, 160);
-            this.homeBtn.Name = "homeBtn";
-            this.homeBtn.Size = new System.Drawing.Size(202, 56);
-            this.homeBtn.TabIndex = 18;
-            this.homeBtn.Text = "🏠 HOME";
-            this.homeBtn.UseVisualStyleBackColor = true;
-            this.homeBtn.Click += new System.EventHandler(this.homeBtn_Click);
-            // 
             // mainForn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1270, 745);
+            this.ClientSize = new System.Drawing.Size(1778, 993);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.Name = "mainForn";
@@ -752,6 +765,8 @@ namespace BankaApp
             this.panel14.ResumeLayout(false);
             this.panel14.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTransactions)).EndInit();
+            this.panel11.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -826,5 +841,6 @@ namespace BankaApp
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button secrty;
         private System.Windows.Forms.Button homeBtn;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
