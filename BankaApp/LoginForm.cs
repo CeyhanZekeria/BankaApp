@@ -29,6 +29,13 @@ namespace BankaApp
             MakeButtonRound(button2);
             button2.Resize += button2_Resize;
 
+            AppState.ApplyFormState(this);
+            ThemeManager.ApplyTheme(this);
+
+            this.Resize += (s, e) => AppState.SaveFormState(this);
+            this.Move += (s, e) => AppState.SaveFormState(this);
+            this.FormClosing += (s, e) => AppState.SaveFormState(this);
+
             ApplyEnglishLanguage();
         }
 
@@ -105,7 +112,7 @@ namespace BankaApp
                 label4.ForeColor = Color.Red;
                 label4.Text = isEnglish
                     ? "Please enter username/email and password."
-                    : "Моля, въведете" +"\n" +"потребител/имейл и парола.";
+                    : "Моля, въведете" + "\n" + "потребител/имейл и парола.";
                 label4.Visible = true;
                 return;
             }
@@ -145,13 +152,19 @@ namespace BankaApp
                                 {
                                     clientId = Convert.ToInt32(reader["CLIENT_ID"]);
                                 }
+                                if (userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    adminForm adminForm = new adminForm(userId, username);
+                                    adminForm.Show();
+                                    this.Hide();
+                                }
+                                else
+                                {
+                                    mainForn mainForm = new mainForn(clientId, userId, username);
+                                    mainForm.Show();
+                                    this.Hide();
+                                }
 
-                                clientId = userId;
-
-                                mainForn mainForm = new mainForn(clientId, userId, username);
-
-                                mainForm.Show();
-                                this.Hide();
                             }
                             else
                             {

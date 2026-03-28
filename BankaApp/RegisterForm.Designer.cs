@@ -127,15 +127,16 @@ namespace BankaApp
             this.groupBox1.Controls.Add(this.phoneNum);
             this.groupBox1.Controls.Add(this.email);
             this.groupBox1.Controls.Add(this.username);
-            this.groupBox1.Location = new System.Drawing.Point(0, 15);
+            this.groupBox1.Location = new System.Drawing.Point(18, 16);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1221, 667);
+            this.groupBox1.Size = new System.Drawing.Size(1194, 655);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter_1);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1142, 11);
+            this.button2.Location = new System.Drawing.Point(1130, 11);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(58, 49);
             this.button2.TabIndex = 26;
@@ -297,7 +298,7 @@ namespace BankaApp
             // 
             this.cmbCountry.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.cmbCountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCountry.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.cmbCountry.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmbCountry.FormattingEnabled = true;
             this.cmbCountry.Location = new System.Drawing.Point(627, 378);
             this.cmbCountry.MaximumSize = new System.Drawing.Size(500, 0);
@@ -459,6 +460,7 @@ namespace BankaApp
             this.label1.TabIndex = 4;
             this.label1.Text = "Registration Form";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // RegisterForm
             // 
@@ -481,7 +483,6 @@ namespace BankaApp
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button crtAccount;

@@ -44,11 +44,14 @@ namespace BankaApp
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cmbTheme = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel6.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel9.SuspendLayout();
             this.panel10.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel6
@@ -231,11 +234,32 @@ namespace BankaApp
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.panel1.Controls.Add(this.cmbTheme);
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(223, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(803, 637);
             this.panel1.TabIndex = 16;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // cmbTheme
+            // 
+            this.cmbTheme.FormattingEnabled = true;
+            this.cmbTheme.Location = new System.Drawing.Point(186, 86);
+            this.cmbTheme.Name = "cmbTheme";
+            this.cmbTheme.Size = new System.Drawing.Size(130, 28);
+            this.cmbTheme.TabIndex = 1;
+            this.cmbTheme.SelectedIndexChanged += new System.EventHandler(this.cmbTheme_SelectedIndexChanged_1);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(53, 89);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(127, 20);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Choose a theme : ";
             // 
             // settings
             // 
@@ -253,6 +277,8 @@ namespace BankaApp
             this.panel8.ResumeLayout(false);
             this.panel9.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -274,5 +300,7 @@ namespace BankaApp
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button secrty;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ComboBox cmbTheme;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -20,6 +20,11 @@ namespace BankaApp
         private bool isCVVVisible = false;
         private string realCVV = "";
 
+        private bool isCardVisible = false;
+        private string fullCardNumber = "";
+        private string fullCardHolderName = "";
+        private string fullValidThru = "";
+
         public mainForn(int clientId, int userId, string username)
         {
             InitializeComponent();
@@ -27,20 +32,54 @@ namespace BankaApp
             currentClientId = clientId;
             currentAppUserId = userId;
             currentUsername = username;
+
             usrName.Text = currentUsername.ToUpper();
+            cvvShow.Text = "👁 Show";
 
-            cvvShow.Text = "👁";
+            ApplyModernUi();
+            WireEvents();
+
             LoadUserCVV();
-
             LoadCardInfo();
+            LoadExchangeRatesForChart(2, 6, "EUR -> AED");
 
             SetupTransactionsGrid();
             SetupTransactionFilters();
             LoadRecentTransactions();
             LoadUserAccountsList();
 
-            dgvTransactions.DataBindingComplete += dgvTransactions_DataBindingComplete;
-            listAccounts.SelectedIndexChanged += listAccounts_SelectedIndexChanged;
+            AppState.ApplyFormState(this);
+            ThemeManager.ApplyTheme(this);
+        }
+
+        private void ApplyModernUi()
+        {
+            BackColor = UiStyle.BgColor;
+
+            panel1.BackColor = UiStyle.Sidebar;
+            panel2.BackColor = UiStyle.BgColor;
+            panel12.BackColor = Color.White;
+            panel13.BackColor = Color.White;
+            panel14.BackColor = Color.White;
+            dgvTransactions.BackgroundColor = Color.White;
+
+            UiStyle.StylePrimaryButton(AddMoney);
+            UiStyle.StylePrimaryButton(sendMoney);
+            UiStyle.StyleSecondaryButton(cvvShow);
+            UiStyle.StyleSecondaryButton(filter);
+            UiStyle.StyleSecondaryButton(reset);
+
+            UiStyle.RoundControl(AddMoney, 12);
+            UiStyle.RoundControl(sendMoney, 12);
+            UiStyle.RoundControl(cvvShow, 12);
+            UiStyle.RoundControl(filter, 10);
+            UiStyle.RoundControl(reset, 10);
+
+            StyleSidebarButton(homeBtn);
+            StyleSidebarButton(secrty);
+            StyleSidebarButton(profl);
+            StyleSidebarButton(button1);
+            SetActiveMenu(homeBtn);
 
             listAccounts.DrawMode = DrawMode.OwnerDrawFixed;
             listAccounts.ItemHeight = 38;
@@ -49,36 +88,73 @@ namespace BankaApp
             listAccounts.ForeColor = Color.FromArgb(45, 45, 45);
             listAccounts.Font = new Font("Segoe UI", 10, FontStyle.Regular);
 
-            listAccounts.DrawItem += listAccounts_DrawItem;
-
-            LoadExchangeRatesForChart(2, 6, "EUR -> AED");
-
-            SetRoundedPanel(panel1, 30);
             SetRoundedPanel(panel2, 30);
             SetRoundedPanel(panel3, 30);
             SetRoundedPanel(panel4, 30);
             SetRoundedPanel(panel5, 30);
             SetRoundedPanel(panel6, 30);
-            SetRoundedPanel(panel7, 30);
+            SetRoundedPanel(panel3, 30);
             SetRoundedPanel(panel12, 30);
             SetRoundedPanel(panel13, 30);
             SetRoundedPanel(panel14, 40);
-            SetRoundedPanel(panel15, 40);
 
-            panel1.Resize += panel1_Resize;
+            AddHoverEffect(AddMoney, UiStyle.Primary, UiStyle.PrimaryDark);
+            AddHoverEffect(sendMoney, UiStyle.Primary, UiStyle.PrimaryDark);
+        }
+
+        private void WireEvents()
+        {
+            dgvTransactions.DataBindingComplete += dgvTransactions_DataBindingComplete;
+            listAccounts.SelectedIndexChanged += listAccounts_SelectedIndexChanged;
+            listAccounts.DrawItem += listAccounts_DrawItem;
+
             panel2.Resize += panel2_Resize;
             panel3.Resize += panel3_Resize;
             panel4.Resize += panel4_Resize;
             panel5.Resize += panel5_Resize;
             panel6.Resize += panel6_Resize;
-            panel7.Resize += panel7_Resize;
-            panel15.Resize += panel15_Resize;
             panel12.Resize += panel12_Resize;
+            panel13.Resize += panel13_Resize;
+
             panel12.Paint += panel12_Paint;
+            panel13.Paint += panel13_Paint;
 
             filter.Click += btnFilter_Click;
             reset.Click += btnReset_Click;
+
+            Resize += (s, e) => AppState.SaveFormState(this);
+            Move += (s, e) => AppState.SaveFormState(this);
+            FormClosing += (s, e) => AppState.SaveFormState(this);
         }
+
+        private void SetActiveMenu(Button activeButton)
+        {
+            Button[] buttons = { homeBtn, secrty, profl, button1 };
+
+            foreach (Button btn in buttons)
+                btn.BackColor = Color.FromArgb(67, 97, 238);
+
+            activeButton.BackColor = Color.FromArgb(49, 76, 194);
+        }
+
+        private void AddHoverEffect(Button btn, Color normalColor, Color hoverColor)
+        {
+            btn.MouseEnter += (s, e) => btn.BackColor = hoverColor;
+            btn.MouseLeave += (s, e) => btn.BackColor = normalColor;
+        }
+
+        private void StyleSidebarButton(Button btn)
+        {
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.BackColor = Color.FromArgb(67, 97, 238);
+            btn.ForeColor = Color.White;
+            btn.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btn.TextAlign = ContentAlignment.MiddleLeft;
+            btn.Padding = new Padding(18, 0, 0, 0);
+            btn.Cursor = Cursors.Hand;
+        }
+
         private bool CheckUserPassword(string enteredPassword)
         {
             try
@@ -88,10 +164,10 @@ namespace BankaApp
                     conn.Open();
 
                     string query = @"
-                SELECT COUNT(*)
-                FROM App_User
-                WHERE ID_User = :userId
-                  AND User_Password = :password";
+                        SELECT COUNT(*)
+                        FROM App_User
+                        WHERE ID_User = :userId
+                          AND User_Password = :password";
 
                     using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
@@ -109,37 +185,14 @@ namespace BankaApp
                 return false;
             }
         }
+
         private void cvvShow_Click_1(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(realCVV))
-            {
-                MessageBox.Show("No CVV found.");
-                return;
-            }
-
-            if (!isCVVVisible)
-            {
-                string enteredPassword = Prompt.ShowDialog("Enter your password to view CVV:", "Password Required");
-
-                if (string.IsNullOrWhiteSpace(enteredPassword))
-                    return;
-
-                if (CheckUserPassword(enteredPassword))
-                {
-                    cvvShow.Text = realCVV;
-                    isCVVVisible = true;
-                }
-                else
-                {
-                    MessageBox.Show("Wrong password.");
-                }
-            }
-            else
-            {
-                cvvShow.Text = "👁";
-                isCVVVisible = false;
-            }
+            isCardVisible = !isCardVisible;
+            cvvShow.Text = isCardVisible ? "🙈 Hide" : "👁 Show";
+            RefreshCardDisplay();
         }
+
         private void LoadUserCVV()
         {
             try
@@ -153,17 +206,8 @@ namespace BankaApp
                     using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":userId", OracleDbType.Int32).Value = currentAppUserId;
-
                         object result = cmd.ExecuteScalar();
-
-                        if (result != null)
-                        {
-                            realCVV = result.ToString();
-                        }
-                        else
-                        {
-                            realCVV = "";
-                        }
+                        realCVV = result != null ? result.ToString() : "";
                     }
                 }
             }
@@ -172,283 +216,297 @@ namespace BankaApp
                 MessageBox.Show("Error loading CVV: " + ex.Message);
             }
         }
-    
-    private void LoadCardInfo()
-    {
-        try
+
+        private void LoadCardInfo()
         {
-            using (OracleConnection conn = new OracleConnection(connStr))
+            try
             {
-                conn.Open();
-
-                string query = @"
-                SELECT c.Name,
-                       au.Card_Number,
-                       au.Valid_Thru
-                FROM App_User au
-                LEFT JOIN Client c ON c.Client_ID = au.ID_User
-                WHERE au.ID_User = :appUserId";
-
-                string fullName = "";
-                string cardNumber = "";
-                string validThru = "";
-
-                using (OracleCommand cmd = new OracleCommand(query, conn))
+                using (OracleConnection conn = new OracleConnection(connStr))
                 {
-                    cmd.BindByName = true;
-                    cmd.Parameters.Add(":appUserId", OracleDbType.Int32).Value = currentAppUserId;
+                    conn.Open();
 
-                    using (OracleDataReader reader = cmd.ExecuteReader())
+                    string query = @"
+                        SELECT c.Name,
+                               au.Card_Number,
+                               au.Valid_Thru
+                        FROM App_User au
+                        LEFT JOIN Client c ON c.Client_ID = :clientId
+                        WHERE au.ID_User = :appUserId";
+
+                    string fullName = "";
+                    string cardNumber = "";
+                    string validThru = "";
+
+                    using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
-                        if (reader.Read())
+                        cmd.BindByName = true;
+                        cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
+                        cmd.Parameters.Add(":appUserId", OracleDbType.Int32).Value = currentAppUserId;
+
+                        using (OracleDataReader reader = cmd.ExecuteReader())
                         {
-                            fullName = reader["Name"] == DBNull.Value ? "" : reader["Name"].ToString().Trim();
-                            cardNumber = reader["Card_Number"] == DBNull.Value ? "" : reader["Card_Number"].ToString().Trim();
-                            validThru = reader["Valid_Thru"] == DBNull.Value ? "" : reader["Valid_Thru"].ToString().Trim();
+                            if (reader.Read())
+                            {
+                                fullName = reader["Name"] == DBNull.Value ? "" : reader["Name"].ToString().Trim();
+                                cardNumber = reader["Card_Number"] == DBNull.Value ? "" : reader["Card_Number"].ToString().Trim();
+                                validThru = reader["Valid_Thru"] == DBNull.Value ? "" : reader["Valid_Thru"].ToString().Trim();
+                            }
                         }
                     }
+
+                    fullCardHolderName = string.IsNullOrWhiteSpace(fullName) ? "NO NAME" : fullName.ToUpper();
+                    fullCardNumber = string.IsNullOrWhiteSpace(cardNumber) ? "NO CARD" : cardNumber;
+                    fullValidThru = string.IsNullOrWhiteSpace(validThru) ? "--/--" : validThru;
+
+                    RefreshCardDisplay();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading card info: " + ex.Message);
+            }
+        }
+
+        private string MaskCardNumber(string cardNumber)
+        {
+            if (string.IsNullOrWhiteSpace(cardNumber))
+                return "**** **** **** ****";
+
+            string clean = cardNumber.Replace(" ", "").Trim();
+            if (clean.Length < 8)
+                return "**** **** **** ****";
+
+            string first4 = clean.Substring(0, 4);
+            string last4 = clean.Substring(clean.Length - 4);
+            return $"{first4} •••• •••• {last4}";
+        }
+
+        private string MaskCardHolder(string holder)
+        {
+            if (string.IsNullOrWhiteSpace(holder))
+                return "CARD HOLDER";
+
+            string[] parts = holder.Trim().Split(' ');
+            if (parts.Length == 1)
+                return parts[0].Substring(0, Math.Min(2, parts[0].Length)) + "••••";
+
+            string first = parts[0];
+            string last = parts[parts.Length - 1];
+            return first.Substring(0, Math.Min(2, first.Length)) + "••• " + last.Substring(0, Math.Min(2, last.Length)) + "•••";
+        }
+
+        private void RefreshCardDisplay()
+        {
+            cardNum.Text = isCardVisible ? fullCardNumber : MaskCardNumber(fullCardNumber);
+            cardHldrName.Text = isCardVisible ? fullCardHolderName : MaskCardHolder(fullCardHolderName);
+            label11.Text = fullValidThru;
+            panel13.Invalidate();
+        }
+
+        private void ColorTypeColumn()
+        {
+            if (!dgvTransactions.Columns.Contains("Type"))
+                return;
+
+            foreach (DataGridViewRow row in dgvTransactions.Rows)
+            {
+                if (row.IsNewRow || row.Cells["Type"].Value == null)
+                    continue;
+
+                string type = row.Cells["Type"].Value.ToString().Trim().ToLower();
+
+                if (type == "deposit")
+                {
+                    row.Cells["Type"].Style.ForeColor = Color.Green;
+                    row.Cells["Type"].Style.SelectionForeColor = Color.Green;
+                }
+                else if (type == "withdrawal")
+                {
+                    row.Cells["Type"].Style.ForeColor = Color.Red;
+                    row.Cells["Type"].Style.SelectionForeColor = Color.Red;
+                }
+                else if (type == "transfer")
+                {
+                    row.Cells["Type"].Style.ForeColor = Color.RoyalBlue;
+                    row.Cells["Type"].Style.SelectionForeColor = Color.RoyalBlue;
+                }
+                else if (type == "fee")
+                {
+                    row.Cells["Type"].Style.ForeColor = Color.Gray;
+                    row.Cells["Type"].Style.SelectionForeColor = Color.Gray;
+                }
+                else if (type == "interest")
+                {
+                    row.Cells["Type"].Style.ForeColor = Color.DarkOrange;
+                    row.Cells["Type"].Style.SelectionForeColor = Color.DarkOrange;
                 }
 
-                cardHldrName.Text = string.IsNullOrWhiteSpace(fullName) ? "NO NAME" : fullName.ToUpper();
-                cardNum.Text = string.IsNullOrWhiteSpace(cardNumber) ? "NO CARD" : cardNumber;
-                label11.Text = string.IsNullOrWhiteSpace(validThru) ? "--/--" : validThru;
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error loading card info: " + ex.Message);
-        }
-    }
-
-
-    private void ColorTypeColumn()
-    {
-        if (!dgvTransactions.Columns.Contains("Type"))
-            return;
-
-        foreach (DataGridViewRow row in dgvTransactions.Rows)
-        {
-            if (row.IsNewRow) continue;
-            if (row.Cells["Type"].Value == null) continue;
-
-            string type = row.Cells["Type"].Value.ToString().Trim().ToLower();
-
-            if (type == "deposit")
-            {
-                row.Cells["Type"].Style.ForeColor = Color.Green;
-                row.Cells["Type"].Style.SelectionForeColor = Color.Green;
-                row.Cells["Type"].Style.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            }
-            else if (type == "withdrawal")
-            {
-                row.Cells["Type"].Style.ForeColor = Color.Red;
-                row.Cells["Type"].Style.SelectionForeColor = Color.Red;
-                row.Cells["Type"].Style.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            }
-            else if (type == "transfer")
-            {
-                row.Cells["Type"].Style.ForeColor = Color.RoyalBlue;
-                row.Cells["Type"].Style.SelectionForeColor = Color.RoyalBlue;
-                row.Cells["Type"].Style.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            }
-            else if (type == "fee")
-            {
-                row.Cells["Type"].Style.ForeColor = Color.Gray;
-                row.Cells["Type"].Style.SelectionForeColor = Color.Gray;
-                row.Cells["Type"].Style.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            }
-            else if (type == "interest")
-            {
-                row.Cells["Type"].Style.ForeColor = Color.DarkOrange;
-                row.Cells["Type"].Style.SelectionForeColor = Color.DarkOrange;
                 row.Cells["Type"].Style.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             }
         }
-    }
 
-    private void listAccounts_DrawItem(object sender, DrawItemEventArgs e)
-    {
-        if (e.Index < 0) return;
-
-        e.DrawBackground();
-
-        ListBox lb = (ListBox)sender;
-        string text = lb.Items[e.Index].ToString();
-
-        bool isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
-
-        Color backColor = isSelected ? Color.FromArgb(98, 70, 255) : Color.White;
-        Color textColor = isSelected ? Color.White : Color.FromArgb(45, 45, 45);
-
-        using (SolidBrush backBrush = new SolidBrush(backColor))
-        using (SolidBrush textBrush = new SolidBrush(textColor))
+        private void listAccounts_DrawItem(object sender, DrawItemEventArgs e)
         {
-            e.Graphics.FillRectangle(backBrush, e.Bounds);
+            if (e.Index < 0) return;
 
-            Rectangle textRect = new Rectangle(
-                e.Bounds.X + 12,
-                e.Bounds.Y + 9,
-                e.Bounds.Width - 12,
-                e.Bounds.Height - 9
-            );
+            e.DrawBackground();
+            ListBox lb = (ListBox)sender;
+            string text = lb.Items[e.Index].ToString();
+            bool isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
 
-            e.Graphics.DrawString(text, new Font("Segoe UI", 10, FontStyle.Bold), textBrush, textRect);
-        }
+            Color backColor = isSelected ? Color.FromArgb(98, 70, 255) : Color.White;
+            Color textColor = isSelected ? Color.White : Color.FromArgb(45, 45, 45);
 
-        e.DrawFocusRectangle();
-    }
-
-    private void FormatTransactionsGrid()
-    {
-        if (dgvTransactions.Columns.Contains("Type"))
-        {
-            dgvTransactions.Columns["Type"].HeaderText = "Type";
-            dgvTransactions.Columns["Type"].FillWeight = 22;
-        }
-
-        if (dgvTransactions.Columns.Contains("Amount"))
-        {
-            dgvTransactions.Columns["Amount"].HeaderText = "Amount";
-            dgvTransactions.Columns["Amount"].DefaultCellStyle.Format = "N2";
-            dgvTransactions.Columns["Amount"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dgvTransactions.Columns["Amount"].FillWeight = 18;
-        }
-
-        if (dgvTransactions.Columns.Contains("Currency"))
-        {
-            dgvTransactions.Columns["Currency"].HeaderText = "Currency";
-            dgvTransactions.Columns["Currency"].FillWeight = 14;
-        }
-
-        if (dgvTransactions.Columns.Contains("Description"))
-        {
-            dgvTransactions.Columns["Description"].HeaderText = "Details";
-            dgvTransactions.Columns["Description"].FillWeight = 30;
-        }
-
-        if (dgvTransactions.Columns.Contains("Tran_Date"))
-        {
-            dgvTransactions.Columns["Tran_Date"].HeaderText = "Date";
-            dgvTransactions.Columns["Tran_Date"].DefaultCellStyle.Format = "dd.MM.yyyy";
-            dgvTransactions.Columns["Tran_Date"].FillWeight = 18;
-        }
-
-        if (dgvTransactions.Columns.Contains("Transaction_ID"))
-            dgvTransactions.Columns["Transaction_ID"].Visible = false;
-
-        if (dgvTransactions.Columns.Contains("Account_Number"))
-            dgvTransactions.Columns["Account_Number"].Visible = false;
-
-        if (dgvTransactions.Columns.Contains("ID_Transactions"))
-            dgvTransactions.Columns["ID_Transactions"].Visible = false;
-
-        if (dgvTransactions.Columns.Contains("ID_Account"))
-            dgvTransactions.Columns["ID_Account"].Visible = false;
-    }
-
-    private void SetupTransactionsGrid()
-    {
-        dgvTransactions.Columns.Clear();
-        dgvTransactions.AutoGenerateColumns = true;
-
-        dgvTransactions.BorderStyle = BorderStyle.None;
-        dgvTransactions.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-        dgvTransactions.GridColor = Color.FromArgb(235, 235, 235);
-        dgvTransactions.BackgroundColor = Color.White;
-        dgvTransactions.EnableHeadersVisualStyles = false;
-        dgvTransactions.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-
-        dgvTransactions.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
-        dgvTransactions.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(60, 60, 60);
-        dgvTransactions.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-        dgvTransactions.ColumnHeadersHeight = 42;
-
-        dgvTransactions.DefaultCellStyle.BackColor = Color.White;
-        dgvTransactions.DefaultCellStyle.ForeColor = Color.FromArgb(45, 45, 45);
-        dgvTransactions.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-        dgvTransactions.DefaultCellStyle.SelectionBackColor = Color.FromArgb(238, 242, 255);
-        dgvTransactions.DefaultCellStyle.SelectionForeColor = Color.FromArgb(35, 35, 35);
-
-        dgvTransactions.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(252, 252, 252);
-
-        dgvTransactions.RowHeadersVisible = false;
-        dgvTransactions.AllowUserToAddRows = false;
-        dgvTransactions.AllowUserToDeleteRows = false;
-        dgvTransactions.AllowUserToResizeRows = false;
-        dgvTransactions.ReadOnly = true;
-        dgvTransactions.MultiSelect = false;
-        dgvTransactions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        dgvTransactions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        dgvTransactions.RowTemplate.Height = 38;
-        dgvTransactions.DefaultCellStyle.Padding = new Padding(6, 0, 6, 0);
-    }
-
-    private void listAccounts_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (listAccounts.SelectedItem != null)
-        {
-            ComboBoxItem selected = (ComboBoxItem)listAccounts.SelectedItem;
-            selectedAccountId = selected.Value;
-            LoadRecentTransactions();
-        }
-    }
-
-    private void LoadUserAccountsList()
-    {
-        try
-        {
-            using (OracleConnection conn = new OracleConnection(connStr))
+            using (SolidBrush backBrush = new SolidBrush(backColor))
+            using (SolidBrush textBrush = new SolidBrush(textColor))
             {
-                conn.Open();
+                e.Graphics.FillRectangle(backBrush, e.Bounds);
+                Rectangle textRect = new Rectangle(e.Bounds.X + 12, e.Bounds.Y + 9, e.Bounds.Width - 12, e.Bounds.Height - 9);
+                e.Graphics.DrawString(text, new Font("Segoe UI", 10, FontStyle.Bold), textBrush, textRect);
+            }
 
-                string query = @"
+            e.DrawFocusRectangle();
+        }
+
+        private void FormatTransactionsGrid()
+        {
+            if (dgvTransactions.Columns.Contains("Type"))
+            {
+                dgvTransactions.Columns["Type"].HeaderText = "Type";
+                dgvTransactions.Columns["Type"].FillWeight = 22;
+            }
+
+            if (dgvTransactions.Columns.Contains("Amount"))
+            {
+                dgvTransactions.Columns["Amount"].HeaderText = "Amount";
+                dgvTransactions.Columns["Amount"].DefaultCellStyle.Format = "N2";
+                dgvTransactions.Columns["Amount"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvTransactions.Columns["Amount"].FillWeight = 18;
+            }
+
+            if (dgvTransactions.Columns.Contains("Currency"))
+            {
+                dgvTransactions.Columns["Currency"].HeaderText = "Currency";
+                dgvTransactions.Columns["Currency"].FillWeight = 14;
+            }
+
+            if (dgvTransactions.Columns.Contains("Description"))
+            {
+                dgvTransactions.Columns["Description"].HeaderText = "Details";
+                dgvTransactions.Columns["Description"].FillWeight = 30;
+            }
+
+            if (dgvTransactions.Columns.Contains("Tran_Date"))
+            {
+                dgvTransactions.Columns["Tran_Date"].HeaderText = "Date";
+                dgvTransactions.Columns["Tran_Date"].DefaultCellStyle.Format = "dd.MM.yyyy";
+                dgvTransactions.Columns["Tran_Date"].FillWeight = 18;
+            }
+
+            if (dgvTransactions.Columns.Contains("ID_Transactions"))
+                dgvTransactions.Columns["ID_Transactions"].Visible = false;
+
+            if (dgvTransactions.Columns.Contains("ID_Account"))
+                dgvTransactions.Columns["ID_Account"].Visible = false;
+        }
+
+        private void SetupTransactionsGrid()
+        {
+            dgvTransactions.Columns.Clear();
+            dgvTransactions.AutoGenerateColumns = true;
+
+            dgvTransactions.BorderStyle = BorderStyle.None;
+            dgvTransactions.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvTransactions.GridColor = Color.FromArgb(235, 235, 235);
+            dgvTransactions.BackgroundColor = Color.White;
+            dgvTransactions.EnableHeadersVisualStyles = false;
+            dgvTransactions.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+            dgvTransactions.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
+            dgvTransactions.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(60, 60, 60);
+            dgvTransactions.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgvTransactions.ColumnHeadersHeight = 42;
+
+            dgvTransactions.DefaultCellStyle.BackColor = Color.White;
+            dgvTransactions.DefaultCellStyle.ForeColor = Color.FromArgb(45, 45, 45);
+            dgvTransactions.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            dgvTransactions.DefaultCellStyle.SelectionBackColor = Color.FromArgb(238, 242, 255);
+            dgvTransactions.DefaultCellStyle.SelectionForeColor = Color.FromArgb(35, 35, 35);
+            dgvTransactions.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(252, 252, 252);
+
+            dgvTransactions.RowHeadersVisible = false;
+            dgvTransactions.AllowUserToAddRows = false;
+            dgvTransactions.AllowUserToDeleteRows = false;
+            dgvTransactions.AllowUserToResizeRows = false;
+            dgvTransactions.ReadOnly = true;
+            dgvTransactions.MultiSelect = false;
+            dgvTransactions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTransactions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvTransactions.RowTemplate.Height = 38;
+            dgvTransactions.DefaultCellStyle.Padding = new Padding(6, 0, 6, 0);
+        }
+
+        private void listAccounts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listAccounts.SelectedItem != null)
+            {
+                ComboBoxItem selected = (ComboBoxItem)listAccounts.SelectedItem;
+                selectedAccountId = selected.Value;
+                LoadRecentTransactions();
+            }
+        }
+
+        private void LoadUserAccountsList()
+        {
+            try
+            {
+                using (OracleConnection conn = new OracleConnection(connStr))
+                {
+                    conn.Open();
+
+                    string query = @"
                         SELECT ID_Account, Account_NO
                         FROM Account
                         WHERE ID_Client = :clientId
                         ORDER BY ID_Account";
 
-                using (OracleCommand cmd = new OracleCommand(query, conn))
-                {
-                    cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
-
-                    using (OracleDataReader reader = cmd.ExecuteReader())
+                    using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
-                        listAccounts.Items.Clear();
+                        cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
 
-                        while (reader.Read())
+                        using (OracleDataReader reader = cmd.ExecuteReader())
                         {
-                            listAccounts.Items.Add(
-                                new ComboBoxItem(
-                                    reader["Account_NO"].ToString(),
-                                    Convert.ToInt32(reader["ID_Account"])
-                                )
-                            );
+                            listAccounts.Items.Clear();
+
+                            while (reader.Read())
+                            {
+                                listAccounts.Items.Add(new ComboBoxItem(reader["Account_NO"].ToString(), Convert.ToInt32(reader["ID_Account"])));
+                            }
                         }
                     }
                 }
+
+                if (listAccounts.Items.Count > 0)
+                    listAccounts.SelectedIndex = 0;
             }
-
-            if (listAccounts.Items.Count > 0)
-                listAccounts.SelectedIndex = 0;
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error loading accounts: " + ex.Message);
-        }
-    }
-
-    private void LoadExchangeRatesForChart(int fromCurrencyId, int toCurrencyId, string pairText)
-    {
-        exchangeRates.Clear();
-        chartPairText = pairText;
-
-        try
-        {
-            using (OracleConnection conn = new OracleConnection(connStr))
+            catch (Exception ex)
             {
-                conn.Open();
+                MessageBox.Show("Error loading accounts: " + ex.Message);
+            }
+        }
 
-                string query = @"
+        private void LoadExchangeRatesForChart(int fromCurrencyId, int toCurrencyId, string pairText)
+        {
+            exchangeRates.Clear();
+            chartPairText = pairText;
+
+            try
+            {
+                using (OracleConnection conn = new OracleConnection(connStr))
+                {
+                    conn.Open();
+
+                    string query = @"
                         SELECT Rate
                         FROM (
                             SELECT Rate
@@ -459,106 +517,67 @@ namespace BankaApp
                         )
                         WHERE ROWNUM <= 6";
 
-                using (OracleCommand cmd = new OracleCommand(query, conn))
-                {
-                    cmd.BindByName = true;
-                    cmd.Parameters.Add(":fromId", OracleDbType.Int32).Value = fromCurrencyId;
-                    cmd.Parameters.Add(":toId", OracleDbType.Int32).Value = toCurrencyId;
-
-                    using (OracleDataReader reader = cmd.ExecuteReader())
+                    using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
-                        while (reader.Read())
+                        cmd.BindByName = true;
+                        cmd.Parameters.Add(":fromId", OracleDbType.Int32).Value = fromCurrencyId;
+                        cmd.Parameters.Add(":toId", OracleDbType.Int32).Value = toCurrencyId;
+
+                        using (OracleDataReader reader = cmd.ExecuteReader())
                         {
-                            exchangeRates.Add(reader.GetDecimal(0));
+                            while (reader.Read())
+                                exchangeRates.Add(reader.GetDecimal(0));
                         }
                     }
                 }
+
+                exchangeRates.Reverse();
+
+                if (exchangeRates.Count < 2)
+                {
+                    exchangeRates.Clear();
+                    exchangeRates.Add(0.1910m);
+                    exchangeRates.Add(0.1935m);
+                    exchangeRates.Add(0.1942m);
+                    exchangeRates.Add(0.1951m);
+                    exchangeRates.Add(0.1962m);
+                }
             }
-
-            exchangeRates.Reverse();
-
-            if (exchangeRates.Count < 2)
+            catch (Exception ex)
             {
-                exchangeRates.Clear();
-                exchangeRates.Add(0.1910m);
-                exchangeRates.Add(0.1935m);
-                exchangeRates.Add(0.1942m);
-                exchangeRates.Add(0.1951m);
-                exchangeRates.Add(0.1962m);
+                MessageBox.Show("Error loading exchange rates: " + ex.Message);
             }
         }
-        catch (Exception ex)
+
+        private void SetupTransactionFilters()
         {
-            MessageBox.Show("Error loading exchange rates: " + ex.Message);
+            cmbType.Items.Clear();
+            cmbType.Items.Add("All");
+            cmbType.Items.Add("Deposit");
+            cmbType.Items.Add("Withdrawal");
+            cmbType.Items.Add("Transfer");
+            cmbType.Items.Add("Fee");
+            cmbType.Items.Add("Interest");
+            cmbType.SelectedIndex = 0;
+
+            dtpFrom.Value = DateTime.Today.AddMonths(-3);
+            dtpTo.Value = DateTime.Today;
         }
-    }
 
-    private void SetupTransactionFilters()
-    {
-        cmbType.Items.Clear();
-        cmbType.Items.Add("All");
-        cmbType.Items.Add("Deposit");
-        cmbType.Items.Add("Withdrawal");
-        cmbType.Items.Add("Transfer");
-        cmbType.Items.Add("Fee");
-        cmbType.Items.Add("Interest");
-        cmbType.SelectedIndex = 0;
-
-        dtpFrom.Value = DateTime.Today.AddMonths(-3);
-        dtpTo.Value = DateTime.Today;
-    }
-
-    private void dgvTransactions_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-    {
-        ColorTypeColumn();
-    }
-
-    private void StyleTransactionsGrid()
-    {
-        dgvTransactions.BorderStyle = BorderStyle.None;
-        dgvTransactions.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-        dgvTransactions.GridColor = Color.FromArgb(235, 235, 235);
-
-        dgvTransactions.BackgroundColor = Color.White;
-        dgvTransactions.EnableHeadersVisualStyles = false;
-
-        dgvTransactions.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-        dgvTransactions.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
-        dgvTransactions.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(60, 60, 60);
-        dgvTransactions.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-        dgvTransactions.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dgvTransactions.ColumnHeadersHeight = 42;
-
-        dgvTransactions.DefaultCellStyle.BackColor = Color.White;
-        dgvTransactions.DefaultCellStyle.ForeColor = Color.FromArgb(45, 45, 45);
-        dgvTransactions.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-        dgvTransactions.DefaultCellStyle.SelectionBackColor = Color.FromArgb(238, 242, 255);
-        dgvTransactions.DefaultCellStyle.SelectionForeColor = Color.Black;
-
-        dgvTransactions.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(252, 252, 252);
-
-        dgvTransactions.RowHeadersVisible = false;
-        dgvTransactions.AllowUserToAddRows = false;
-        dgvTransactions.AllowUserToDeleteRows = false;
-        dgvTransactions.AllowUserToResizeRows = false;
-        dgvTransactions.ReadOnly = true;
-        dgvTransactions.MultiSelect = false;
-        dgvTransactions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        dgvTransactions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        dgvTransactions.RowTemplate.Height = 38;
-
-        dgvTransactions.DefaultCellStyle.Padding = new Padding(6, 0, 6, 0);
-    }
-
-    private void LoadRecentTransactions()
-    {
-        try
+        private void dgvTransactions_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            using (OracleConnection conn = new OracleConnection(connStr))
-            {
-                conn.Open();
+            ColorTypeColumn();
+        }
 
-                string query = @"
+        private void LoadRecentTransactions()
+        {
+            try
+            {
+                using (OracleConnection conn = new OracleConnection(connStr))
+                {
+                    conn.Open();
+
+                    string query = @"
                         SELECT *
                         FROM (
                             SELECT 
@@ -573,70 +592,65 @@ namespace BankaApp
                             JOIN Currency_type c ON t.ID_Currency_Type = c.ID_Currency_type
                             WHERE a.ID_Client = :clientId";
 
-                if (selectedAccountId.HasValue)
-                {
-                    query += " AND a.ID_Account = :accountId";
-                }
+                    if (selectedAccountId.HasValue)
+                        query += " AND a.ID_Account = :accountId";
 
-                query += @"
+                    query += @"
                             ORDER BY t.Date_Tran DESC
                         )
                         WHERE ROWNUM <= 10";
 
-                using (OracleCommand cmd = new OracleCommand(query, conn))
-                {
-                    cmd.BindByName = true;
-                    cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
-
-                    if (selectedAccountId.HasValue)
+                    using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
-                        cmd.Parameters.Add(":accountId", OracleDbType.Int32).Value = selectedAccountId.Value;
+                        cmd.BindByName = true;
+                        cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
+
+                        if (selectedAccountId.HasValue)
+                            cmd.Parameters.Add(":accountId", OracleDbType.Int32).Value = selectedAccountId.Value;
+
+                        OracleDataAdapter da = new OracleDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        dgvTransactions.DataSource = dt;
+                        FormatTransactionsGrid();
                     }
-
-                    OracleDataAdapter da = new OracleDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-
-                    dgvTransactions.DataSource = dt;
-                    StyleTransactionsGrid();
-                    FormatTransactionsGrid();
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error loading recent transactions: " + ex.Message);
-        }
-    }
-
-    private void btnFilter_Click(object sender, EventArgs e)
-    {
-        if (dtpFrom.Value.Date > dtpTo.Value.Date)
-        {
-            MessageBox.Show("From date cannot be after To date.");
-            return;
-        }
-        LoadFilteredTransactions();
-    }
-
-    private void btnReset_Click(object sender, EventArgs e)
-    {
-        dtpFrom.Value = DateTime.Today.AddMonths(-3);
-        dtpTo.Value = DateTime.Today;
-        cmbType.SelectedIndex = 0;
-
-        LoadRecentTransactions();
-    }
-
-    private void LoadFilteredTransactions()
-    {
-        try
-        {
-            using (OracleConnection conn = new OracleConnection(connStr))
+            catch (Exception ex)
             {
-                conn.Open();
+                MessageBox.Show("Error loading recent transactions: " + ex.Message);
+            }
+        }
 
-                string query = @"
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            if (dtpFrom.Value.Date > dtpTo.Value.Date)
+            {
+                MessageBox.Show("From date cannot be after To date.");
+                return;
+            }
+
+            LoadFilteredTransactions();
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            dtpFrom.Value = DateTime.Today.AddMonths(-3);
+            dtpTo.Value = DateTime.Today;
+            cmbType.SelectedIndex = 0;
+            LoadRecentTransactions();
+        }
+
+        private void LoadFilteredTransactions()
+        {
+            try
+            {
+                using (OracleConnection conn = new OracleConnection(connStr))
+                {
+                    conn.Open();
+
+                    string query = @"
                         SELECT 
                             tp.Type AS Type,
                             t.Sum_Amount AS Amount,
@@ -651,255 +665,257 @@ namespace BankaApp
                           AND t.Date_Tran >= :dateFrom
                           AND t.Date_Tran < :dateTo";
 
-                if (cmbType.Text != "All")
-                {
-                    query += " AND tp.Type = :type";
-                }
-
-                if (selectedAccountId.HasValue)
-                {
-                    query += " AND a.ID_Account = :accountId";
-                }
-
-                query += " ORDER BY t.Date_Tran DESC";
-
-                using (OracleCommand cmd = new OracleCommand(query, conn))
-                {
-                    cmd.BindByName = true;
-
-                    cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
-                    cmd.Parameters.Add(":dateFrom", OracleDbType.Date).Value = dtpFrom.Value.Date;
-                    cmd.Parameters.Add(":dateTo", OracleDbType.Date).Value = dtpTo.Value.Date.AddDays(1);
-
                     if (cmbType.Text != "All")
-                    {
-                        cmd.Parameters.Add(":type", OracleDbType.Varchar2).Value = cmbType.Text;
-                    }
+                        query += " AND tp.Type = :type";
 
                     if (selectedAccountId.HasValue)
+                        query += " AND a.ID_Account = :accountId";
+
+                    query += " ORDER BY t.Date_Tran DESC";
+
+                    using (OracleCommand cmd = new OracleCommand(query, conn))
                     {
-                        cmd.Parameters.Add(":accountId", OracleDbType.Int32).Value = selectedAccountId.Value;
+                        cmd.BindByName = true;
+                        cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
+                        cmd.Parameters.Add(":dateFrom", OracleDbType.Date).Value = dtpFrom.Value.Date;
+                        cmd.Parameters.Add(":dateTo", OracleDbType.Date).Value = dtpTo.Value.Date.AddDays(1);
+
+                        if (cmbType.Text != "All")
+                            cmd.Parameters.Add(":type", OracleDbType.Varchar2).Value = cmbType.Text;
+
+                        if (selectedAccountId.HasValue)
+                            cmd.Parameters.Add(":accountId", OracleDbType.Int32).Value = selectedAccountId.Value;
+
+                        OracleDataAdapter da = new OracleDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        dgvTransactions.DataSource = dt;
+                        FormatTransactionsGrid();
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error filtering transactions: " + ex.Message);
+            }
+        }
 
-                    OracleDataAdapter da = new OracleDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
+        private void panel12_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
 
-                    dgvTransactions.DataSource = dt;
-                    StyleTransactionsGrid();
-                    FormatTransactionsGrid();
+            Rectangle rect = panel12.ClientRectangle;
+            g.Clear(panel12.BackColor);
+
+            using (Pen borderPen = new Pen(Color.FromArgb(230, 233, 240), 1))
+            {
+                Rectangle borderRect = new Rectangle(0, 0, panel12.Width - 1, panel12.Height - 1);
+                g.DrawRectangle(borderPen, borderRect);
+            }
+
+            using (Font titleFont = new Font("Segoe UI", 11, FontStyle.Bold))
+            using (Font smallFont = new Font("Segoe UI", 9, FontStyle.Bold))
+            using (Font axisFont = new Font("Segoe UI", 8))
+            using (Brush textBrush = new SolidBrush(Color.FromArgb(80, 80, 80)))
+            using (Pen linePen = new Pen(Color.FromArgb(98, 70, 255), 3))
+            using (Brush pointFill = new SolidBrush(Color.White))
+            using (Pen pointBorder = new Pen(Color.FromArgb(98, 70, 255), 2))
+            {
+                g.DrawString("Exchange Rates", titleFont, textBrush, 20, 15);
+                g.DrawString(chartPairText, smallFont, textBrush, rect.Width - 100, 18);
+
+                if (exchangeRates == null || exchangeRates.Count < 2)
+                    return;
+
+                int leftMargin = 55;
+                int rightMargin = 20;
+                int topMargin = 55;
+                int bottomMargin = 30;
+
+                int chartWidth = rect.Width - leftMargin - rightMargin;
+                int chartHeight = rect.Height - topMargin - bottomMargin;
+
+                decimal minRate = decimal.MaxValue;
+                decimal maxRate = decimal.MinValue;
+
+                foreach (decimal rate in exchangeRates)
+                {
+                    if (rate < minRate) minRate = rate;
+                    if (rate > maxRate) maxRate = rate;
+                }
+
+                decimal padding = (maxRate - minRate) * 0.2m;
+                if (padding == 0) padding = 0.01m;
+
+                minRate -= padding;
+                maxRate += padding;
+
+                using (Pen gridPen = new Pen(Color.FromArgb(240, 242, 247), 1))
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        float y = topMargin + (chartHeight / 3f) * i;
+                        g.DrawLine(gridPen, leftMargin, y, leftMargin + chartWidth, y);
+                    }
+                }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    decimal value = minRate + ((maxRate - minRate) / 3m) * i;
+                    float y = topMargin + chartHeight - ((float)(value - minRate) / (float)(maxRate - minRate) * chartHeight);
+                    g.DrawString(Math.Round(value, 3).ToString(), axisFont, textBrush, 8, y - 8);
+                }
+
+                List<PointF> points = new List<PointF>();
+
+                for (int i = 0; i < exchangeRates.Count; i++)
+                {
+                    float x = leftMargin + (chartWidth / (float)(exchangeRates.Count - 1)) * i;
+                    float y = topMargin + chartHeight - ((float)(exchangeRates[i] - minRate) / (float)(maxRate - minRate) * chartHeight);
+                    points.Add(new PointF(x, y));
+                }
+
+                if (points.Count >= 2)
+                {
+                    GraphicsPath path = new GraphicsPath();
+                    path.AddCurve(points.ToArray(), 0.5f);
+                    g.DrawPath(linePen, path);
+                }
+
+                foreach (PointF p in points)
+                {
+                    g.FillEllipse(pointFill, p.X - 5, p.Y - 5, 10, 10);
+                    g.DrawEllipse(pointBorder, p.X - 5, p.Y - 5, 10, 10);
                 }
             }
         }
-        catch (Exception ex)
+
+        private void panel13_Paint(object sender, PaintEventArgs e)
         {
-            MessageBox.Show("Error filtering transactions: " + ex.Message);
-        }
-    }
+            Graphics g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
 
-    private void mainForn_Load(object sender, EventArgs e) { }
-    private void panel1_Paint(object sender, PaintEventArgs e) { }
-    private void panel2_Paint(object sender, PaintEventArgs e) { }
-    private void panel3_Paint(object sender, PaintEventArgs e) { }
-    private void panel4_Paint(object sender, PaintEventArgs e) { }
-    private void panel5_Paint(object sender, PaintEventArgs e) { }
-    private void panel6_Paint(object sender, PaintEventArgs e) { }
-    private void panel7_Paint(object sender, PaintEventArgs e) { }
-    private void label1_Click(object sender, EventArgs e) { }
-    private void label2_Click(object sender, EventArgs e) { }
-    private void label3_Click(object sender, EventArgs e) { }
-    private void label4_Click(object sender, EventArgs e) { }
-    private void label5_Click(object sender, EventArgs e) { }
+            Rectangle rect = panel13.ClientRectangle;
 
-    private void panel13_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel14, 30);
-        SetRoundedPanel(panel13, 30);
-        SetRoundedPanel(panel15, 40);
-        panel13.Invalidate();
-    }
-
-    private void panel15_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel15, 30);
-        panel13.Invalidate();
-    }
-
-    private void panel6_Paint_1(object sender, PaintEventArgs e) { }
-    private void label10_Click(object sender, EventArgs e) { }
-    private void ValidThru(object sender, EventArgs e) { }
-    private void cardHldrName_Click(object sender, EventArgs e) { }
-    private void cardNum_Click(object sender, EventArgs e) { }
-
-    private void panel12_Paint(object sender, PaintEventArgs e)
-    {
-        Graphics g = e.Graphics;
-        g.SmoothingMode = SmoothingMode.AntiAlias;
-
-        Rectangle rect = panel12.ClientRectangle;
-        g.Clear(panel12.BackColor);
-
-        using (Font titleFont = new Font("Segoe UI", 11, FontStyle.Bold))
-        using (Font smallFont = new Font("Segoe UI", 9, FontStyle.Bold))
-        using (Font axisFont = new Font("Segoe UI", 8))
-        using (Brush textBrush = new SolidBrush(Color.FromArgb(80, 80, 80)))
-        using (Pen linePen = new Pen(Color.FromArgb(98, 70, 255), 3))
-        using (Brush pointFill = new SolidBrush(Color.White))
-        using (Pen pointBorder = new Pen(Color.FromArgb(98, 70, 255), 2))
-        {
-            g.DrawString("Exchange Rates", titleFont, textBrush, 20, 15);
-            g.DrawString(chartPairText, smallFont, textBrush, rect.Width - 100, 18);
-
-            if (exchangeRates == null || exchangeRates.Count < 2)
-                return;
-
-            int leftMargin = 55;
-            int rightMargin = 20;
-            int topMargin = 55;
-            int bottomMargin = 30;
-
-            int chartWidth = rect.Width - leftMargin - rightMargin;
-            int chartHeight = rect.Height - topMargin - bottomMargin;
-
-            decimal minRate = decimal.MaxValue;
-            decimal maxRate = decimal.MinValue;
-
-            foreach (decimal rate in exchangeRates)
+            using (LinearGradientBrush brush = new LinearGradientBrush(rect, Color.FromArgb(22, 78, 255), Color.FromArgb(0, 186, 255), 25f))
             {
-                if (rate < minRate) minRate = rate;
-                if (rate > maxRate) maxRate = rate;
+                g.FillRectangle(brush, rect);
             }
 
-            decimal padding = (maxRate - minRate) * 0.2m;
-            if (padding == 0) padding = 0.01m;
-
-            minRate -= padding;
-            maxRate += padding;
-
-            for (int i = 0; i < 4; i++)
+            using (Pen softPen = new Pen(Color.FromArgb(255, 255, 255, 50), 1))
             {
-                decimal value = minRate + ((maxRate - minRate) / 3m) * i;
-                float y = topMargin + chartHeight - ((float)(value - minRate) / (float)(maxRate - minRate) * chartHeight);
-                g.DrawString(Math.Round(value, 3).ToString(), axisFont, textBrush, 8, y - 8);
+                g.DrawEllipse(softPen, rect.Width - 90, rect.Height - 90, 120, 120);
+                g.DrawEllipse(softPen, rect.Width - 50, -20, 80, 80);
             }
 
-            List<PointF> points = new List<PointF>();
-
-            for (int i = 0; i < exchangeRates.Count; i++)
+            using (Brush whiteBrush = new SolidBrush(Color.White))
+            using (Brush lightBrush = new SolidBrush(Color.FromArgb(230, 240, 255)))
+            using (Font brandFont = new Font("Segoe UI", 18, FontStyle.Bold))
+            using (Font chipFont = new Font("Segoe UI", 18, FontStyle.Bold))
+            using (Font numFont = new Font("Consolas", 16, FontStyle.Bold))
+            using (Font labelFont = new Font("Segoe UI", 8, FontStyle.Bold))
+            using (Font valueFont = new Font("Segoe UI", 11, FontStyle.Bold))
             {
-                float x = leftMargin + (chartWidth / (float)(exchangeRates.Count - 1)) * i;
-                float y = topMargin + chartHeight -
-                          ((float)(exchangeRates[i] - minRate) / (float)(maxRate - minRate) * chartHeight);
+                g.DrawString("VISA", brandFont, whiteBrush, 22, 18);
+                g.DrawString("MeliPay", brandFont, whiteBrush, rect.Width - 125, 18);
 
-                points.Add(new PointF(x, y));
-            }
+                using (Brush chipBrush = new SolidBrush(Color.FromArgb(255, 215, 90)))
+                using (Brush chipTextBrush = new SolidBrush(Color.FromArgb(140, 100, 10)))
+                {
+                    g.FillRectangle(chipBrush, 24, 58, 42, 28);
+                    g.DrawString("✦", chipFont, chipTextBrush, 32, 55);
+                }
 
-            if (points.Count >= 2)
-            {
-                GraphicsPath path = new GraphicsPath();
-                path.AddCurve(points.ToArray(), 0.5f);
-                g.DrawPath(linePen, path);
-            }
-
-            foreach (PointF p in points)
-            {
-                g.FillEllipse(pointFill, p.X - 5, p.Y - 5, 10, 10);
-                g.DrawEllipse(pointBorder, p.X - 5, p.Y - 5, 10, 10);
+                g.DrawString(cardNum.Text, numFont, whiteBrush, 22, 105);
+                g.DrawString("VALID THRU", labelFont, lightBrush, 22, 150);
+                g.DrawString(label11.Text, valueFont, whiteBrush, 22, 168);
+                g.DrawString("CARD HOLDER", labelFont, lightBrush, 150, 150);
+                g.DrawString(cardHldrName.Text, valueFont, whiteBrush, 150, 168);
             }
         }
-    }
 
+        private void SetRoundedPanel(Panel panel, int radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+            path.StartFigure();
+            path.AddArc(0, 0, radius, radius, 180, 90);
+            path.AddArc(panel.Width - radius, 0, radius, radius, 270, 90);
+            path.AddArc(panel.Width - radius, panel.Height - radius, radius, radius, 0, 90);
+            path.AddArc(0, panel.Height - radius, radius, radius, 90, 90);
+            path.CloseFigure();
+            panel.Region = new Region(path);
+        }
 
+        private void panel2_Resize(object sender, EventArgs e) => SetRoundedPanel(panel2, 30);
+        private void panel3_Resize(object sender, EventArgs e) => SetRoundedPanel(panel3, 30);
+        private void panel4_Resize(object sender, EventArgs e) => SetRoundedPanel(panel4, 40);
+        private void panel5_Resize(object sender, EventArgs e) => SetRoundedPanel(panel5, 40);
+        private void panel6_Resize(object sender, EventArgs e) => SetRoundedPanel(panel6, 30);
+        private void panel7_Resize(object sender, EventArgs e) => SetRoundedPanel(panel3, 30);
 
-    private void label11_Click(object sender, EventArgs e) { }
-    private void label13_Click(object sender, EventArgs e) { }
-    private void usrName_Click(object sender, EventArgs e) { }
-    private void panel13_Paint(object sender, PaintEventArgs e) { }
-    private void panel14_Paint(object sender, PaintEventArgs e) { }
-    private void button2_Click(object sender, EventArgs e) { }
-    private void panel15_Paint(object sender, PaintEventArgs e) { }
+        private void panel12_Resize(object sender, EventArgs e)
+        {
+            SetRoundedPanel(panel12, 30);
+            panel12.Invalidate();
+        }
 
-    private void SetRoundedPanel(Panel panel, int radius)
-    {
-        GraphicsPath path = new GraphicsPath();
-        path.StartFigure();
-
-        path.AddArc(0, 0, radius, radius, 180, 90);
-        path.AddArc(panel.Width - radius, 0, radius, radius, 270, 90);
-        path.AddArc(panel.Width - radius, panel.Height - radius, radius, radius, 0, 90);
-        path.AddArc(0, panel.Height - radius, radius, radius, 90, 90);
-
-        path.CloseFigure();
-        panel.Region = new Region(path);
-    }
-
-    private void panel1_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel1, 30);
-    }
-
-    private void panel2_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel2, 30);
-    }
-
-    private void panel3_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel3, 30);
-    }
-
-    private void panel4_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel4, 40);
-    }
-
-    private void panel5_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel5, 40);
-    }
-
-    private void panel6_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel6, 30);
-    }
-
-    private void panel7_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel7, 30);
-    }
-
-    private void panel12_Resize(object sender, EventArgs e)
-    {
-        SetRoundedPanel(panel12, 30);
-        panel12.Invalidate();
-    }
+        private void panel13_Resize(object sender, EventArgs e)
+        {
+            SetRoundedPanel(panel13, 30);
+            panel13.Invalidate();
+        }
 
         private void profl_Click(object sender, EventArgs e)
         {
             ProfileForm form = new ProfileForm(currentClientId, currentAppUserId, currentUsername);
             form.Show();
-            this.Hide();
+            Hide();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             settings form = new settings(currentClientId, currentAppUserId, currentUsername);
             form.Show();
-            this.Hide();
+            Hide();
         }
 
         private void homeBtn_Click(object sender, EventArgs e)
         {
-            mainForn loginForm = new mainForn(currentClientId, currentAppUserId, currentUsername);
-            loginForm.Show();
-            this.Hide();
+            SetActiveMenu(homeBtn);
         }
 
         private void secrty_Click(object sender, EventArgs e)
         {
-            securityForm loginForm = new securityForm(currentClientId, currentAppUserId, currentUsername);
-            loginForm.Show();
-            this.Hide();
+            securityForm form = new securityForm(currentClientId, currentAppUserId, currentUsername);
+            form.Show();
+            Hide();
         }
+        private void panel2_Paint(object sender, PaintEventArgs e) { }
+        private void panel3_Paint(object sender, PaintEventArgs e) { }
+        private void panel4_Paint(object sender, PaintEventArgs e) { }
+        private void panel5_Paint(object sender, PaintEventArgs e) { }
+        private void panel6_Paint_1(object sender, PaintEventArgs e) { }
+        private void panel7_Paint(object sender, PaintEventArgs e) { }
+        private void panel14_Paint(object sender, PaintEventArgs e) { }
+        private void AddMoney_Click(object sender, EventArgs e) { }
+        private void sendMoney_Click(object sender, EventArgs e) { }
+        private void mainForn_Load(object sender, EventArgs e) { }
+        private void panel1_Paint(object sender, PaintEventArgs e) { }
+        private void label1_Click(object sender, EventArgs e) { }
+        private void label2_Click(object sender, EventArgs e) { }
+        private void label3_Click(object sender, EventArgs e) { }
+        private void label4_Click(object sender, EventArgs e) { }
+        private void label5_Click(object sender, EventArgs e) { }
+        private void label10_Click(object sender, EventArgs e) { }
+        private void label11_Click(object sender, EventArgs e) { }
+        private void label13_Click(object sender, EventArgs e) { }
+        private void usrName_Click(object sender, EventArgs e) { }
+        private void button2_Click(object sender, EventArgs e) { }
+        private void textBox1_TextChanged(object sender, EventArgs e) { }
+        private void cardNum_Click(object sender, EventArgs e) { }
+        private void cardHldrName_Click(object sender, EventArgs e) { }
+        private void ValidThru(object sender, EventArgs e) { }
     }
 }

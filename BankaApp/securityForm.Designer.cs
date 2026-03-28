@@ -65,6 +65,7 @@ namespace BankaApp
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(223, 661);
             this.panel6.TabIndex = 14;
+            this.panel6.Paint += new System.Windows.Forms.PaintEventHandler(this.panel6_Paint);
             // 
             // button1
             // 
@@ -236,6 +237,7 @@ namespace BankaApp
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(805, 661);
             this.panel1.TabIndex = 16;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // securityForm
             // 

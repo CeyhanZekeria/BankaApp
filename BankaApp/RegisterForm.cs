@@ -34,7 +34,134 @@ namespace BankaApp
             MakeButtonRound(button2);
             button2.Resize += button2_Resize;
 
+            AppState.ApplyFormState(this);
+            ThemeManager.ApplyTheme(this);
+
+            this.Resize += (s, e) => AppState.SaveFormState(this);
+            this.Move += (s, e) => AppState.SaveFormState(this);
+            this.FormClosing += (s, e) => AppState.SaveFormState(this);
+
             ApplyEnglishLanguage();
+        }
+
+        private int GetOrCreateCountryId(OracleConnection conn, OracleTransaction transaction, string countryName)
+        {
+            string selectQuery = @"
+        SELECT ID_Country
+        FROM Country
+        WHERE UPPER(TRIM(Country)) = UPPER(TRIM(:countryName))";
+
+            using (OracleCommand cmdSelect = new OracleCommand(selectQuery, conn))
+            {
+                cmdSelect.Transaction = transaction;
+                cmdSelect.BindByName = true;
+                cmdSelect.Parameters.Add(":countryName", OracleDbType.Varchar2).Value = countryName.Trim();
+
+                object result = cmdSelect.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                    return Convert.ToInt32(result);
+            }
+
+            string insertQuery = @"
+        INSERT INTO Country (ID_Country, Country)
+        VALUES (seq_country.NEXTVAL, :countryName)
+        RETURNING ID_Country INTO :newCountryId";
+
+            using (OracleCommand cmdInsert = new OracleCommand(insertQuery, conn))
+            {
+                cmdInsert.Transaction = transaction;
+                cmdInsert.BindByName = true;
+                cmdInsert.Parameters.Add(":countryName", OracleDbType.Varchar2).Value = countryName.Trim();
+
+                OracleParameter outParam = new OracleParameter(":newCountryId", OracleDbType.Int32);
+                outParam.Direction = ParameterDirection.Output;
+                cmdInsert.Parameters.Add(outParam);
+
+                cmdInsert.ExecuteNonQuery();
+                return Convert.ToInt32(((OracleDecimal)outParam.Value).Value);
+            }
+        }
+
+        private int GetOrCreateCityId(OracleConnection conn, OracleTransaction transaction, string cityName, int countryId)
+        {
+            string selectQuery = @"
+        SELECT ID_City
+        FROM City
+        WHERE UPPER(TRIM(City)) = UPPER(TRIM(:cityName))
+          AND ID_Country = :countryId";
+
+            using (OracleCommand cmdSelect = new OracleCommand(selectQuery, conn))
+            {
+                cmdSelect.Transaction = transaction;
+                cmdSelect.BindByName = true;
+                cmdSelect.Parameters.Add(":cityName", OracleDbType.Varchar2).Value = cityName.Trim();
+                cmdSelect.Parameters.Add(":countryId", OracleDbType.Int32).Value = countryId;
+
+                object result = cmdSelect.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                    return Convert.ToInt32(result);
+            }
+
+            string insertQuery = @"
+        INSERT INTO City (ID_City, City, ID_Country, Postal_code)
+        VALUES (seq_city.NEXTVAL, :cityName, :countryId, NULL)
+        RETURNING ID_City INTO :newCityId";
+
+            using (OracleCommand cmdInsert = new OracleCommand(insertQuery, conn))
+            {
+                cmdInsert.Transaction = transaction;
+                cmdInsert.BindByName = true;
+                cmdInsert.Parameters.Add(":cityName", OracleDbType.Varchar2).Value = cityName.Trim();
+                cmdInsert.Parameters.Add(":countryId", OracleDbType.Int32).Value = countryId;
+
+                OracleParameter outParam = new OracleParameter(":newCityId", OracleDbType.Int32);
+                outParam.Direction = ParameterDirection.Output;
+                cmdInsert.Parameters.Add(outParam);
+
+                cmdInsert.ExecuteNonQuery();
+                return Convert.ToInt32(((OracleDecimal)outParam.Value).Value);
+            }
+        }
+
+        private int GetOrCreateStreetId(OracleConnection conn, OracleTransaction transaction, string streetName, int cityId)
+        {
+            string selectQuery = @"
+        SELECT ID_Street
+        FROM Street
+        WHERE UPPER(TRIM(Street)) = UPPER(TRIM(:streetName))
+          AND ID_City = :cityId";
+
+            using (OracleCommand cmdSelect = new OracleCommand(selectQuery, conn))
+            {
+                cmdSelect.Transaction = transaction;
+                cmdSelect.BindByName = true;
+                cmdSelect.Parameters.Add(":streetName", OracleDbType.Varchar2).Value = streetName.Trim();
+                cmdSelect.Parameters.Add(":cityId", OracleDbType.Int32).Value = cityId;
+
+                object result = cmdSelect.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                    return Convert.ToInt32(result);
+            }
+
+            string insertQuery = @"
+        INSERT INTO Street (ID_Street, Street, ID_City)
+        VALUES (seq_street.NEXTVAL, :streetName, :cityId)
+        RETURNING ID_Street INTO :newStreetId";
+
+            using (OracleCommand cmdInsert = new OracleCommand(insertQuery, conn))
+            {
+                cmdInsert.Transaction = transaction;
+                cmdInsert.BindByName = true;
+                cmdInsert.Parameters.Add(":streetName", OracleDbType.Varchar2).Value = streetName.Trim();
+                cmdInsert.Parameters.Add(":cityId", OracleDbType.Int32).Value = cityId;
+
+                OracleParameter outParam = new OracleParameter(":newStreetId", OracleDbType.Int32);
+                outParam.Direction = ParameterDirection.Output;
+                cmdInsert.Parameters.Add(outParam);
+
+                cmdInsert.ExecuteNonQuery();
+                return Convert.ToInt32(((OracleDecimal)outParam.Value).Value);
+            }
         }
 
         private void ApplyEnglishLanguage()
@@ -160,24 +287,18 @@ namespace BankaApp
 
             return countryCode + checkDigits + bankCode + branchCode + accountPart;
         }
-        private string GenerateRandomCVV()
-        {
-            Random rnd = new Random();
-            return rnd.Next(0, 1000).ToString("D3");
-        }
-
         private string GenerateRandomCardNumber()
         {
             return $"{rnd.Next(4000, 5000)} {rnd.Next(1000, 10000)} {rnd.Next(1000, 10000)} {rnd.Next(1000, 10000)}";
         }
-
-
-
+        private string GenerateRandomCVV()
+        {
+            return rnd.Next(0, 1000).ToString("D3");
+        }
         private string GenerateValidThru()
         {
             return DateTime.Now.AddYears(10).ToString("MM/yy");
         }
-
         private void LoadCountries()
         {
             cmbCountry.Items.AddRange(new string[]
@@ -206,7 +327,6 @@ namespace BankaApp
 
             cmbCountry.SelectedIndex = 0;
         }
-
         private bool IsValidEmail(string emailValue)
         {
             try
@@ -219,7 +339,6 @@ namespace BankaApp
                 return false;
             }
         }
-
         private bool IsStrongPassword(string password)
         {
             if (password.Length < 8)
@@ -244,7 +363,6 @@ namespace BankaApp
 
             return hasUpper && hasLower && hasDigit && hasSpecial;
         }
-
         private bool IsValidPhone(string phone)
         {
             if (string.IsNullOrWhiteSpace(phone))
@@ -252,7 +370,6 @@ namespace BankaApp
 
             return Regex.IsMatch(phone, @"^\+?[0-9]{8,15}$");
         }
-
         private bool RecordExists(OracleConnection conn, OracleTransaction transaction, string query, string paramName, object value)
         {
             using (OracleCommand cmd = new OracleCommand(query, conn))
@@ -265,37 +382,29 @@ namespace BankaApp
                 return Convert.ToInt32(result) > 0;
             }
         }
-
-        private bool StreetExists(OracleConnection conn, OracleTransaction transaction, int streetId)
-        {
-            return RecordExists(
-                conn,
-                transaction,
-                "SELECT COUNT(*) FROM Street WHERE ID_Street = :streetId",
-                ":streetId",
-                streetId
-            );
-        }
-
         private void crtAccount_Click(object sender, EventArgs e)
         {
             label4.ForeColor = System.Drawing.Color.Red;
             label4.Text = "";
+            label4.Visible = false;
 
             string usernameValue = username.Text.Trim();
             string egnValue = EGN.Text.Trim();
-            string streetNameValue = streetId.Text.Trim(); // textbox за улица
-            string addressValue = adress.Text.Trim();      // номер
-            string cityValue = city.Text.Trim();           // ако искаш да го ползваш после
+            string streetNameValue = streetId.Text.Trim();
+            string addressValue = adress.Text.Trim();
+            string cityValue = city.Text.Trim();
             string passwordValue = pass.Text.Trim();
             string emailValue = email.Text.Trim();
             string phoneValue = phoneNum.Text.Trim();
-            string countryValue = cmbCountry.SelectedItem != null ? cmbCountry.SelectedItem.ToString() : "";
+            string countryValue = cmbCountry.SelectedItem != null ? cmbCountry.SelectedItem.ToString().Trim() : "";
             string genderValue = "";
             string generatedCVV = GenerateRandomCVV();
 
             int birthYear;
             int newClientId = 0;
+            int countryId = 0;
+            int cityId = 0;
+            int streetIdDb = 0;
 
             if (radioBtnMan.Checked)
                 genderValue = "Male";
@@ -306,6 +415,8 @@ namespace BankaApp
                 string.IsNullOrWhiteSpace(egnValue) ||
                 string.IsNullOrWhiteSpace(streetNameValue) ||
                 string.IsNullOrWhiteSpace(addressValue) ||
+                string.IsNullOrWhiteSpace(cityValue) ||
+                string.IsNullOrWhiteSpace(countryValue) ||
                 string.IsNullOrWhiteSpace(passwordValue) ||
                 string.IsNullOrWhiteSpace(emailValue) ||
                 string.IsNullOrWhiteSpace(phoneValue) ||
@@ -315,6 +426,7 @@ namespace BankaApp
                 label4.Text = isEnglish
                     ? "Please fill in all required fields."
                     : "Моля, попълнете всички задължителни полета.";
+                label4.Visible = true;
                 return;
             }
 
@@ -323,6 +435,7 @@ namespace BankaApp
                 label4.Text = isEnglish
                     ? "Birth year must be a valid number."
                     : "Годината на раждане трябва да е валидно число.";
+                label4.Visible = true;
                 return;
             }
 
@@ -331,6 +444,7 @@ namespace BankaApp
                 label4.Text = isEnglish
                     ? "Birth year is invalid."
                     : "Невалидна година на раждане.";
+                label4.Visible = true;
                 return;
             }
 
@@ -339,6 +453,7 @@ namespace BankaApp
                 label4.Text = isEnglish
                     ? "EGN must contain exactly 10 digits."
                     : "ЕГН трябва да съдържа точно 10 цифри.";
+                label4.Visible = true;
                 return;
             }
 
@@ -347,6 +462,7 @@ namespace BankaApp
                 label4.Text = isEnglish
                     ? "Please enter a valid email address."
                     : "Моля, въведете валиден имейл адрес.";
+                label4.Visible = true;
                 return;
             }
 
@@ -355,6 +471,7 @@ namespace BankaApp
                 label4.Text = isEnglish
                     ? "Please enter a valid phone number."
                     : "Моля, въведете валиден телефонен номер.";
+                label4.Visible = true;
                 return;
             }
 
@@ -363,6 +480,7 @@ namespace BankaApp
                 label4.Text = isEnglish
                     ? "Password must be at least 8 characters and include uppercase, lowercase, number and symbol."
                     : "Паролата трябва да е поне 8 символа и да съдържа главна буква, малка буква, число и символ.";
+                label4.Visible = true;
                 return;
             }
 
@@ -377,11 +495,12 @@ namespace BankaApp
                         try
                         {
                             if (RecordExists(conn, transaction, "SELECT COUNT(*) FROM App_User WHERE Email = :val", ":val", emailValue) ||
-    RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE Email = :val", ":val", emailValue))
+                                RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE Email = :val", ":val", emailValue))
                             {
                                 label4.Text = isEnglish
                                     ? "This email is already registered."
                                     : "Този имейл вече е регистриран.";
+                                label4.Visible = true;
                                 return;
                             }
 
@@ -391,6 +510,7 @@ namespace BankaApp
                                 label4.Text = isEnglish
                                     ? "This phone number is already registered."
                                     : "Този телефонен номер вече е регистриран.";
+                                label4.Visible = true;
                                 return;
                             }
 
@@ -399,8 +519,13 @@ namespace BankaApp
                                 label4.Text = isEnglish
                                     ? "This EGN is already registered."
                                     : "Това ЕГН вече е регистрирано.";
+                                label4.Visible = true;
                                 return;
                             }
+
+                            countryId = GetOrCreateCountryId(conn, transaction, countryValue);
+                            cityId = GetOrCreateCityId(conn, transaction, cityValue, countryId);
+                            streetIdDb = GetOrCreateStreetId(conn, transaction, streetNameValue, cityId);
 
                             string generatedCardNumber = GenerateRandomCardNumber();
                             string generatedValidThru = GenerateValidThru();
@@ -445,7 +570,7 @@ namespace BankaApp
 
                                 cmdClient.Parameters.Add(":name", OracleDbType.Varchar2).Value = usernameValue;
                                 cmdClient.Parameters.Add(":egn", OracleDbType.Varchar2).Value = egnValue;
-                                cmdClient.Parameters.Add(":streetId", OracleDbType.Int32).Value = DBNull.Value;
+                                cmdClient.Parameters.Add(":streetId", OracleDbType.Int32).Value = streetIdDb;
                                 cmdClient.Parameters.Add(":streetName", OracleDbType.Varchar2).Value = streetNameValue;
                                 cmdClient.Parameters.Add(":adress", OracleDbType.Varchar2).Value = addressValue;
                                 cmdClient.Parameters.Add(":phone", OracleDbType.Varchar2).Value = phoneValue;
@@ -508,9 +633,12 @@ namespace BankaApp
 
                             transaction.Commit();
 
-
-                            MessageBox.Show(isEnglish ? "Account created successfully." : "Акаунтът беше създаден успешно.",
-                                isEnglish ? "Success" : "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(
+                                isEnglish ? "Account created successfully." : "Акаунтът беше създаден успешно.",
+                                isEnglish ? "Success" : "Успех",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information
+                            );
 
                             LoginForm loginForm = new LoginForm();
                             loginForm.Show();
@@ -526,6 +654,8 @@ namespace BankaApp
             }
             catch (OracleException ex)
             {
+                label4.Visible = true;
+
                 if (ex.Number == 1)
                 {
                     string errorText = ex.Message.ToLower();
@@ -562,12 +692,12 @@ namespace BankaApp
             }
             catch (Exception ex)
             {
+                label4.Visible = true;
                 label4.Text = isEnglish
                     ? "Error: " + ex.Message
                     : "Грешка: " + ex.Message;
             }
         }
-
         private void RegisterForm_Load(object sender, EventArgs e) { }
         private void groupBox1_Enter(object sender, EventArgs e) { }
         private void cmbCountry_SelectedIndexChanged(object sender, EventArgs e) { }
@@ -583,7 +713,6 @@ namespace BankaApp
         private void EGN_TextChanged(object sender, EventArgs e) { }
         private void streetId_TextChanged(object sender, EventArgs e) { }
         private void city_TextChanged(object sender, EventArgs e) { }
-
         private void button1_Click(object sender, EventArgs e)
         {
             LoginForm form = new LoginForm();
@@ -661,6 +790,14 @@ namespace BankaApp
 
         }
 
+        private void label1_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        private void groupBox1_Enter_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

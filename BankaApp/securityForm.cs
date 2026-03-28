@@ -20,6 +20,13 @@ namespace BankaApp
             currentClientId = clientId;
             currentAppUserId = userId;
             currentUsername = username;
+
+            AppState.ApplyFormState(this);
+            ThemeManager.ApplyTheme(this);
+
+            this.Resize += (s, e) => AppState.SaveFormState(this);
+            this.Move += (s, e) => AppState.SaveFormState(this);
+            this.FormClosing += (s, e) => AppState.SaveFormState(this);
         }
 
         private void securityForm_Load(object sender, EventArgs e)
@@ -45,6 +52,16 @@ namespace BankaApp
             mainForn loginForm = new mainForn(currentClientId, currentAppUserId, currentUsername);
             loginForm.Show();
             this.Hide();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel6_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
