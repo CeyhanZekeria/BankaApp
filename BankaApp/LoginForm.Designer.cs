@@ -57,7 +57,7 @@ namespace BankaApp
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(497, -2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1175, 894);
+            this.panel1.Size = new System.Drawing.Size(1266, 782);
             this.panel1.TabIndex = 0;
             // 
             // pictureBox1
@@ -66,7 +66,8 @@ namespace BankaApp
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1175, 894);
+            this.pictureBox1.Size = new System.Drawing.Size(1266, 782);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -78,7 +79,6 @@ namespace BankaApp
             this.textBox1.PlaceholderText = "username or email";
             this.textBox1.Size = new System.Drawing.Size(246, 27);
             this.textBox1.TabIndex = 1;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // textBox2
             // 
@@ -88,7 +88,6 @@ namespace BankaApp
             this.textBox2.PlaceholderText = "Password";
             this.textBox2.Size = new System.Drawing.Size(246, 27);
             this.textBox2.TabIndex = 2;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label2
             // 
@@ -103,7 +102,6 @@ namespace BankaApp
             this.label2.TabIndex = 3;
             this.label2.Text = "Login";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // button1
             // 
@@ -128,7 +126,6 @@ namespace BankaApp
             this.label3.Size = new System.Drawing.Size(169, 45);
             this.label3.TabIndex = 2;
             this.label3.Text = "Don\'t have an account? ";
-            this.label3.Click += new System.EventHandler(this.label3_Click_1);
             // 
             // linkLabel1
             // 
@@ -151,7 +148,7 @@ namespace BankaApp
             this.label4.Size = new System.Drawing.Size(0, 20);
             this.label4.TabIndex = 6;
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label4.Click += new System.EventHandler(this.label4_Click);
+            this.label4.Visible = false;
             // 
             // showbtn
             // 
@@ -213,8 +210,9 @@ namespace BankaApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(1676, 891);
+            this.ClientSize = new System.Drawing.Size(1767, 779);
             this.Controls.Add(this.passwrd);
             this.Controls.Add(this.usrnmoremail);
             this.Controls.Add(this.button2);
@@ -230,9 +228,11 @@ namespace BankaApp
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LoginForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MeliPay";
-            this.Load += new System.EventHandler(this.LoginForm_Load);
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

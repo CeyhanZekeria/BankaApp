@@ -18,12 +18,9 @@ namespace BankaApp
             InitializeComponent();
             currentUserId = userId;
             currentUsername = username;
-            AppState.ApplyFormState(this);
-            ThemeManager.ApplyTheme(this);
 
-            this.Resize += (s, e) => AppState.SaveFormState(this);
-            this.Move += (s, e) => AppState.SaveFormState(this);
-            this.FormClosing += (s, e) => AppState.SaveFormState(this);
+            FormStateHelper.Attach(this);
+            ThemeManager.ApplyTheme(this);
         }
 
         private void adminForm_Load_1(object sender, EventArgs e)

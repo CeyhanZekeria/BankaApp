@@ -93,7 +93,6 @@ namespace BankaApp
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1224, 685);
             this.panel2.TabIndex = 9;
-            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // groupBox1
             // 
@@ -132,7 +131,6 @@ namespace BankaApp
             this.groupBox1.Size = new System.Drawing.Size(1194, 655);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter_1);
             // 
             // button2
             // 
@@ -140,7 +138,6 @@ namespace BankaApp
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(58, 49);
             this.button2.TabIndex = 26;
-            this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -166,7 +163,6 @@ namespace BankaApp
             this.label12.Size = new System.Drawing.Size(68, 31);
             this.label12.TabIndex = 24;
             this.label12.Text = "City :";
-            this.label12.Click += new System.EventHandler(this.label12_Click);
             // 
             // label11
             // 
@@ -177,7 +173,6 @@ namespace BankaApp
             this.label11.Size = new System.Drawing.Size(89, 31);
             this.label11.TabIndex = 23;
             this.label11.Text = "Street :";
-            this.label11.Click += new System.EventHandler(this.label11_Click);
             // 
             // label10
             // 
@@ -188,7 +183,6 @@ namespace BankaApp
             this.label10.Size = new System.Drawing.Size(105, 31);
             this.label10.TabIndex = 22;
             this.label10.Text = "PIN/IDN";
-            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // label9
             // 
@@ -199,7 +193,6 @@ namespace BankaApp
             this.label9.Size = new System.Drawing.Size(161, 31);
             this.label9.TabIndex = 21;
             this.label9.Text = "Year of Birth :";
-            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label8
             // 
@@ -210,7 +203,6 @@ namespace BankaApp
             this.label8.Size = new System.Drawing.Size(97, 31);
             this.label8.TabIndex = 21;
             this.label8.Text = "Adress :";
-            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // label7
             // 
@@ -221,7 +213,6 @@ namespace BankaApp
             this.label7.Size = new System.Drawing.Size(126, 31);
             this.label7.TabIndex = 20;
             this.label7.Text = "Password :";
-            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // label6
             // 
@@ -232,7 +223,6 @@ namespace BankaApp
             this.label6.Size = new System.Drawing.Size(94, 31);
             this.label6.TabIndex = 19;
             this.label6.Text = "Phone :";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // label5
             // 
@@ -243,7 +233,6 @@ namespace BankaApp
             this.label5.Size = new System.Drawing.Size(85, 31);
             this.label5.TabIndex = 18;
             this.label5.Text = "Email :";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // fullNAme
             // 
@@ -254,7 +243,6 @@ namespace BankaApp
             this.fullNAme.Size = new System.Drawing.Size(141, 31);
             this.fullNAme.TabIndex = 17;
             this.fullNAme.Text = "Full Name : ";
-            this.fullNAme.Click += new System.EventHandler(this.fullNAme_Click);
             // 
             // city
             // 
@@ -316,7 +304,6 @@ namespace BankaApp
             this.label3.Size = new System.Drawing.Size(117, 31);
             this.label3.TabIndex = 10;
             this.label3.Text = "Country *";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label4
             // 
@@ -347,7 +334,6 @@ namespace BankaApp
             this.label2.Size = new System.Drawing.Size(133, 38);
             this.label2.TabIndex = 8;
             this.label2.Text = "Gender *";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // radioBtnWoman
             // 
@@ -362,7 +348,6 @@ namespace BankaApp
             this.radioBtnWoman.TabStop = true;
             this.radioBtnWoman.Text = "Woman";
             this.radioBtnWoman.UseVisualStyleBackColor = false;
-            this.radioBtnWoman.CheckedChanged += new System.EventHandler(this.radioBtnWoman_CheckedChanged_1);
             // 
             // radioBtnMan
             // 
@@ -376,7 +361,6 @@ namespace BankaApp
             this.radioBtnMan.TabStop = true;
             this.radioBtnMan.Text = "Man";
             this.radioBtnMan.UseVisualStyleBackColor = true;
-            this.radioBtnMan.CheckedChanged += new System.EventHandler(this.radioBtnMan_CheckedChanged_1);
             // 
             // pass
             // 
@@ -460,7 +444,6 @@ namespace BankaApp
             this.label1.TabIndex = 4;
             this.label1.Text = "Registration Form";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // RegisterForm
             // 
@@ -471,7 +454,6 @@ namespace BankaApp
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RegisterForm";
             this.Text = "RegisterForm";
-            this.Load += new System.EventHandler(this.RegisterForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

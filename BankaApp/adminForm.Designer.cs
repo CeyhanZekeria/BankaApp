@@ -39,7 +39,6 @@ namespace BankaApp
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1174, 725);
             this.Name = "adminForm";
-            this.Text = "adminForm";
             this.Load += new System.EventHandler(this.adminForm_Load_1);
             this.ResumeLayout(false);
 

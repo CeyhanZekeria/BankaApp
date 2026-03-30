@@ -10,14 +10,17 @@ namespace BankaApp
 {
     public partial class mainForn : Form
     {
-        private string connStr = "User Id=banka;Password=1234;Data Source=localhost:1521/XE;";
+        private AccountService accountService = new AccountService();
+        private TransactionService transactionService = new TransactionService();
+        private ExchangeRateService exchangeRateService = new ExchangeRateService();
+
+        private bool isCvvVisible = false;
         private List<decimal> exchangeRates = new List<decimal>();
         private string chartPairText = "Lei = EUR";
         private string currentUsername;
         private int? selectedAccountId = null;
         private int currentClientId;
         private int currentAppUserId;
-        private bool isCVVVisible = false;
         private string realCVV = "";
 
         private bool isCardVisible = false;
@@ -33,12 +36,14 @@ namespace BankaApp
             currentAppUserId = userId;
             currentUsername = username;
 
-            usrName.Text = currentUsername.ToUpper();
-            cvvShow.Text = "👁 Show";
+            usrName.Text = string.IsNullOrWhiteSpace(currentUsername)
+                      ? "USER"
+                     : currentUsername.ToUpper();
 
             ApplyModernUi();
             WireEvents();
-
+            SetupCvvButton();
+            SetupCvvShow();
             LoadUserCVV();
             LoadCardInfo();
             LoadExchangeRatesForChart(2, 6, "EUR -> AED");
@@ -48,8 +53,9 @@ namespace BankaApp
             LoadRecentTransactions();
             LoadUserAccountsList();
 
-            AppState.ApplyFormState(this);
+            FormStateHelper.Attach(this);
             ThemeManager.ApplyTheme(this);
+
         }
 
         private void ApplyModernUi()
@@ -65,13 +71,11 @@ namespace BankaApp
 
             UiStyle.StylePrimaryButton(AddMoney);
             UiStyle.StylePrimaryButton(sendMoney);
-            UiStyle.StyleSecondaryButton(cvvShow);
             UiStyle.StyleSecondaryButton(filter);
             UiStyle.StyleSecondaryButton(reset);
 
             UiStyle.RoundControl(AddMoney, 12);
             UiStyle.RoundControl(sendMoney, 12);
-            UiStyle.RoundControl(cvvShow, 12);
             UiStyle.RoundControl(filter, 10);
             UiStyle.RoundControl(reset, 10);
 
@@ -121,10 +125,6 @@ namespace BankaApp
 
             filter.Click += btnFilter_Click;
             reset.Click += btnReset_Click;
-
-            Resize += (s, e) => AppState.SaveFormState(this);
-            Move += (s, e) => AppState.SaveFormState(this);
-            FormClosing += (s, e) => AppState.SaveFormState(this);
         }
 
         private void SetActiveMenu(Button activeButton)
@@ -159,25 +159,20 @@ namespace BankaApp
         {
             try
             {
-                using (OracleConnection conn = new OracleConnection(connStr))
-                {
-                    conn.Open();
+                string query = @"
+            SELECT COUNT(*)
+            FROM App_User
+            WHERE ID_User = :userId
+              AND User_Password = :password";
 
-                    string query = @"
-                        SELECT COUNT(*)
-                        FROM App_User
-                        WHERE ID_User = :userId
-                          AND User_Password = :password";
+                object result = DatabaseHelper.ExecuteScalar(
+                    query,
+                    new OracleParameter("userId", OracleDbType.Int32) { Value = currentAppUserId },
+                    new OracleParameter("password", OracleDbType.Varchar2) { Value = enteredPassword }
+                );
 
-                    using (OracleCommand cmd = new OracleCommand(query, conn))
-                    {
-                        cmd.Parameters.Add(":userId", OracleDbType.Int32).Value = currentAppUserId;
-                        cmd.Parameters.Add(":password", OracleDbType.Varchar2).Value = enteredPassword;
-
-                        int count = Convert.ToInt32(cmd.ExecuteScalar());
-                        return count > 0;
-                    }
-                }
+                int count = Convert.ToInt32(result);
+                return count > 0;
             }
             catch (Exception ex)
             {
@@ -186,30 +181,20 @@ namespace BankaApp
             }
         }
 
+
         private void cvvShow_Click_1(object sender, EventArgs e)
         {
             isCardVisible = !isCardVisible;
-            cvvShow.Text = isCardVisible ? "🙈 Hide" : "👁 Show";
+            cvvShow.Text = isCardVisible ? "🙈" : "👁";
             RefreshCardDisplay();
+
         }
 
         private void LoadUserCVV()
         {
             try
             {
-                using (OracleConnection conn = new OracleConnection(connStr))
-                {
-                    conn.Open();
-
-                    string query = "SELECT CVV FROM App_User WHERE ID_User = :userId";
-
-                    using (OracleCommand cmd = new OracleCommand(query, conn))
-                    {
-                        cmd.Parameters.Add(":userId", OracleDbType.Int32).Value = currentAppUserId;
-                        object result = cmd.ExecuteScalar();
-                        realCVV = result != null ? result.ToString() : "";
-                    }
-                }
+                realCVV = accountService.LoadUserCVV(currentAppUserId);
             }
             catch (Exception ex)
             {
@@ -221,45 +206,23 @@ namespace BankaApp
         {
             try
             {
-                using (OracleConnection conn = new OracleConnection(connStr))
+                string fullName = accountService.LoadCardHolderName(currentClientId);
+                DataTable dt = accountService.LoadCardData(currentAppUserId);
+
+                string cardNumber = "";
+                string validThru = "";
+
+                if (dt.Rows.Count > 0)
                 {
-                    conn.Open();
-
-                    string query = @"
-                        SELECT c.Name,
-                               au.Card_Number,
-                               au.Valid_Thru
-                        FROM App_User au
-                        LEFT JOIN Client c ON c.Client_ID = :clientId
-                        WHERE au.ID_User = :appUserId";
-
-                    string fullName = "";
-                    string cardNumber = "";
-                    string validThru = "";
-
-                    using (OracleCommand cmd = new OracleCommand(query, conn))
-                    {
-                        cmd.BindByName = true;
-                        cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
-                        cmd.Parameters.Add(":appUserId", OracleDbType.Int32).Value = currentAppUserId;
-
-                        using (OracleDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                fullName = reader["Name"] == DBNull.Value ? "" : reader["Name"].ToString().Trim();
-                                cardNumber = reader["Card_Number"] == DBNull.Value ? "" : reader["Card_Number"].ToString().Trim();
-                                validThru = reader["Valid_Thru"] == DBNull.Value ? "" : reader["Valid_Thru"].ToString().Trim();
-                            }
-                        }
-                    }
-
-                    fullCardHolderName = string.IsNullOrWhiteSpace(fullName) ? "NO NAME" : fullName.ToUpper();
-                    fullCardNumber = string.IsNullOrWhiteSpace(cardNumber) ? "NO CARD" : cardNumber;
-                    fullValidThru = string.IsNullOrWhiteSpace(validThru) ? "--/--" : validThru;
-
-                    RefreshCardDisplay();
+                    cardNumber = dt.Rows[0]["CARD_NUMBER"] == DBNull.Value ? "" : dt.Rows[0]["CARD_NUMBER"].ToString().Trim();
+                    validThru = dt.Rows[0]["VALID_THRU"] == DBNull.Value ? "" : dt.Rows[0]["VALID_THRU"].ToString().Trim();
                 }
+
+                fullCardHolderName = string.IsNullOrWhiteSpace(fullName) ? "NO NAME" : fullName.ToUpper();
+                fullCardNumber = string.IsNullOrWhiteSpace(cardNumber) ? "NO CARD" : cardNumber;
+                fullValidThru = string.IsNullOrWhiteSpace(validThru) ? "--/--" : validThru;
+
+                RefreshCardDisplay();
             }
             catch (Exception ex)
             {
@@ -460,30 +423,18 @@ namespace BankaApp
         {
             try
             {
-                using (OracleConnection conn = new OracleConnection(connStr))
+                DataTable dt = accountService.LoadUserAccounts(currentClientId);
+
+                listAccounts.Items.Clear();
+
+                foreach (DataRow row in dt.Rows)
                 {
-                    conn.Open();
-
-                    string query = @"
-                        SELECT ID_Account, Account_NO
-                        FROM Account
-                        WHERE ID_Client = :clientId
-                        ORDER BY ID_Account";
-
-                    using (OracleCommand cmd = new OracleCommand(query, conn))
-                    {
-                        cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
-
-                        using (OracleDataReader reader = cmd.ExecuteReader())
-                        {
-                            listAccounts.Items.Clear();
-
-                            while (reader.Read())
-                            {
-                                listAccounts.Items.Add(new ComboBoxItem(reader["Account_NO"].ToString(), Convert.ToInt32(reader["ID_Account"])));
-                            }
-                        }
-                    }
+                    listAccounts.Items.Add(
+                        new ComboBoxItem(
+                            row["Account_NO"].ToString(),
+                            Convert.ToInt32(row["ID_Account"])
+                        )
+                    );
                 }
 
                 if (listAccounts.Items.Count > 0)
@@ -502,36 +453,7 @@ namespace BankaApp
 
             try
             {
-                using (OracleConnection conn = new OracleConnection(connStr))
-                {
-                    conn.Open();
-
-                    string query = @"
-                        SELECT Rate
-                        FROM (
-                            SELECT Rate
-                            FROM Exchange_Rate
-                            WHERE Currency_type_from = :fromId
-                              AND Currency_type_to = :toId
-                            ORDER BY Rate_Date DESC
-                        )
-                        WHERE ROWNUM <= 6";
-
-                    using (OracleCommand cmd = new OracleCommand(query, conn))
-                    {
-                        cmd.BindByName = true;
-                        cmd.Parameters.Add(":fromId", OracleDbType.Int32).Value = fromCurrencyId;
-                        cmd.Parameters.Add(":toId", OracleDbType.Int32).Value = toCurrencyId;
-
-                        using (OracleDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                                exchangeRates.Add(reader.GetDecimal(0));
-                        }
-                    }
-                }
-
-                exchangeRates.Reverse();
+                exchangeRates = exchangeRateService.LoadRates(fromCurrencyId, toCurrencyId, 6);
 
                 if (exchangeRates.Count < 2)
                 {
@@ -573,49 +495,13 @@ namespace BankaApp
         {
             try
             {
-                using (OracleConnection conn = new OracleConnection(connStr))
-                {
-                    conn.Open();
+                DataTable dt = transactionService.LoadRecentTransactions(
+                    currentClientId,
+                    selectedAccountId
+                );
 
-                    string query = @"
-                        SELECT *
-                        FROM (
-                            SELECT 
-                                tp.Type AS Type,
-                                t.Sum_Amount AS Amount,
-                                c.Currency_type_Name AS Currency,
-                                t.Description AS Description,
-                                t.Date_Tran AS Tran_Date
-                            FROM Transactions t
-                            JOIN Account a ON t.ID_Account = a.ID_Account
-                            JOIN Type tp ON t.ID_Type = tp.ID_Type
-                            JOIN Currency_type c ON t.ID_Currency_Type = c.ID_Currency_type
-                            WHERE a.ID_Client = :clientId";
-
-                    if (selectedAccountId.HasValue)
-                        query += " AND a.ID_Account = :accountId";
-
-                    query += @"
-                            ORDER BY t.Date_Tran DESC
-                        )
-                        WHERE ROWNUM <= 10";
-
-                    using (OracleCommand cmd = new OracleCommand(query, conn))
-                    {
-                        cmd.BindByName = true;
-                        cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
-
-                        if (selectedAccountId.HasValue)
-                            cmd.Parameters.Add(":accountId", OracleDbType.Int32).Value = selectedAccountId.Value;
-
-                        OracleDataAdapter da = new OracleDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-
-                        dgvTransactions.DataSource = dt;
-                        FormatTransactionsGrid();
-                    }
-                }
+                dgvTransactions.DataSource = dt;
+                FormatTransactionsGrid();
             }
             catch (Exception ex)
             {
@@ -633,7 +519,6 @@ namespace BankaApp
 
             LoadFilteredTransactions();
         }
-
         private void btnReset_Click(object sender, EventArgs e)
         {
             dtpFrom.Value = DateTime.Today.AddMonths(-3);
@@ -641,59 +526,20 @@ namespace BankaApp
             cmbType.SelectedIndex = 0;
             LoadRecentTransactions();
         }
-
         private void LoadFilteredTransactions()
         {
             try
             {
-                using (OracleConnection conn = new OracleConnection(connStr))
-                {
-                    conn.Open();
+                DataTable dt = transactionService.LoadFilteredTransactions(
+                    currentClientId,
+                    dtpFrom.Value,
+                    dtpTo.Value,
+                    cmbType.Text,
+                    selectedAccountId
+                );
 
-                    string query = @"
-                        SELECT 
-                            tp.Type AS Type,
-                            t.Sum_Amount AS Amount,
-                            c.Currency_type_Name AS Currency,
-                            t.Description AS Description,
-                            t.Date_Tran AS Tran_Date
-                        FROM Transactions t
-                        JOIN Account a ON t.ID_Account = a.ID_Account
-                        JOIN Type tp ON t.ID_Type = tp.ID_Type
-                        JOIN Currency_type c ON t.ID_Currency_Type = c.ID_Currency_type
-                        WHERE a.ID_Client = :clientId
-                          AND t.Date_Tran >= :dateFrom
-                          AND t.Date_Tran < :dateTo";
-
-                    if (cmbType.Text != "All")
-                        query += " AND tp.Type = :type";
-
-                    if (selectedAccountId.HasValue)
-                        query += " AND a.ID_Account = :accountId";
-
-                    query += " ORDER BY t.Date_Tran DESC";
-
-                    using (OracleCommand cmd = new OracleCommand(query, conn))
-                    {
-                        cmd.BindByName = true;
-                        cmd.Parameters.Add(":clientId", OracleDbType.Int32).Value = currentClientId;
-                        cmd.Parameters.Add(":dateFrom", OracleDbType.Date).Value = dtpFrom.Value.Date;
-                        cmd.Parameters.Add(":dateTo", OracleDbType.Date).Value = dtpTo.Value.Date.AddDays(1);
-
-                        if (cmbType.Text != "All")
-                            cmd.Parameters.Add(":type", OracleDbType.Varchar2).Value = cmbType.Text;
-
-                        if (selectedAccountId.HasValue)
-                            cmd.Parameters.Add(":accountId", OracleDbType.Int32).Value = selectedAccountId.Value;
-
-                        OracleDataAdapter da = new OracleDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-
-                        dgvTransactions.DataSource = dt;
-                        FormatTransactionsGrid();
-                    }
-                }
+                dgvTransactions.DataSource = dt;
+                FormatTransactionsGrid();
             }
             catch (Exception ex)
             {
@@ -854,68 +700,92 @@ namespace BankaApp
         private void panel5_Resize(object sender, EventArgs e) => SetRoundedPanel(panel5, 40);
         private void panel6_Resize(object sender, EventArgs e) => SetRoundedPanel(panel6, 30);
         private void panel7_Resize(object sender, EventArgs e) => SetRoundedPanel(panel3, 30);
-
         private void panel12_Resize(object sender, EventArgs e)
         {
             SetRoundedPanel(panel12, 30);
             panel12.Invalidate();
         }
-
         private void panel13_Resize(object sender, EventArgs e)
         {
             SetRoundedPanel(panel13, 30);
             panel13.Invalidate();
         }
-
         private void profl_Click(object sender, EventArgs e)
         {
             ProfileForm form = new ProfileForm(currentClientId, currentAppUserId, currentUsername);
             form.Show();
             Hide();
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             settings form = new settings(currentClientId, currentAppUserId, currentUsername);
             form.Show();
             Hide();
         }
-
         private void homeBtn_Click(object sender, EventArgs e)
         {
             SetActiveMenu(homeBtn);
         }
-
         private void secrty_Click(object sender, EventArgs e)
         {
             securityForm form = new securityForm(currentClientId, currentAppUserId, currentUsername);
             form.Show();
             Hide();
         }
-        private void panel2_Paint(object sender, PaintEventArgs e) { }
-        private void panel3_Paint(object sender, PaintEventArgs e) { }
-        private void panel4_Paint(object sender, PaintEventArgs e) { }
-        private void panel5_Paint(object sender, PaintEventArgs e) { }
-        private void panel6_Paint_1(object sender, PaintEventArgs e) { }
-        private void panel7_Paint(object sender, PaintEventArgs e) { }
-        private void panel14_Paint(object sender, PaintEventArgs e) { }
+        private void cvvBtn_Click(object sender, EventArgs e)
+        {
+            if (!isCvvVisible)
+            {
+                string enteredPassword = Prompt.ShowDialog("Enter your password:", "CVV Verification");
+
+                if (string.IsNullOrWhiteSpace(enteredPassword))
+                    return;
+
+                if (CheckUserPassword(enteredPassword))
+                {
+                    cvvBtn.Text = string.IsNullOrWhiteSpace(realCVV) ? "N/A" : realCVV;
+                    isCvvVisible = true;
+                }
+                else
+                {
+                    MessageBox.Show("Incorrect password.");
+                }
+            }
+            else
+            {
+                cvvBtn.Text = "CVV 👁";
+                isCvvVisible = false;
+            }
+        }
+        private void SetupCvvButton()
+        {
+            cvvBtn.Text = "CVV 👁";
+            cvvBtn.Width = 50;
+            cvvBtn.Height = 50;
+            cvvBtn.FlatStyle = FlatStyle.Flat;
+            cvvBtn.FlatAppearance.BorderSize = 0;
+            cvvBtn.BackColor = Color.RoyalBlue;
+            cvvBtn.ForeColor = Color.White;
+
+            UiStyle.RoundControl(cvvBtn, 25);
+
+            cvvBtn.Click -= cvvBtn_Click;
+            cvvBtn.Click += cvvBtn_Click;
+        }
+        private void SetupCvvShow()
+        {
+            cvvShow.Text = "👁 Show";
+            cvvShow.Width = 50;
+            cvvShow.Height = 50;
+            cvvShow.FlatStyle = FlatStyle.Flat;
+            cvvShow.FlatAppearance.BorderSize = 0;
+            cvvShow.BackColor = Color.RoyalBlue;
+            cvvShow.ForeColor = Color.White;
+
+            UiStyle.RoundControl(cvvShow, 25);
+
+        }
         private void AddMoney_Click(object sender, EventArgs e) { }
         private void sendMoney_Click(object sender, EventArgs e) { }
-        private void mainForn_Load(object sender, EventArgs e) { }
-        private void panel1_Paint(object sender, PaintEventArgs e) { }
-        private void label1_Click(object sender, EventArgs e) { }
-        private void label2_Click(object sender, EventArgs e) { }
-        private void label3_Click(object sender, EventArgs e) { }
-        private void label4_Click(object sender, EventArgs e) { }
-        private void label5_Click(object sender, EventArgs e) { }
-        private void label10_Click(object sender, EventArgs e) { }
-        private void label11_Click(object sender, EventArgs e) { }
-        private void label13_Click(object sender, EventArgs e) { }
-        private void usrName_Click(object sender, EventArgs e) { }
-        private void button2_Click(object sender, EventArgs e) { }
-        private void textBox1_TextChanged(object sender, EventArgs e) { }
-        private void cardNum_Click(object sender, EventArgs e) { }
-        private void cardHldrName_Click(object sender, EventArgs e) { }
-        private void ValidThru(object sender, EventArgs e) { }
     }
 }

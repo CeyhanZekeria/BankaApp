@@ -21,12 +21,10 @@ namespace BankaApp
             currentAppUserId = userId;
             currentUsername = username;
 
-            AppState.ApplyFormState(this);
+            FormStateHelper.Attach(this);
             ThemeManager.ApplyTheme(this);
 
-            this.Resize += (s, e) => AppState.SaveFormState(this);
-            this.Move += (s, e) => AppState.SaveFormState(this);
-            this.FormClosing += (s, e) => AppState.SaveFormState(this);
+
         }
 
         private void securityForm_Load(object sender, EventArgs e)

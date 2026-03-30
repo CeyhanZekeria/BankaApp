@@ -11,9 +11,7 @@ namespace BankaApp
 {
     public partial class RegisterForm : Form
     {
-        string connStr = "User Id=banka;Password=1234;Data Source=localhost:1521/XE;";
         private static readonly Random rnd = new Random();
-        private bool isEnglish = true;
         public RegisterForm()
         {
             InitializeComponent();
@@ -34,14 +32,17 @@ namespace BankaApp
             MakeButtonRound(button2);
             button2.Resize += button2_Resize;
 
-            AppState.ApplyFormState(this);
+            FormStateHelper.Attach(this);
             ThemeManager.ApplyTheme(this);
 
-            this.Resize += (s, e) => AppState.SaveFormState(this);
-            this.Move += (s, e) => AppState.SaveFormState(this);
-            this.FormClosing += (s, e) => AppState.SaveFormState(this);
 
-            ApplyEnglishLanguage();
+
+            LanguageManager.LoadLanguage();
+
+            if (LanguageManager.IsEnglish())
+                ApplyEnglishLanguage();
+            else
+                ApplyBulgarianLanguage();
         }
 
         private int GetOrCreateCountryId(OracleConnection conn, OracleTransaction transaction, string countryName)
@@ -198,15 +199,19 @@ namespace BankaApp
             city.PlaceholderText = "City";
 
             button2.Text = "BG";
-            isEnglish = true;
+            LanguageManager.SetLanguage("EN");
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
-            if (isEnglish)
-                ApplyBulgarianLanguage();
-            else
+            LanguageManager.ToggleLanguage();
+
+            if (LanguageManager.IsEnglish())
                 ApplyEnglishLanguage();
+            else
+                ApplyBulgarianLanguage();
         }
+
         private void ApplyBulgarianLanguage()
         {
             label1.Text = "Форма за регистрация";
@@ -241,7 +246,7 @@ namespace BankaApp
             city.PlaceholderText = "град";
 
             button2.Text = "EN";
-            isEnglish = false;
+            LanguageManager.SetLanguage("BG");
         }
 
         private void button2_Resize(object sender, EventArgs e)
@@ -423,7 +428,7 @@ namespace BankaApp
                 string.IsNullOrWhiteSpace(age.Text.Trim()) ||
                 string.IsNullOrWhiteSpace(genderValue))
             {
-                label4.Text = isEnglish
+                label4.Text = LanguageManager.IsEnglish()
                     ? "Please fill in all required fields."
                     : "Моля, попълнете всички задължителни полета.";
                 label4.Visible = true;
@@ -432,7 +437,7 @@ namespace BankaApp
 
             if (!int.TryParse(age.Text.Trim(), out birthYear))
             {
-                label4.Text = isEnglish
+                label4.Text = LanguageManager.IsEnglish()
                     ? "Birth year must be a valid number."
                     : "Годината на раждане трябва да е валидно число.";
                 label4.Visible = true;
@@ -441,7 +446,7 @@ namespace BankaApp
 
             if (birthYear < 1900 || birthYear > DateTime.Now.Year)
             {
-                label4.Text = isEnglish
+                label4.Text = LanguageManager.IsEnglish()
                     ? "Birth year is invalid."
                     : "Невалидна година на раждане.";
                 label4.Visible = true;
@@ -450,7 +455,7 @@ namespace BankaApp
 
             if (!IsValidEGN(egnValue))
             {
-                label4.Text = isEnglish
+                label4.Text = LanguageManager.IsEnglish()
                     ? "EGN must contain exactly 10 digits."
                     : "ЕГН трябва да съдържа точно 10 цифри.";
                 label4.Visible = true;
@@ -459,7 +464,7 @@ namespace BankaApp
 
             if (!IsValidEmail(emailValue))
             {
-                label4.Text = isEnglish
+                label4.Text = LanguageManager.IsEnglish()
                     ? "Please enter a valid email address."
                     : "Моля, въведете валиден имейл адрес.";
                 label4.Visible = true;
@@ -468,7 +473,7 @@ namespace BankaApp
 
             if (!IsValidPhone(phoneValue))
             {
-                label4.Text = isEnglish
+                label4.Text = LanguageManager.IsEnglish()
                     ? "Please enter a valid phone number."
                     : "Моля, въведете валиден телефонен номер.";
                 label4.Visible = true;
@@ -477,7 +482,7 @@ namespace BankaApp
 
             if (!IsStrongPassword(passwordValue))
             {
-                label4.Text = isEnglish
+                label4.Text = LanguageManager.IsEnglish()
                     ? "Password must be at least 8 characters and include uppercase, lowercase, number and symbol."
                     : "Паролата трябва да е поне 8 символа и да съдържа главна буква, малка буква, число и символ.";
                 label4.Visible = true;
@@ -486,7 +491,7 @@ namespace BankaApp
 
             try
             {
-                using (OracleConnection conn = new OracleConnection(connStr))
+                using (OracleConnection conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
 
@@ -497,7 +502,7 @@ namespace BankaApp
                             if (RecordExists(conn, transaction, "SELECT COUNT(*) FROM App_User WHERE Email = :val", ":val", emailValue) ||
                                 RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE Email = :val", ":val", emailValue))
                             {
-                                label4.Text = isEnglish
+                                label4.Text = LanguageManager.IsEnglish()
                                     ? "This email is already registered."
                                     : "Този имейл вече е регистриран.";
                                 label4.Visible = true;
@@ -507,7 +512,7 @@ namespace BankaApp
                             if (RecordExists(conn, transaction, "SELECT COUNT(*) FROM App_User WHERE Phone_number = :val", ":val", phoneValue) ||
                                 RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE Phone_number = :val", ":val", phoneValue))
                             {
-                                label4.Text = isEnglish
+                                label4.Text = LanguageManager.IsEnglish()
                                     ? "This phone number is already registered."
                                     : "Този телефонен номер вече е регистриран.";
                                 label4.Visible = true;
@@ -516,7 +521,7 @@ namespace BankaApp
 
                             if (RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE EGN = :val", ":val", egnValue))
                             {
-                                label4.Text = isEnglish
+                                label4.Text = LanguageManager.IsEnglish()
                                     ? "This EGN is already registered."
                                     : "Това ЕГН вече е регистрирано.";
                                 label4.Visible = true;
@@ -627,15 +632,15 @@ namespace BankaApp
                             }
 
                             if (!accountCreated)
-                                throw new Exception(isEnglish
+                                throw new Exception(LanguageManager.IsEnglish()
                                     ? "Could not create bank account automatically."
                                     : "Банковата сметка не можа да бъде създадена автоматично.");
 
                             transaction.Commit();
 
                             MessageBox.Show(
-                                isEnglish ? "Account created successfully." : "Акаунтът беше създаден успешно.",
-                                isEnglish ? "Success" : "Успех",
+                                LanguageManager.IsEnglish() ? "Account created successfully." : "Акаунтът беше създаден успешно.",
+                                LanguageManager.IsEnglish() ? "Success" : "Успех",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information
                             );
@@ -661,31 +666,31 @@ namespace BankaApp
                     string errorText = ex.Message.ToLower();
 
                     if (errorText.Contains("uq_app_user_email") || errorText.Contains("uq_client_email"))
-                        label4.Text = isEnglish
+                        label4.Text = LanguageManager.IsEnglish()
                             ? "This email is already registered."
                             : "Този имейл вече е регистриран.";
                     else if (errorText.Contains("uq_app_user_phone") || errorText.Contains("uq_client_phone"))
-                        label4.Text = isEnglish
+                        label4.Text = LanguageManager.IsEnglish()
                             ? "This phone number is already registered."
                             : "Този телефонен номер вече е регистриран.";
                     else if (errorText.Contains("uq_client_egn"))
-                        label4.Text = isEnglish
+                        label4.Text = LanguageManager.IsEnglish()
                             ? "This EGN is already registered."
                             : "Това ЕГН вече е регистрирано.";
                     else
-                        label4.Text = isEnglish
+                        label4.Text = LanguageManager.IsEnglish()
                             ? "Duplicate value detected. Please check your input."
                             : "Открита е повтаряща се стойност. Моля, проверете данните.";
                 }
                 else if (ex.Number == 2290)
                 {
-                    label4.Text = isEnglish
+                    label4.Text = LanguageManager.IsEnglish()
                         ? "Invalid data. Please check your input values."
                         : "Невалидни данни. Моля, проверете въведените стойности.";
                 }
                 else
                 {
-                    label4.Text = isEnglish
+                    label4.Text = LanguageManager.IsEnglish()
                         ? "Database error: " + ex.Message
                         : "Грешка в базата данни: " + ex.Message;
                 }
@@ -693,111 +698,17 @@ namespace BankaApp
             catch (Exception ex)
             {
                 label4.Visible = true;
-                label4.Text = isEnglish
+                label4.Text = LanguageManager.IsEnglish()
                     ? "Error: " + ex.Message
                     : "Грешка: " + ex.Message;
             }
         }
-        private void RegisterForm_Load(object sender, EventArgs e) { }
-        private void groupBox1_Enter(object sender, EventArgs e) { }
-        private void cmbCountry_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void pass_TextChanged(object sender, EventArgs e) { }
-        private void username_TextChanged(object sender, EventArgs e) { }
-        private void email_TextChanged(object sender, EventArgs e) { }
-        private void phoneNum_TextChanged(object sender, EventArgs e) { }
-        private void age_TextChanged(object sender, EventArgs e) { }
-        private void radioBtnWoman_CheckedChanged(object sender, EventArgs e) { }
-        private void radioBtnMan_CheckedChanged(object sender, EventArgs e) { }
-        private void label4_Click(object sender, EventArgs e) { }
-        private void adress_TextChanged(object sender, EventArgs e) { }
-        private void EGN_TextChanged(object sender, EventArgs e) { }
-        private void streetId_TextChanged(object sender, EventArgs e) { }
-        private void city_TextChanged(object sender, EventArgs e) { }
+
         private void button1_Click(object sender, EventArgs e)
         {
             LoginForm form = new LoginForm();
             form.Show();
             this.Hide();
-        }
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void fullNAme_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label10_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label11_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label12_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void radioBtnMan_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void radioBtnWoman_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox1_Enter_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
