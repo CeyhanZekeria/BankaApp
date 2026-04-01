@@ -13,6 +13,8 @@ namespace BankaApp
         private AccountService accountService = new AccountService();
         private TransactionService transactionService = new TransactionService();
         private ExchangeRateService exchangeRateService = new ExchangeRateService();
+        private TransferRequestService transferRequestService = new TransferRequestService();
+
 
         private bool isCvvVisible = false;
         private List<decimal> exchangeRates = new List<decimal>();
@@ -28,6 +30,7 @@ namespace BankaApp
         private string fullCardHolderName = "";
         private string fullValidThru = "";
 
+
         public mainForn(int clientId, int userId, string username)
         {
             InitializeComponent();
@@ -37,13 +40,15 @@ namespace BankaApp
             currentUsername = username;
 
             usrName.Text = string.IsNullOrWhiteSpace(currentUsername)
-                      ? "USER"
-                     : currentUsername.ToUpper();
+                ? "USER"
+                : currentUsername.ToUpper();
 
+            SetupApprovalsBell();
             ApplyModernUi();
             WireEvents();
             SetupCvvButton();
             SetupCvvShow();
+
             LoadUserCVV();
             LoadCardInfo();
             LoadExchangeRatesForChart(2, 6, "EUR -> AED");
@@ -56,8 +61,14 @@ namespace BankaApp
             FormStateHelper.Attach(this);
             ThemeManager.ApplyTheme(this);
 
+            LoadApprovalBadge();
         }
-
+        private void MakeCircularButton(Button btn)
+        {
+            System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+            path.AddEllipse(0, 0, btn.Width, btn.Height);
+            btn.Region = new Region(path);
+        }
         private void ApplyModernUi()
         {
             BackColor = UiStyle.BgColor;
@@ -785,7 +796,102 @@ namespace BankaApp
             UiStyle.RoundControl(cvvShow, 25);
 
         }
-        private void AddMoney_Click(object sender, EventArgs e) { }
+        private void AddMoney_Click(object sender, EventArgs e) 
+        {
+            AddMoneyForm form = new AddMoneyForm(currentClientId, currentAppUserId, currentUsername);
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                RefreshDashboardData();
+            }
+        }
+     
+        private void RefreshDashboardData()
+        {
+            LoadUserCVV();
+            LoadCardInfo();
+            LoadRecentTransactions();
+            LoadUserAccountsList();
+            LoadApprovalBadge();
+
+        }
         private void sendMoney_Click(object sender, EventArgs e) { }
+
+        private void btnApprovalsBell_Click(object sender, EventArgs e)
+        {
+            ApprovalsForm form = new ApprovalsForm(currentClientId, currentAppUserId, currentUsername);
+            form.ShowDialog();
+            RefreshDashboardData();
+        }
+        private void LoadApprovalBadge()
+        {
+            try
+            {
+                int count = transferRequestService.GetPendingRequestsCount(currentClientId);
+
+                if (count > 0)
+                {
+                    lblApprovalCount.Visible = true;
+                    lblApprovalCount.Text = count > 99 ? "99+" : count.ToString();
+                }
+                else
+                {
+                    lblApprovalCount.Visible = false;
+                }
+            }
+            catch
+            {
+                lblApprovalCount.Visible = false;
+            }
+        }
+
+        private void SetupApprovalsBell()
+        {
+            btnApprovalsBell.Text = "🔔";
+            btnApprovalsBell.Width = 48;
+            btnApprovalsBell.Height = 48;
+            btnApprovalsBell.FlatStyle = FlatStyle.Flat;
+            btnApprovalsBell.FlatAppearance.BorderSize = 0;
+            btnApprovalsBell.BackColor = Color.White;
+            btnApprovalsBell.ForeColor = Color.FromArgb(0, 120, 215);
+            btnApprovalsBell.Cursor = Cursors.Hand;
+            btnApprovalsBell.Font = new Font("Segoe UI Emoji", 18, FontStyle.Regular);
+
+            MakeCircularButton(btnApprovalsBell);
+
+            lblApprovalCount.AutoSize = false;
+            lblApprovalCount.Width = 22;
+            lblApprovalCount.Height = 22;
+            lblApprovalCount.TextAlign = ContentAlignment.MiddleCenter;
+            lblApprovalCount.Font = new Font("Segoe UI", 8, FontStyle.Bold);
+            lblApprovalCount.BackColor = Color.FromArgb(220, 53, 69);
+            lblApprovalCount.ForeColor = Color.White;
+
+            MakeCircularLabel(lblApprovalCount);
+
+            lblApprovalCount.BringToFront();
+            lblApprovalCount.Location = new Point(
+                btnApprovalsBell.Left + btnApprovalsBell.Width - 12,
+                btnApprovalsBell.Top - 4
+            );
+        }
+
+        private void StyleAddMoneyButton()
+        {
+            AddMoney.BackColor = Color.FromArgb(0, 120, 215);
+            AddMoney.ForeColor = Color.White;
+            AddMoney.FlatStyle = FlatStyle.Flat;
+            AddMoney.FlatAppearance.BorderSize = 0;
+            AddMoney.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            AddMoney.Cursor = Cursors.Hand;
+
+            UiStyle.RoundControl(AddMoney, 12);
+        }
+        private void MakeCircularLabel(Label lbl)
+        {
+            GraphicsPath path = new GraphicsPath();
+            path.AddEllipse(0, 0, lbl.Width, lbl.Height);
+            lbl.Region = new Region(path);
+        }
     }
 }

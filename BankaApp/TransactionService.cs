@@ -116,6 +116,7 @@ namespace BankaApp
                 new OracleParameter("clientId", OracleDbType.Int32) { Value = clientId }
             );
         }
+       
     }
 
 }
