@@ -15,7 +15,6 @@ namespace BankaApp
         private ExchangeRateService exchangeRateService = new ExchangeRateService();
         private TransferRequestService transferRequestService = new TransferRequestService();
 
-
         private bool isCvvVisible = false;
         private List<decimal> exchangeRates = new List<decimal>();
         private string chartPairText = "Lei = EUR";
@@ -30,6 +29,10 @@ namespace BankaApp
         private string fullCardHolderName = "";
         private string fullValidThru = "";
 
+        private bool isBalanceVisible = false;
+        private decimal currentBalance = 0m;
+        private int currentCurrencyId = 0;
+        private string currentAccountNo = "";
 
         public mainForn(int clientId, int userId, string username)
         {
@@ -38,6 +41,7 @@ namespace BankaApp
             currentClientId = clientId;
             currentAppUserId = userId;
             currentUsername = username;
+
 
             usrName.Text = string.IsNullOrWhiteSpace(currentUsername)
                 ? "USER"
@@ -52,7 +56,7 @@ namespace BankaApp
             LoadUserCVV();
             LoadCardInfo();
             LoadExchangeRatesForChart(2, 6, "EUR -> AED");
-
+            lblBalanceAmount.Font = new Font("Segoe UI", 18, FontStyle.Bold);
             SetupTransactionsGrid();
             SetupTransactionFilters();
             LoadRecentTransactions();
@@ -71,22 +75,25 @@ namespace BankaApp
         }
         private void ApplyModernUi()
         {
+
             BackColor = UiStyle.BgColor;
+            panelAccountDetails.Tag = "KeepColor";
+            panel14.Tag = "KeepColor";
 
             panel1.BackColor = UiStyle.Sidebar;
             panel2.BackColor = UiStyle.BgColor;
             panel12.BackColor = Color.White;
-            panel13.BackColor = Color.White;
-            panel14.BackColor = Color.White;
             dgvTransactions.BackgroundColor = Color.White;
 
             UiStyle.StylePrimaryButton(AddMoney);
             UiStyle.StylePrimaryButton(sendMoney);
+            UiStyle.StylePrimaryButton(btnExchange);
             UiStyle.StyleSecondaryButton(filter);
             UiStyle.StyleSecondaryButton(reset);
 
             UiStyle.RoundControl(AddMoney, 12);
             UiStyle.RoundControl(sendMoney, 12);
+            UiStyle.RoundControl(btnExchange, 12);
             UiStyle.RoundControl(filter, 10);
             UiStyle.RoundControl(reset, 10);
 
@@ -108,10 +115,13 @@ namespace BankaApp
             SetRoundedPanel(panel4, 30);
             SetRoundedPanel(panel5, 30);
             SetRoundedPanel(panel6, 30);
-            SetRoundedPanel(panel3, 30);
             SetRoundedPanel(panel12, 30);
             SetRoundedPanel(panel13, 30);
             SetRoundedPanel(panel14, 40);
+            SetRoundedPanel(panelAccountDetails, 40);
+           
+            UiStyle.StyleColoredPanel(panelAccountDetails, Color.FromArgb(98, 70, 255));
+            UiStyle.StyleColoredPanel(panel14, Color.FromArgb(63, 114, 255));
 
             AddHoverEffect(AddMoney, UiStyle.Primary, UiStyle.PrimaryDark);
             AddHoverEffect(sendMoney, UiStyle.Primary, UiStyle.PrimaryDark);
@@ -426,6 +436,7 @@ namespace BankaApp
             {
                 ComboBoxItem selected = (ComboBoxItem)listAccounts.SelectedItem;
                 selectedAccountId = selected.Value;
+                LoadSelectedAccountBalance();
                 LoadRecentTransactions();
             }
         }
@@ -796,7 +807,7 @@ namespace BankaApp
             UiStyle.RoundControl(cvvShow, 25);
 
         }
-        private void AddMoney_Click(object sender, EventArgs e) 
+        private void AddMoney_Click(object sender, EventArgs e)
         {
             AddMoneyForm form = new AddMoneyForm(currentClientId, currentAppUserId, currentUsername);
 
@@ -805,7 +816,7 @@ namespace BankaApp
                 RefreshDashboardData();
             }
         }
-     
+
         private void RefreshDashboardData()
         {
             LoadUserCVV();
@@ -892,6 +903,85 @@ namespace BankaApp
             GraphicsPath path = new GraphicsPath();
             path.AddEllipse(0, 0, lbl.Width, lbl.Height);
             lbl.Region = new Region(path);
+        }
+
+        private void LoadSelectedAccountBalance()
+        {
+            if (!selectedAccountId.HasValue)
+                return;
+
+            try
+            {
+                int accountId = selectedAccountId.Value;
+                AccountBalanceInfo info = accountService.GetAccountBalanceInfo(accountId);
+
+                if (info == null)
+                {
+                    lblBalanceAmount.Text = "N/A";
+                    lblAccountNumber.Text = "No account";
+                    return;
+                }
+
+                currentBalance = info.Balance;
+                currentCurrencyId = info.CurrencyId;
+                currentAccountNo = info.AccountNo;
+
+                lblAccountNumber.Text = info.AccountNo;
+                RefreshBalanceDisplay();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading balance: " + ex.Message);
+            }
+        }
+
+        private string GetCurrencyText(int currencyId)
+        {
+            switch (currencyId)
+            {
+                case 1: return "Lei";
+                case 2: return "€";
+                case 3: return "$";
+                case 4: return "£";
+                case 5: return "CHF";
+                case 6: return "AED";
+                case 7: return "₺";
+                default: return "";
+            }
+        }
+        private void RefreshBalanceDisplay()
+        {
+            string currencyText = GetCurrencyText(currentCurrencyId);
+
+            if (isBalanceVisible)
+                lblBalanceAmount.Text = $"{currencyText} {currentBalance:N2}";
+            else
+                lblBalanceAmount.Text = $"{currencyText} ****";
+        }
+
+        private void btnToggleBalance_Click(object sender, EventArgs e)
+        {
+            isBalanceVisible = !isBalanceVisible;
+
+            if (isBalanceVisible)
+                btnToggleBalance.Text = "🙈";
+            else
+                btnToggleBalance.Text = "👁";
+
+            RefreshBalanceDisplay();
+        }
+        private void btnCopyIBAN_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(currentAccountNo))
+            {
+                Clipboard.SetText(currentAccountNo);
+                MessageBox.Show("IBAN copied!");
+            }
+        }
+        private void panelAccountDetails_Resize(object sender, EventArgs e)
+        {
+            btnCopyIBAN.Left = panelAccountDetails.Width - btnCopyIBAN.Width - 15;
+            lblAccountNumber.Width = btnCopyIBAN.Left - lblAccountNumber.Left - 8;
         }
     }
 }

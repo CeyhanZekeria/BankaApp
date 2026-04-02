@@ -1,4 +1,5 @@
 ﻿using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Data;
 
 namespace BankaApp
@@ -58,5 +59,6 @@ namespace BankaApp
         {
             return new OracleConnection(connStr);
         }
+   
     }
 }

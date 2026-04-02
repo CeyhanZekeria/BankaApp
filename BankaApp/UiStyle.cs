@@ -16,6 +16,13 @@ namespace BankaApp
         public static Color Border = Color.FromArgb(230, 233, 240);
         public static Color Success = Color.FromArgb(34, 197, 94);
         public static Color Danger = Color.FromArgb(239, 68, 68);
+        public static Color Warning = Color.FromArgb(245, 158, 11);
+
+        public static void ApplyFormStyle(Form form)
+        {
+            form.BackColor = BgColor;
+            form.ForeColor = TextDark;
+        }
 
         public static void RoundControl(Control control, int radius)
         {
@@ -33,6 +40,16 @@ namespace BankaApp
             control.Region = new Region(path);
         }
 
+        public static void StyleCardPanel(Panel panel)
+        {
+            panel.BackColor = CardColor;
+        }
+
+        public static void StyleColoredPanel(Panel panel, Color backColor)
+        {
+            panel.BackColor = backColor;
+        }
+
         public static void StylePrimaryButton(Button btn)
         {
             btn.FlatStyle = FlatStyle.Flat;
@@ -41,6 +58,7 @@ namespace BankaApp
             btn.ForeColor = Color.White;
             btn.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             btn.Cursor = Cursors.Hand;
+            btn.UseVisualStyleBackColor = false;
         }
 
         public static void StyleSecondaryButton(Button btn)
@@ -52,11 +70,85 @@ namespace BankaApp
             btn.ForeColor = TextDark;
             btn.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             btn.Cursor = Cursors.Hand;
+            btn.UseVisualStyleBackColor = false;
         }
 
-        public static void StyleCardPanel(Panel panel)
+        public static void StyleDangerButton(Button btn)
         {
-            panel.BackColor = CardColor;
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.BackColor = Danger;
+            btn.ForeColor = Color.White;
+            btn.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btn.Cursor = Cursors.Hand;
+            btn.UseVisualStyleBackColor = false;
+        }
+
+        public static void AddHoverEffect(Button btn, Color normalColor, Color hoverColor)
+        {
+            btn.MouseEnter += (s, e) => btn.BackColor = hoverColor;
+            btn.MouseLeave += (s, e) => btn.BackColor = normalColor;
+        }
+
+        public static void StyleTitleLabel(Label lbl)
+        {
+            lbl.ForeColor = TextDark;
+            lbl.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            lbl.BackColor = Color.Transparent;
+        }
+
+        public static void StyleSubtitleLabel(Label lbl)
+        {
+            lbl.ForeColor = TextGray;
+            lbl.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            lbl.BackColor = Color.Transparent;
+        }
+
+        public static void StyleBalanceLabel(Label lbl)
+        {
+            lbl.ForeColor = TextDark;
+            lbl.Font = new Font("Segoe UI", 18, FontStyle.Bold);
+            lbl.BackColor = Color.Transparent;
+        }
+
+        public static void StyleLightTextLabel(Label lbl)
+        {
+            lbl.ForeColor = Color.White;
+            lbl.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            lbl.BackColor = Color.Transparent;
+        }
+
+        public static void StyleTextBox(TextBox txt)
+        {
+            txt.BorderStyle = BorderStyle.FixedSingle;
+            txt.BackColor = Color.White;
+            txt.ForeColor = TextDark;
+            txt.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+        }
+
+        public static void StyleReadOnlyTextBox(TextBox txt)
+        {
+            txt.BorderStyle = BorderStyle.None;
+            txt.BackColor = CardColor;
+            txt.ForeColor = TextDark;
+            txt.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            txt.ReadOnly = true;
+        }
+
+        public static void StyleComboBox(ComboBox cmb)
+        {
+            cmb.FlatStyle = FlatStyle.Flat;
+            cmb.BackColor = Color.White;
+            cmb.ForeColor = TextDark;
+            cmb.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+        }
+
+        public static void StyleListBox(ListBox list)
+        {
+            list.BorderStyle = BorderStyle.None;
+            list.BackColor = Color.White;
+            list.ForeColor = TextDark;
+            list.Font = new Font("Segoe UI", 10, FontStyle.Regular);
         }
     }
 }

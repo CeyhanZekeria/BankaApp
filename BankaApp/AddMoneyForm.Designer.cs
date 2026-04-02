@@ -53,9 +53,9 @@ namespace BankaApp
             this.lblStatus = new System.Windows.Forms.Label();
             this.zaglavie = new System.Windows.Forms.Label();
             this.panel13 = new System.Windows.Forms.Panel();
-            this.cmbCurrency = new System.Windows.Forms.ComboBox();
-            this.visa = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.visa = new System.Windows.Forms.Label();
+            this.cmbCurrency = new System.Windows.Forms.ComboBox();
             this.panel6.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel9.SuspendLayout();
@@ -196,12 +196,12 @@ namespace BankaApp
             this.txtCardNumber.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.txtCardNumber.Location = new System.Drawing.Point(181, 113);
             this.txtCardNumber.Name = "txtCardNumber";
-            this.txtCardNumber.Size = new System.Drawing.Size(192, 27);
+            this.txtCardNumber.Size = new System.Drawing.Size(225, 27);
             this.txtCardNumber.TabIndex = 18;
             // 
             // txtValidThru
             // 
-            this.txtValidThru.Location = new System.Drawing.Point(114, 201);
+            this.txtValidThru.Location = new System.Drawing.Point(114, 205);
             this.txtValidThru.Name = "txtValidThru";
             this.txtValidThru.Size = new System.Drawing.Size(80, 27);
             this.txtValidThru.TabIndex = 19;
@@ -210,27 +210,29 @@ namespace BankaApp
             // 
             this.txtCVV.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.txtCVV.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.txtCVV.Location = new System.Drawing.Point(397, 205);
+            this.txtCVV.Location = new System.Drawing.Point(366, 205);
             this.txtCVV.Name = "txtCVV";
             this.txtCVV.Size = new System.Drawing.Size(57, 27);
             this.txtCVV.TabIndex = 20;
             // 
             // btnSendRequest
             // 
-            this.btnSendRequest.Location = new System.Drawing.Point(532, 413);
+            this.btnSendRequest.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnSendRequest.Location = new System.Drawing.Point(569, 398);
             this.btnSendRequest.Name = "btnSendRequest";
-            this.btnSendRequest.Size = new System.Drawing.Size(174, 43);
+            this.btnSendRequest.Size = new System.Drawing.Size(118, 43);
             this.btnSendRequest.TabIndex = 21;
-            this.btnSendRequest.Text = "Add money securely";
+            this.btnSendRequest.Text = "Add money";
             this.btnSendRequest.UseVisualStyleBackColor = true;
             this.btnSendRequest.Click += new System.EventHandler(this.btnSendRequest_Click);
             // 
             // lblAccount
             // 
             this.lblAccount.AutoSize = true;
-            this.lblAccount.Location = new System.Drawing.Point(374, 194);
+            this.lblAccount.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblAccount.Location = new System.Drawing.Point(322, 186);
             this.lblAccount.Name = "lblAccount";
-            this.lblAccount.Size = new System.Drawing.Size(138, 20);
+            this.lblAccount.Size = new System.Drawing.Size(190, 28);
             this.lblAccount.TabIndex = 23;
             this.lblAccount.Text = "Select your account";
             // 
@@ -250,7 +252,7 @@ namespace BankaApp
             this.lblValidThru.AutoSize = true;
             this.lblValidThru.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblValidThru.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.lblValidThru.Location = new System.Drawing.Point(31, 204);
+            this.lblValidThru.Location = new System.Drawing.Point(21, 208);
             this.lblValidThru.Name = "lblValidThru";
             this.lblValidThru.Size = new System.Drawing.Size(77, 20);
             this.lblValidThru.TabIndex = 25;
@@ -261,7 +263,7 @@ namespace BankaApp
             this.lblCVV.AutoSize = true;
             this.lblCVV.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblCVV.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.lblCVV.Location = new System.Drawing.Point(353, 208);
+            this.lblCVV.Location = new System.Drawing.Point(322, 208);
             this.lblCVV.Name = "lblCVV";
             this.lblCVV.Size = new System.Drawing.Size(38, 20);
             this.lblCVV.TabIndex = 26;
@@ -270,9 +272,10 @@ namespace BankaApp
             // lblAmount
             // 
             this.lblAmount.AutoSize = true;
-            this.lblAmount.Location = new System.Drawing.Point(464, 365);
+            this.lblAmount.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblAmount.Location = new System.Drawing.Point(440, 364);
             this.lblAmount.Name = "lblAmount";
-            this.lblAmount.Size = new System.Drawing.Size(62, 20);
+            this.lblAmount.Size = new System.Drawing.Size(86, 28);
             this.lblAmount.TabIndex = 27;
             this.lblAmount.Text = "Amount";
             // 
@@ -322,13 +325,16 @@ namespace BankaApp
             this.panel13.Size = new System.Drawing.Size(513, 254);
             this.panel13.TabIndex = 31;
             // 
-            // cmbCurrency
+            // label1
             // 
-            this.cmbCurrency.FormattingEnabled = true;
-            this.cmbCurrency.Location = new System.Drawing.Point(727, 364);
-            this.cmbCurrency.Name = "cmbCurrency";
-            this.cmbCurrency.Size = new System.Drawing.Size(73, 28);
-            this.cmbCurrency.TabIndex = 32;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 18F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.label1.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.label1.Location = new System.Drawing.Point(364, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(133, 41);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "MeliPay";
             // 
             // visa
             // 
@@ -341,22 +347,19 @@ namespace BankaApp
             this.visa.TabIndex = 27;
             this.visa.Text = "VISA";
             // 
-            // label1
+            // cmbCurrency
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 18F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.label1.ForeColor = System.Drawing.SystemColors.InactiveBorder;
-            this.label1.Location = new System.Drawing.Point(364, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(133, 41);
-            this.label1.TabIndex = 28;
-            this.label1.Text = "MeliPay";
+            this.cmbCurrency.FormattingEnabled = true;
+            this.cmbCurrency.Location = new System.Drawing.Point(727, 364);
+            this.cmbCurrency.Name = "cmbCurrency";
+            this.cmbCurrency.Size = new System.Drawing.Size(73, 28);
+            this.cmbCurrency.TabIndex = 32;
             // 
             // AddMoneyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(1394, 735);
             this.Controls.Add(this.cmbCurrency);
             this.Controls.Add(this.panel13);
