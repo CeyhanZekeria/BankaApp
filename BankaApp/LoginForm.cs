@@ -29,13 +29,11 @@ namespace BankaApp
             ThemeManager.ApplyTheme(this);
 
             LanguageManager.LoadLanguage();
+            ApplyTranslations();
 
-            if (LanguageManager.IsEnglish())
-                ApplyEnglishLanguage();
-            else
-                ApplyBulgarianLanguage();
+           
         }
-
+      
         private void MakeButtonRound(Button btn)
         {
             GraphicsPath path = new GraphicsPath();
@@ -43,44 +41,34 @@ namespace BankaApp
             btn.Region = new Region(path);
         }
 
-        private void ApplyEnglishLanguage()
+        private void ApplyTranslations()
         {
-            label2.Text = "Login";
-            usrnmoremail.Text = "Username / Email";
+            if (LanguageManager.IsEnglish())
+            {
+                label2.Text = LanguageManager.GetText("login_title");
+                label2.Font = new Font("Segoe UI", 30F);
+                label2.AutoSize = true;
+            }
+            else
+            {
+                label2.Text = LanguageManager.GetText("login_title");
+                label2.Font = new Font("Segoe UI", 20F);
+                label2.AutoSize = true;
+            }
 
-            passwrd.Text = "Password";
-            label3.Text = "Don't have an account?";
+            usrnmoremail.Text = LanguageManager.GetText("username_email");
+            passwrd.Text = LanguageManager.GetText("password");
+            label3.Text = LanguageManager.GetText("no_account");
 
-            button1.Text = "LOG IN";
-            label2.Font = new Font("Segoe UI", 30F);
-            linkLabel1.Text = "Create account";
+            button1.Text = LanguageManager.GetText("log_in");
+            linkLabel1.Text = LanguageManager.GetText("create_account");
+
             showbtn.Text = textBox2.UseSystemPasswordChar ? "👁" : "🚫";
 
-            textBox1.PlaceholderText = "Enter username or email";
-            textBox2.PlaceholderText = "Enter password";
+            textBox1.PlaceholderText = LanguageManager.GetText("ph_login_user");
+            textBox2.PlaceholderText = LanguageManager.GetText("ph_login_pass");
 
-            button2.Text = "BG";
-            LanguageManager.SetLanguage("EN");
-        }
-
-        private void ApplyBulgarianLanguage()
-        {
-            label2.Text = "Добре Дошли";
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 20F);
-            usrnmoremail.Text = "Потребител / Имейл";
-            passwrd.Text = "Парола";
-
-            button1.Text = "ВХОД";
-            linkLabel1.Text = "Създай акаунт";
-            label3.Text = "Нямате още профил?";
-            showbtn.Text = textBox2.UseSystemPasswordChar ? "👁" : "🚫";
-
-            textBox1.PlaceholderText = "Въведи потребител или имейл";
-            textBox2.PlaceholderText = "Въведи парола";
-
-            button2.Text = "EN";
-            LanguageManager.SetLanguage("BG");
+            button2.Text = LanguageManager.IsBulgarian() ? "EN" : "BG";
         }
 
         private void showbtn_Click(object sender, EventArgs e)
@@ -193,11 +181,7 @@ namespace BankaApp
         private void button2_Click(object sender, EventArgs e)
         {
             LanguageManager.ToggleLanguage();
-
-            if (LanguageManager.IsEnglish())
-                ApplyEnglishLanguage();
-            else
-                ApplyBulgarianLanguage();
+            ApplyTranslations();
         }
 
         private void button2_Resize(object sender, EventArgs e)

@@ -24,6 +24,8 @@ namespace BankaApp
             currentAppUserId = userId;
             currentUsername = username;
 
+            LanguageManager.LoadLanguage();
+            ApplyTranslations();
             FormStateHelper.Attach(this);
             ThemeManager.ApplyTheme(this);
         }
@@ -266,6 +268,11 @@ namespace BankaApp
             lblStatus.AutoSize = true;
             lblStatus.ForeColor = Color.FromArgb(220, 53, 69);
             lblStatus.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+        }
+
+        private void ApplyTranslations()
+        {
+            
         }
     }
 }

@@ -17,7 +17,34 @@ namespace BankaApp
         public static Color Success = Color.FromArgb(34, 197, 94);
         public static Color Danger = Color.FromArgb(239, 68, 68);
         public static Color Warning = Color.FromArgb(245, 158, 11);
+        public static Color SoftPanel = Color.FromArgb(248, 250, 255);
+        public static Color InputBg = Color.White;
+        public static Color InputBorder = Color.FromArgb(220, 224, 232);
 
+        public static void StyleInput(Control control)
+        {
+            control.BackColor = InputBg;
+            control.ForeColor = TextDark;
+            control.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+        }
+
+        public static void StyleComboBox(ComboBox combo)
+        {
+            combo.BackColor = InputBg;
+            combo.ForeColor = TextDark;
+            combo.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            combo.FlatStyle = FlatStyle.Flat;
+        }
+
+        public static void StyleCardPanel(Panel panel)
+        {
+            panel.BackColor = CardColor;
+        }
+
+        public static void StyleSoftPanel(Panel panel)
+        {
+            panel.BackColor = SoftPanel;
+        }
         public static void ApplyFormStyle(Form form)
         {
             form.BackColor = BgColor;
@@ -38,11 +65,6 @@ namespace BankaApp
             path.CloseFigure();
 
             control.Region = new Region(path);
-        }
-
-        public static void StyleCardPanel(Panel panel)
-        {
-            panel.BackColor = CardColor;
         }
 
         public static void StyleColoredPanel(Panel panel, Color backColor)
@@ -133,14 +155,6 @@ namespace BankaApp
             txt.ForeColor = TextDark;
             txt.Font = new Font("Segoe UI", 10, FontStyle.Regular);
             txt.ReadOnly = true;
-        }
-
-        public static void StyleComboBox(ComboBox cmb)
-        {
-            cmb.FlatStyle = FlatStyle.Flat;
-            cmb.BackColor = Color.White;
-            cmb.ForeColor = TextDark;
-            cmb.Font = new Font("Segoe UI", 10, FontStyle.Regular);
         }
 
         public static void StyleListBox(ListBox list)

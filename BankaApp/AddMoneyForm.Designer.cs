@@ -220,7 +220,7 @@ namespace BankaApp
             this.btnSendRequest.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnSendRequest.Location = new System.Drawing.Point(569, 398);
             this.btnSendRequest.Name = "btnSendRequest";
-            this.btnSendRequest.Size = new System.Drawing.Size(118, 43);
+            this.btnSendRequest.Size = new System.Drawing.Size(126, 43);
             this.btnSendRequest.TabIndex = 21;
             this.btnSendRequest.Text = "Add money";
             this.btnSendRequest.UseVisualStyleBackColor = true;

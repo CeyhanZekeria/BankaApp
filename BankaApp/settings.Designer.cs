@@ -44,14 +44,19 @@ namespace BankaApp
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.langLbl = new System.Windows.Forms.Label();
+            this.cmbLanguage = new System.Windows.Forms.ComboBox();
+            this.themeLbl = new System.Windows.Forms.Label();
             this.cmbTheme = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.panel6.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel9.SuspendLayout();
             this.panel10.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel6
@@ -66,14 +71,14 @@ namespace BankaApp
             this.panel6.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(223, 637);
+            this.panel6.Size = new System.Drawing.Size(223, 745);
             this.panel6.TabIndex = 13;
             // 
             // secrty
             // 
             this.secrty.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.secrty.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.secrty.Location = new System.Drawing.Point(11, 291);
+            this.secrty.Location = new System.Drawing.Point(11, 400);
             this.secrty.Name = "secrty";
             this.secrty.Size = new System.Drawing.Size(200, 55);
             this.secrty.TabIndex = 16;
@@ -87,7 +92,7 @@ namespace BankaApp
             this.panel13.Controls.Add(this.textBox1);
             this.panel13.Controls.Add(this.button2);
             this.panel13.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel13.Location = new System.Drawing.Point(3, 402);
+            this.panel13.Location = new System.Drawing.Point(6, 524);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(211, 209);
             this.panel13.TabIndex = 15;
@@ -122,7 +127,7 @@ namespace BankaApp
             // 
             this.profl.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.profl.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.profl.Location = new System.Drawing.Point(11, 232);
+            this.profl.Location = new System.Drawing.Point(11, 341);
             this.profl.Name = "profl";
             this.profl.Size = new System.Drawing.Size(200, 55);
             this.profl.TabIndex = 13;
@@ -134,7 +139,7 @@ namespace BankaApp
             // 
             this.homeBtn.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.homeBtn.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.homeBtn.Location = new System.Drawing.Point(9, 170);
+            this.homeBtn.Location = new System.Drawing.Point(9, 279);
             this.homeBtn.Name = "homeBtn";
             this.homeBtn.Size = new System.Drawing.Size(202, 56);
             this.homeBtn.TabIndex = 12;
@@ -164,7 +169,7 @@ namespace BankaApp
             this.panel8.Controls.Add(this.label9);
             this.panel8.Location = new System.Drawing.Point(-788, 6);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(46, 1901);
+            this.panel8.Size = new System.Drawing.Size(46, 2009);
             this.panel8.TabIndex = 11;
             // 
             // panel9
@@ -177,7 +182,7 @@ namespace BankaApp
             this.panel9.Controls.Add(this.label8);
             this.panel9.Location = new System.Drawing.Point(-1262, 8);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(23, 3750);
+            this.panel9.Size = new System.Drawing.Size(23, 3858);
             this.panel9.TabIndex = 12;
             // 
             // panel10
@@ -189,7 +194,7 @@ namespace BankaApp
             this.panel10.Controls.Add(this.label7);
             this.panel10.Location = new System.Drawing.Point(-99, 0);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(0, 6150);
+            this.panel10.Size = new System.Drawing.Size(0, 6258);
             this.panel10.TabIndex = 12;
             // 
             // label7
@@ -233,39 +238,81 @@ namespace BankaApp
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.panel1.Controls.Add(this.cmbTheme);
-            this.panel1.Controls.Add(this.label1);
+            this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(223, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(803, 637);
+            this.panel1.Size = new System.Drawing.Size(1080, 745);
             this.panel1.TabIndex = 16;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.btnSave);
+            this.panel2.Controls.Add(this.langLbl);
+            this.panel2.Controls.Add(this.cmbLanguage);
+            this.panel2.Controls.Add(this.themeLbl);
+            this.panel2.Controls.Add(this.cmbTheme);
+            this.panel2.Location = new System.Drawing.Point(26, 50);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1051, 683);
+            this.panel2.TabIndex = 2;
+            // 
+            // btnSave
+            // 
+            this.btnSave.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnSave.Location = new System.Drawing.Point(907, 614);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(147, 49);
+            this.btnSave.TabIndex = 4;
+            this.btnSave.Text = "Save Changes";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // langLbl
+            // 
+            this.langLbl.AutoSize = true;
+            this.langLbl.Location = new System.Drawing.Point(20, 129);
+            this.langLbl.Name = "langLbl";
+            this.langLbl.Size = new System.Drawing.Size(134, 20);
+            this.langLbl.TabIndex = 3;
+            this.langLbl.Text = "Select a language :";
+            // 
+            // cmbLanguage
+            // 
+            this.cmbLanguage.FormattingEnabled = true;
+            this.cmbLanguage.Items.AddRange(new object[] {
+            "EN",
+            "BG"});
+            this.cmbLanguage.Location = new System.Drawing.Point(160, 126);
+            this.cmbLanguage.Name = "cmbLanguage";
+            this.cmbLanguage.Size = new System.Drawing.Size(151, 28);
+            this.cmbLanguage.TabIndex = 2;
+            // 
+            // themeLbl
+            // 
+            this.themeLbl.AutoSize = true;
+            this.themeLbl.Location = new System.Drawing.Point(27, 18);
+            this.themeLbl.Name = "themeLbl";
+            this.themeLbl.Size = new System.Drawing.Size(131, 20);
+            this.themeLbl.TabIndex = 0;
+            this.themeLbl.Text = "Choose a theme  : ";
             // 
             // cmbTheme
             // 
             this.cmbTheme.FormattingEnabled = true;
-            this.cmbTheme.Location = new System.Drawing.Point(186, 86);
+            this.cmbTheme.Location = new System.Drawing.Point(160, 15);
             this.cmbTheme.Name = "cmbTheme";
-            this.cmbTheme.Size = new System.Drawing.Size(130, 28);
+            this.cmbTheme.Size = new System.Drawing.Size(151, 28);
             this.cmbTheme.TabIndex = 1;
             this.cmbTheme.SelectedIndexChanged += new System.EventHandler(this.cmbTheme_SelectedIndexChanged_1);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(53, 89);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(127, 20);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Choose a theme : ";
             // 
             // settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1026, 637);
+            this.ClientSize = new System.Drawing.Size(1303, 745);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel6);
             this.Name = "settings";
@@ -278,7 +325,8 @@ namespace BankaApp
             this.panel9.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -301,6 +349,10 @@ namespace BankaApp
         private System.Windows.Forms.Button secrty;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox cmbTheme;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label themeLbl;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label langLbl;
+        private System.Windows.Forms.ComboBox cmbLanguage;
+        private System.Windows.Forms.Button btnSave;
     }
 }

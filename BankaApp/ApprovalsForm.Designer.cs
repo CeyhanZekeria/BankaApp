@@ -35,7 +35,6 @@ namespace BankaApp
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.btnCancel = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.panel8 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
@@ -43,21 +42,25 @@ namespace BankaApp
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRequests)).BeginInit();
             this.panel6.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel9.SuspendLayout();
             this.panel10.SuspendLayout();
+            this.panel13.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvRequests
             // 
             this.dgvRequests.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvRequests.Location = new System.Drawing.Point(510, 141);
+            this.dgvRequests.Location = new System.Drawing.Point(428, 141);
             this.dgvRequests.Name = "dgvRequests";
             this.dgvRequests.RowHeadersWidth = 51;
             this.dgvRequests.RowTemplate.Height = 29;
-            this.dgvRequests.Size = new System.Drawing.Size(691, 358);
+            this.dgvRequests.Size = new System.Drawing.Size(773, 358);
             this.dgvRequests.TabIndex = 0;
             // 
             // btnApprove
@@ -89,7 +92,7 @@ namespace BankaApp
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblTitle.Location = new System.Drawing.Point(692, 17);
+            this.lblTitle.Location = new System.Drawing.Point(676, 18);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(161, 41);
             this.lblTitle.TabIndex = 3;
@@ -98,7 +101,7 @@ namespace BankaApp
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(519, 105);
+            this.lblStatus.Location = new System.Drawing.Point(478, 109);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(50, 20);
             this.lblStatus.TabIndex = 4;
@@ -107,7 +110,7 @@ namespace BankaApp
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel6.Controls.Add(this.btnCancel);
+            this.panel6.Controls.Add(this.panel13);
             this.panel6.Controls.Add(this.label6);
             this.panel6.Controls.Add(this.panel8);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Left;
@@ -115,18 +118,6 @@ namespace BankaApp
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(223, 740);
             this.panel6.TabIndex = 14;
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnCancel.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.btnCancel.Location = new System.Drawing.Point(12, 257);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(202, 56);
-            this.btnCancel.TabIndex = 18;
-            this.btnCancel.Text = "⬅️ BACK";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // label6
             // 
@@ -217,6 +208,43 @@ namespace BankaApp
             this.label9.Text = "MeliPay💵";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // panel13
+            // 
+            this.panel13.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.panel13.Controls.Add(this.textBox1);
+            this.panel13.Controls.Add(this.button2);
+            this.panel13.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.panel13.Location = new System.Drawing.Point(3, 352);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(211, 209);
+            this.panel13.TabIndex = 16;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Enabled = false;
+            this.textBox1.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.textBox1.Location = new System.Drawing.Point(36, 39);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(143, 67);
+            this.textBox1.TabIndex = 16;
+            this.textBox1.Text = "Get a Premium\r\n     Account ";
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.RoyalBlue;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button2.ForeColor = System.Drawing.Color.White;
+            this.button2.Location = new System.Drawing.Point(6, 122);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(199, 67);
+            this.button2.TabIndex = 16;
+            this.button2.Text = "Get Now!";
+            this.button2.UseVisualStyleBackColor = false;
+            // 
             // ApprovalsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -236,6 +264,8 @@ namespace BankaApp
             this.panel8.ResumeLayout(false);
             this.panel9.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
+            this.panel13.ResumeLayout(false);
+            this.panel13.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -249,7 +279,6 @@ namespace BankaApp
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Panel panel9;
@@ -257,5 +286,8 @@ namespace BankaApp
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Panel panel13;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button2;
     }
 }

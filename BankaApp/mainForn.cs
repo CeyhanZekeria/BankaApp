@@ -41,6 +41,10 @@ namespace BankaApp
             currentClientId = clientId;
             currentAppUserId = userId;
             currentUsername = username;
+            ThemeManager.ApplyTheme(this);
+            FormStateHelper.Attach(this);
+            LanguageManager.ToggleLanguage();
+            ApplyTranslations();
 
 
             usrName.Text = string.IsNullOrWhiteSpace(currentUsername)
@@ -55,15 +59,15 @@ namespace BankaApp
 
             LoadUserCVV();
             LoadCardInfo();
-            LoadExchangeRatesForChart(2, 6, "EUR -> AED");
+            LoadExchangeRatesForChart(1, 2, "EUR -> Lei");
             lblBalanceAmount.Font = new Font("Segoe UI", 18, FontStyle.Bold);
             SetupTransactionsGrid();
             SetupTransactionFilters();
             LoadRecentTransactions();
             LoadUserAccountsList();
+            ApplyModernUi();
+          
 
-            FormStateHelper.Attach(this);
-            ThemeManager.ApplyTheme(this);
 
             LoadApprovalBadge();
         }
@@ -75,19 +79,67 @@ namespace BankaApp
         }
         private void ApplyModernUi()
         {
-
             BackColor = UiStyle.BgColor;
+
+            // ===== TAGS FOR THEME =====
+            // само hero panel-ите пазят custom цвят
             panelAccountDetails.Tag = "KeepColor";
             panel14.Tag = "KeepColor";
 
-            panel1.BackColor = UiStyle.Sidebar;
-            panel2.BackColor = UiStyle.BgColor;
-            panel12.BackColor = Color.White;
-            dgvTransactions.BackgroundColor = Color.White;
+            // sidebar-а НЕ го пазим, за да може да се theme-ва
+            panel1.Tag = "SoftPanel";
 
+            panel3.Tag = "SoftPanel";
+            panel4.Tag = "SoftPanel";
+            panel5.Tag = "SoftPanel";
+            panel6.Tag = "SoftPanel";
+            panel12.Tag = "SoftPanel";
+            panel13.Tag = "SoftPanel";
+
+            AddMoney.Tag = "PrimaryButton";
+            sendMoney.Tag = "PrimaryButton";
+            btnExchange.Tag = "PrimaryButton";
+
+            filter.Tag = "SecondaryButton";
+            reset.Tag = "SecondaryButton";
+
+            // ===== BASE BACKGROUNDS =====
+            // не фиксирай light цветове тук
+            panel1.BackColor = UiStyle.SoftPanel;
+            panel2.BackColor = UiStyle.BgColor;
+
+            panel3.BackColor = UiStyle.SoftPanel;
+            panel4.BackColor = UiStyle.CardColor;
+            panel5.BackColor = UiStyle.CardColor;
+            panel6.BackColor = UiStyle.SoftPanel;
+            panel12.BackColor = UiStyle.CardColor;
+            panel13.BackColor = UiStyle.SoftPanel;
+
+            dgvTransactions.BackgroundColor = UiStyle.CardColor;
+            dgvTransactions.BorderStyle = BorderStyle.None;
+            dgvTransactions.GridColor = UiStyle.Border;
+            dgvTransactions.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvTransactions.EnableHeadersVisualStyles = false;
+            dgvTransactions.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dgvTransactions.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+            dgvTransactions.ColumnHeadersDefaultCellStyle.BackColor = UiStyle.SoftPanel;
+            dgvTransactions.ColumnHeadersDefaultCellStyle.ForeColor = UiStyle.TextDark;
+            dgvTransactions.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiStyle.SoftPanel;
+            dgvTransactions.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiStyle.TextDark;
+
+            dgvTransactions.DefaultCellStyle.BackColor = UiStyle.CardColor;
+            dgvTransactions.DefaultCellStyle.ForeColor = UiStyle.TextDark;
+            dgvTransactions.DefaultCellStyle.SelectionBackColor = Color.FromArgb(238, 242, 255);
+            dgvTransactions.DefaultCellStyle.SelectionForeColor = UiStyle.TextDark;
+
+            dgvTransactions.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(252, 252, 252);
+
+            // ===== BUTTONS =====
             UiStyle.StylePrimaryButton(AddMoney);
             UiStyle.StylePrimaryButton(sendMoney);
             UiStyle.StylePrimaryButton(btnExchange);
+
             UiStyle.StyleSecondaryButton(filter);
             UiStyle.StyleSecondaryButton(reset);
 
@@ -97,19 +149,27 @@ namespace BankaApp
             UiStyle.RoundControl(filter, 10);
             UiStyle.RoundControl(reset, 10);
 
+            AddHoverEffect(AddMoney, UiStyle.Primary, UiStyle.PrimaryDark);
+            AddHoverEffect(sendMoney, UiStyle.Primary, UiStyle.PrimaryDark);
+            AddHoverEffect(btnExchange, UiStyle.Primary, UiStyle.PrimaryDark);
+
+            // ===== SIDEBAR =====
             StyleSidebarButton(homeBtn);
             StyleSidebarButton(secrty);
             StyleSidebarButton(profl);
             StyleSidebarButton(button1);
             SetActiveMenu(homeBtn);
 
+            // ===== ACCOUNTS LIST =====
             listAccounts.DrawMode = DrawMode.OwnerDrawFixed;
             listAccounts.ItemHeight = 38;
             listAccounts.BorderStyle = BorderStyle.None;
-            listAccounts.BackColor = Color.White;
-            listAccounts.ForeColor = Color.FromArgb(45, 45, 45);
+            listAccounts.BackColor = UiStyle.CardColor;
+            listAccounts.ForeColor = UiStyle.TextDark;
             listAccounts.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            listAccounts.Padding = new Padding(4);
 
+            // ===== ROUNDED PANELS =====
             SetRoundedPanel(panel2, 30);
             SetRoundedPanel(panel3, 30);
             SetRoundedPanel(panel4, 30);
@@ -119,12 +179,10 @@ namespace BankaApp
             SetRoundedPanel(panel13, 30);
             SetRoundedPanel(panel14, 40);
             SetRoundedPanel(panelAccountDetails, 40);
-           
+
+            // ===== HERO PANELS =====
             UiStyle.StyleColoredPanel(panelAccountDetails, Color.FromArgb(98, 70, 255));
             UiStyle.StyleColoredPanel(panel14, Color.FromArgb(63, 114, 255));
-
-            AddHoverEffect(AddMoney, UiStyle.Primary, UiStyle.PrimaryDark);
-            AddHoverEffect(sendMoney, UiStyle.Primary, UiStyle.PrimaryDark);
         }
 
         private void WireEvents()
@@ -264,7 +322,6 @@ namespace BankaApp
             string last4 = clean.Substring(clean.Length - 4);
             return $"{first4} •••• •••• {last4}";
         }
-
         private string MaskCardHolder(string holder)
         {
             if (string.IsNullOrWhiteSpace(holder))
@@ -278,7 +335,6 @@ namespace BankaApp
             string last = parts[parts.Length - 1];
             return first.Substring(0, Math.Min(2, first.Length)) + "••• " + last.Substring(0, Math.Min(2, last.Length)) + "•••";
         }
-
         private void RefreshCardDisplay()
         {
             cardNum.Text = isCardVisible ? fullCardNumber : MaskCardNumber(fullCardNumber);
@@ -742,7 +798,7 @@ namespace BankaApp
         {
             settings form = new settings(currentClientId, currentAppUserId, currentUsername);
             form.Show();
-            Hide();
+            this.Hide();
         }
         private void homeBtn_Click(object sender, EventArgs e)
         {
@@ -810,13 +866,13 @@ namespace BankaApp
         private void AddMoney_Click(object sender, EventArgs e)
         {
             AddMoneyForm form = new AddMoneyForm(currentClientId, currentAppUserId, currentUsername);
+            Hide();
 
             if (form.ShowDialog() == DialogResult.OK)
             {
                 RefreshDashboardData();
             }
         }
-
         private void RefreshDashboardData()
         {
             LoadUserCVV();
@@ -827,7 +883,6 @@ namespace BankaApp
 
         }
         private void sendMoney_Click(object sender, EventArgs e) { }
-
         private void btnApprovalsBell_Click(object sender, EventArgs e)
         {
             ApprovalsForm form = new ApprovalsForm(currentClientId, currentAppUserId, currentUsername);
@@ -855,7 +910,6 @@ namespace BankaApp
                 lblApprovalCount.Visible = false;
             }
         }
-
         private void SetupApprovalsBell()
         {
             btnApprovalsBell.Text = "🔔";
@@ -886,7 +940,6 @@ namespace BankaApp
                 btnApprovalsBell.Top - 4
             );
         }
-
         private void StyleAddMoneyButton()
         {
             AddMoney.BackColor = Color.FromArgb(0, 120, 215);
@@ -904,7 +957,6 @@ namespace BankaApp
             path.AddEllipse(0, 0, lbl.Width, lbl.Height);
             lbl.Region = new Region(path);
         }
-
         private void LoadSelectedAccountBalance()
         {
             if (!selectedAccountId.HasValue)
@@ -934,7 +986,6 @@ namespace BankaApp
                 MessageBox.Show("Error loading balance: " + ex.Message);
             }
         }
-
         private string GetCurrencyText(int currencyId)
         {
             switch (currencyId)
@@ -958,7 +1009,6 @@ namespace BankaApp
             else
                 lblBalanceAmount.Text = $"{currencyText} ****";
         }
-
         private void btnToggleBalance_Click(object sender, EventArgs e)
         {
             isBalanceVisible = !isBalanceVisible;
@@ -983,5 +1033,31 @@ namespace BankaApp
             btnCopyIBAN.Left = panelAccountDetails.Width - btnCopyIBAN.Width - 15;
             lblAccountNumber.Width = btnCopyIBAN.Left - lblAccountNumber.Left - 8;
         }
+        private void ApplyTranslations()
+        {
+            homeBtn.Text = LanguageManager.GetText("home");
+            profl.Text = LanguageManager.GetText("profile");
+            secrty.Text = LanguageManager.GetText("security");
+            button1.Text = LanguageManager.GetText("settings");
+
+            AddMoney.Text = LanguageManager.GetText("add_money");
+            sendMoney.Text = LanguageManager.GetText("send_money");
+            btnExchange.Text = LanguageManager.GetText("exchange");
+
+            filter.Text = LanguageManager.GetText("filter");
+            reset.Text = LanguageManager.GetText("reset");
+
+            label15.Text = LanguageManager.GetText("welcome_back");
+            label14.Text = LanguageManager.GetText("hi");
+            label4.Text = LanguageManager.GetText("overview");
+            label10.Text = LanguageManager.GetText("accounts");
+            label16.Text = LanguageManager.GetText("from");
+            label17.Text = LanguageManager.GetText("to");
+            label18.Text = LanguageManager.GetText("type");
+            lblBalanceAmount.Text = LanguageManager.GetText("amount");
+
+        }
+     
+       
     }
 }

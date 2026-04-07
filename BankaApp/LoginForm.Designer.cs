@@ -158,7 +158,7 @@ namespace BankaApp
             this.showbtn.Location = new System.Drawing.Point(355, 434);
             this.showbtn.MaximumSize = new System.Drawing.Size(271, 80);
             this.showbtn.Name = "showbtn";
-            this.showbtn.Size = new System.Drawing.Size(36, 25);
+            this.showbtn.Size = new System.Drawing.Size(36, 27);
             this.showbtn.TabIndex = 8;
             this.showbtn.Text = "👁️";
             this.showbtn.UseVisualStyleBackColor = false;

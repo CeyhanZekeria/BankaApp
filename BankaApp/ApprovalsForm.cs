@@ -154,13 +154,6 @@ namespace BankaApp
             }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            mainForn loginForm = new mainForn(currentClientId, currentAppUserId, currentUsername);
-            loginForm.Show();
-            this.Hide();
-        }
-
 
         private void StyleGrid()
         {
@@ -191,7 +184,6 @@ namespace BankaApp
 
             UiStyle.RoundControl(btnApprove, 12);
             UiStyle.RoundControl(btnReject, 12);
-            UiStyle.RoundControl(btnCancel, 12);
         }
     }
 }

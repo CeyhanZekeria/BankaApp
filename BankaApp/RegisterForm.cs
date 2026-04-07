@@ -27,9 +27,10 @@ namespace BankaApp
             button2.Height = 50;
             button2.FlatStyle = FlatStyle.Flat;
             button2.FlatAppearance.BorderSize = 0;
-            button2.BackColor = System.Drawing.Color.RoyalBlue;
-            button2.ForeColor = System.Drawing.Color.White;
+            button2.BackColor = Color.RoyalBlue;
+            button2.ForeColor = Color.White;
             MakeButtonRound(button2);
+            button2.Resize += button2_Resize;
             button2.Resize += button2_Resize;
 
             FormStateHelper.Attach(this);
@@ -38,13 +39,10 @@ namespace BankaApp
 
 
             LanguageManager.LoadLanguage();
+            ApplyTranslations();
+           
 
-            if (LanguageManager.IsEnglish())
-                ApplyEnglishLanguage();
-            else
-                ApplyBulgarianLanguage();
         }
-
         private int GetOrCreateCountryId(OracleConnection conn, OracleTransaction transaction, string countryName)
         {
             string selectQuery = @"
@@ -164,94 +162,57 @@ namespace BankaApp
                 return Convert.ToInt32(((OracleDecimal)outParam.Value).Value);
             }
         }
-
-        private void ApplyEnglishLanguage()
-        {
-            label1.Text = "Registration Form";
-
-            fullNAme.Text = "Full Name :";
-            label5.Text = "Email :";
-            label6.Text = "Phone :";
-            label7.Text = "Password :";
-            label9.Text = "Year of Birth :";
-            label10.Text = "PIN/IDN";
-
-            label11.Text = "Street :";
-            label8.Text = "Adress :";
-            label12.Text = "City :";
-            label3.Text = "Country *";
-            label2.Text = "Gender *";
-
-            radioBtnMan.Text = "Man";
-            radioBtnWoman.Text = "Woman";
-
-            crtAccount.Text = "CREATE ACCOUNT";
-            button1.Text = "Cancel";
-
-            username.PlaceholderText = "Full Name";
-            email.PlaceholderText = "email adress";
-            phoneNum.PlaceholderText = "phone";
-            pass.PlaceholderText = "password";
-            age.PlaceholderText = "Year of Birth";
-            EGN.PlaceholderText = "PIN/IDN";
-            streetId.PlaceholderText = "street";
-            adress.PlaceholderText = "adress";
-            city.PlaceholderText = "City";
-
-            button2.Text = "BG";
-            LanguageManager.SetLanguage("EN");
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             LanguageManager.ToggleLanguage();
-
-            if (LanguageManager.IsEnglish())
-                ApplyEnglishLanguage();
-            else
-                ApplyBulgarianLanguage();
+            ApplyTranslations();
         }
 
-        private void ApplyBulgarianLanguage()
+        private void ApplyTranslations()
         {
-            label1.Text = "Форма за регистрация";
+            label1.Text = LanguageManager.GetText("register_form");
 
-            fullNAme.Text = "Име и фамилия :";
-            label5.Text = "Имейл :";
-            label6.Text = "Телефон :";
-            label7.Text = "Парола :";
-            label9.Text = "Година на раждане :";
-            label10.Text = "ЕГН/ЛНЧ";
+            fullNAme.Text = LanguageManager.GetText("full_name");
+            label5.Text = LanguageManager.GetText("email");
+            label6.Text = LanguageManager.GetText("phone");
+            label7.Text = LanguageManager.GetText("password");
+            label9.Text = LanguageManager.GetText("birth_year");
+            label10.Text = LanguageManager.GetText("egn_lnc");
 
-            label11.Text = "Улица :";
-            label8.Text = "Адрес :";
-            label12.Text = "Град :";
-            label3.Text = "Държава *";
-            label2.Text = "Пол *";
+            label11.Text = LanguageManager.GetText("street");
+            label8.Text = LanguageManager.GetText("address");
+            label12.Text = LanguageManager.GetText("city");
+            label3.Text = LanguageManager.GetText("country_required");
+            label2.Text = LanguageManager.GetText("gender_required");
 
-            radioBtnMan.Text = "Мъж";
-            radioBtnWoman.Text = "Жена";
+            radioBtnMan.Text = LanguageManager.GetText("male");
+            radioBtnWoman.Text = LanguageManager.GetText("female");
 
-            crtAccount.Text = "СЪЗДАЙ АКАУНТ";
-            button1.Text = "Назад";
+            crtAccount.Text = LanguageManager.GetText("create_account");
+            button1.Text = LanguageManager.GetText("back");
 
-            username.PlaceholderText = "Име и фамилия";
-            email.PlaceholderText = "имейл адрес";
-            phoneNum.PlaceholderText = "телефон";
-            pass.PlaceholderText = "парола";
-            age.PlaceholderText = "Година на раждане";
-            EGN.PlaceholderText = "ЕГН/ЛНЧ";
-            streetId.PlaceholderText = "улица";
-            adress.PlaceholderText = "адрес";
-            city.PlaceholderText = "град";
+            username.PlaceholderText = LanguageManager.GetText("ph_full_name");
+            email.PlaceholderText = LanguageManager.GetText("ph_email");
+            phoneNum.PlaceholderText = LanguageManager.GetText("ph_phone");
+            pass.PlaceholderText = LanguageManager.GetText("ph_password");
+            age.PlaceholderText = LanguageManager.GetText("ph_birth_year");
+            EGN.PlaceholderText = LanguageManager.GetText("ph_egn_lnc");
+            streetId.PlaceholderText = LanguageManager.GetText("ph_street");
+            adress.PlaceholderText = LanguageManager.GetText("ph_address");
+            city.PlaceholderText = LanguageManager.GetText("ph_city");
 
-            button2.Text = "EN";
-            LanguageManager.SetLanguage("BG");
+            button2.Text = LanguageManager.IsBulgarian() ? "EN" : "BG";
         }
 
         private void button2_Resize(object sender, EventArgs e)
         {
             MakeButtonRound(button2);
+            button2.Width = 50;
+            button2.Height = 50;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.FlatAppearance.BorderSize = 0;
+            button2.BackColor = System.Drawing.Color.RoyalBlue;
+            button2.ForeColor = System.Drawing.Color.White;
         }
         private void SetRoundedPanel(Panel panel, int radius)
         {

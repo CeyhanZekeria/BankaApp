@@ -17,6 +17,7 @@ namespace BankaApp
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            LanguageManager.LoadLanguage();
             Application.Run(new LoginForm());
         }
     }
