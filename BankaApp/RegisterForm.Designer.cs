@@ -33,11 +33,19 @@ namespace BankaApp
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.radioBtnMan = new System.Windows.Forms.RadioButton();
+            this.radioBtnWoman = new System.Windows.Forms.RadioButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.rbEGN = new System.Windows.Forms.RadioButton();
+            this.rbLNC = new System.Windows.Forms.RadioButton();
+            this.EGN = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -46,15 +54,11 @@ namespace BankaApp
             this.fullNAme = new System.Windows.Forms.Label();
             this.city = new System.Windows.Forms.TextBox();
             this.streetId = new System.Windows.Forms.TextBox();
-            this.EGN = new System.Windows.Forms.TextBox();
             this.adress = new System.Windows.Forms.TextBox();
             this.cmbCountry = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.age = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.radioBtnWoman = new System.Windows.Forms.RadioButton();
-            this.radioBtnMan = new System.Windows.Forms.RadioButton();
             this.pass = new System.Windows.Forms.TextBox();
             this.phoneNum = new System.Windows.Forms.TextBox();
             this.email = new System.Windows.Forms.TextBox();
@@ -65,6 +69,8 @@ namespace BankaApp
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -100,11 +106,12 @@ namespace BankaApp
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.groupBox1.Controls.Add(this.groupBox3);
+            this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label7);
@@ -113,15 +120,11 @@ namespace BankaApp
             this.groupBox1.Controls.Add(this.fullNAme);
             this.groupBox1.Controls.Add(this.city);
             this.groupBox1.Controls.Add(this.streetId);
-            this.groupBox1.Controls.Add(this.EGN);
             this.groupBox1.Controls.Add(this.adress);
             this.groupBox1.Controls.Add(this.cmbCountry);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.age);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.radioBtnWoman);
-            this.groupBox1.Controls.Add(this.radioBtnMan);
             this.groupBox1.Controls.Add(this.pass);
             this.groupBox1.Controls.Add(this.phoneNum);
             this.groupBox1.Controls.Add(this.email);
@@ -131,6 +134,112 @@ namespace BankaApp
             this.groupBox1.Size = new System.Drawing.Size(1194, 655);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.radioBtnMan);
+            this.groupBox3.Controls.Add(this.radioBtnWoman);
+            this.groupBox3.Location = new System.Drawing.Point(933, 113);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(229, 182);
+            this.groupBox3.TabIndex = 30;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Required *";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label2.Location = new System.Drawing.Point(38, 38);
+            this.label2.MaximumSize = new System.Drawing.Size(500, 250);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(128, 38);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Gender :";
+            // 
+            // radioBtnMan
+            // 
+            this.radioBtnMan.AutoSize = true;
+            this.radioBtnMan.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.radioBtnMan.Location = new System.Drawing.Point(38, 92);
+            this.radioBtnMan.MaximumSize = new System.Drawing.Size(500, 250);
+            this.radioBtnMan.Name = "radioBtnMan";
+            this.radioBtnMan.Size = new System.Drawing.Size(83, 35);
+            this.radioBtnMan.TabIndex = 6;
+            this.radioBtnMan.TabStop = true;
+            this.radioBtnMan.Text = "Man";
+            this.radioBtnMan.UseVisualStyleBackColor = true;
+            // 
+            // radioBtnWoman
+            // 
+            this.radioBtnWoman.AutoSize = true;
+            this.radioBtnWoman.BackColor = System.Drawing.Color.Transparent;
+            this.radioBtnWoman.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.radioBtnWoman.Location = new System.Drawing.Point(38, 137);
+            this.radioBtnWoman.MaximumSize = new System.Drawing.Size(500, 250);
+            this.radioBtnWoman.Name = "radioBtnWoman";
+            this.radioBtnWoman.Size = new System.Drawing.Size(118, 35);
+            this.radioBtnWoman.TabIndex = 7;
+            this.radioBtnWoman.TabStop = true;
+            this.radioBtnWoman.Text = "Woman";
+            this.radioBtnWoman.UseVisualStyleBackColor = false;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.rbEGN);
+            this.groupBox2.Controls.Add(this.rbLNC);
+            this.groupBox2.Controls.Add(this.EGN);
+            this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Location = new System.Drawing.Point(869, 343);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(305, 132);
+            this.groupBox2.TabIndex = 29;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Required *";
+            // 
+            // rbEGN
+            // 
+            this.rbEGN.AutoSize = true;
+            this.rbEGN.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.rbEGN.Location = new System.Drawing.Point(57, 44);
+            this.rbEGN.Name = "rbEGN";
+            this.rbEGN.Size = new System.Drawing.Size(69, 29);
+            this.rbEGN.TabIndex = 28;
+            this.rbEGN.Text = "EGN";
+            this.rbEGN.UseVisualStyleBackColor = true;
+            // 
+            // rbLNC
+            // 
+            this.rbLNC.AutoSize = true;
+            this.rbLNC.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.rbLNC.Location = new System.Drawing.Point(155, 44);
+            this.rbLNC.Name = "rbLNC";
+            this.rbLNC.Size = new System.Drawing.Size(65, 29);
+            this.rbLNC.TabIndex = 27;
+            this.rbLNC.Text = "IDN";
+            this.rbLNC.UseVisualStyleBackColor = true;
+            // 
+            // EGN
+            // 
+            this.EGN.BackColor = System.Drawing.SystemColors.Control;
+            this.EGN.Location = new System.Drawing.Point(44, 85);
+            this.EGN.MaximumSize = new System.Drawing.Size(500, 250);
+            this.EGN.Name = "EGN";
+            this.EGN.PlaceholderText = "PIN/IDN";
+            this.EGN.Size = new System.Drawing.Size(204, 27);
+            this.EGN.TabIndex = 14;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label10.Location = new System.Drawing.Point(90, 10);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(105, 31);
+            this.label10.TabIndex = 22;
+            this.label10.Text = "PIN/IDN";
+            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // button2
             // 
@@ -146,7 +255,7 @@ namespace BankaApp
             this.label13.BackColor = System.Drawing.Color.Transparent;
             this.label13.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label13.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label13.Location = new System.Drawing.Point(26, 27);
+            this.label13.Location = new System.Drawing.Point(35, 11);
             this.label13.Name = "label13";
             this.label13.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label13.Size = new System.Drawing.Size(255, 55);
@@ -158,7 +267,7 @@ namespace BankaApp
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label12.Location = new System.Drawing.Point(627, 231);
+            this.label12.Location = new System.Drawing.Point(599, 282);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(68, 31);
             this.label12.TabIndex = 24;
@@ -168,27 +277,17 @@ namespace BankaApp
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label11.Location = new System.Drawing.Point(627, 45);
+            this.label11.Location = new System.Drawing.Point(599, 96);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(89, 31);
             this.label11.TabIndex = 23;
             this.label11.Text = "Street :";
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label10.Location = new System.Drawing.Point(340, 474);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(105, 31);
-            this.label10.TabIndex = 22;
-            this.label10.Text = "PIN/IDN";
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label9.Location = new System.Drawing.Point(340, 390);
+            this.label9.Location = new System.Drawing.Point(313, 424);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(161, 31);
             this.label9.TabIndex = 21;
@@ -198,7 +297,7 @@ namespace BankaApp
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label8.Location = new System.Drawing.Point(627, 140);
+            this.label8.Location = new System.Drawing.Point(599, 191);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(97, 31);
             this.label8.TabIndex = 21;
@@ -208,7 +307,7 @@ namespace BankaApp
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label7.Location = new System.Drawing.Point(340, 310);
+            this.label7.Location = new System.Drawing.Point(313, 344);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(126, 31);
             this.label7.TabIndex = 20;
@@ -218,7 +317,7 @@ namespace BankaApp
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(340, 231);
+            this.label6.Location = new System.Drawing.Point(313, 265);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(94, 31);
             this.label6.TabIndex = 19;
@@ -228,7 +327,7 @@ namespace BankaApp
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(340, 140);
+            this.label5.Location = new System.Drawing.Point(313, 174);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(85, 31);
             this.label5.TabIndex = 18;
@@ -238,7 +337,7 @@ namespace BankaApp
             // 
             this.fullNAme.AutoSize = true;
             this.fullNAme.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.fullNAme.Location = new System.Drawing.Point(340, 45);
+            this.fullNAme.Location = new System.Drawing.Point(313, 79);
             this.fullNAme.Name = "fullNAme";
             this.fullNAme.Size = new System.Drawing.Size(141, 31);
             this.fullNAme.TabIndex = 17;
@@ -246,7 +345,7 @@ namespace BankaApp
             // 
             // city
             // 
-            this.city.Location = new System.Drawing.Point(627, 265);
+            this.city.Location = new System.Drawing.Point(599, 316);
             this.city.MaximumSize = new System.Drawing.Size(500, 250);
             this.city.Name = "city";
             this.city.PlaceholderText = "City";
@@ -255,27 +354,17 @@ namespace BankaApp
             // 
             // streetId
             // 
-            this.streetId.Location = new System.Drawing.Point(627, 79);
+            this.streetId.Location = new System.Drawing.Point(599, 130);
             this.streetId.MaximumSize = new System.Drawing.Size(500, 250);
             this.streetId.Name = "streetId";
             this.streetId.PlaceholderText = "street";
             this.streetId.Size = new System.Drawing.Size(220, 27);
             this.streetId.TabIndex = 15;
             // 
-            // EGN
-            // 
-            this.EGN.BackColor = System.Drawing.SystemColors.Control;
-            this.EGN.Location = new System.Drawing.Point(340, 515);
-            this.EGN.MaximumSize = new System.Drawing.Size(500, 250);
-            this.EGN.Name = "EGN";
-            this.EGN.PlaceholderText = "PIN/IDN";
-            this.EGN.Size = new System.Drawing.Size(204, 27);
-            this.EGN.TabIndex = 14;
-            // 
             // adress
             // 
             this.adress.BackColor = System.Drawing.SystemColors.Control;
-            this.adress.Location = new System.Drawing.Point(627, 174);
+            this.adress.Location = new System.Drawing.Point(599, 225);
             this.adress.MaximumSize = new System.Drawing.Size(500, 250);
             this.adress.Name = "adress";
             this.adress.PlaceholderText = "adress";
@@ -288,7 +377,7 @@ namespace BankaApp
             this.cmbCountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCountry.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmbCountry.FormattingEnabled = true;
-            this.cmbCountry.Location = new System.Drawing.Point(627, 378);
+            this.cmbCountry.Location = new System.Drawing.Point(599, 429);
             this.cmbCountry.MaximumSize = new System.Drawing.Size(500, 0);
             this.cmbCountry.Name = "cmbCountry";
             this.cmbCountry.Size = new System.Drawing.Size(207, 28);
@@ -298,7 +387,7 @@ namespace BankaApp
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(627, 344);
+            this.label3.Location = new System.Drawing.Point(599, 395);
             this.label3.MaximumSize = new System.Drawing.Size(154, 41);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(117, 31);
@@ -309,7 +398,7 @@ namespace BankaApp
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.Red;
-            this.label4.Location = new System.Drawing.Point(723, 399);
+            this.label4.Location = new System.Drawing.Point(621, 501);
             this.label4.MaximumSize = new System.Drawing.Size(500, 250);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(0, 20);
@@ -317,54 +406,16 @@ namespace BankaApp
             // 
             // age
             // 
-            this.age.Location = new System.Drawing.Point(340, 432);
+            this.age.Location = new System.Drawing.Point(313, 466);
             this.age.MaximumSize = new System.Drawing.Size(500, 250);
             this.age.Name = "age";
             this.age.PlaceholderText = "Year of Birth";
             this.age.Size = new System.Drawing.Size(204, 27);
             this.age.TabIndex = 11;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(938, 237);
-            this.label2.MaximumSize = new System.Drawing.Size(500, 250);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(133, 38);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Gender *";
-            // 
-            // radioBtnWoman
-            // 
-            this.radioBtnWoman.AutoSize = true;
-            this.radioBtnWoman.BackColor = System.Drawing.Color.Transparent;
-            this.radioBtnWoman.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.radioBtnWoman.Location = new System.Drawing.Point(938, 336);
-            this.radioBtnWoman.MaximumSize = new System.Drawing.Size(500, 250);
-            this.radioBtnWoman.Name = "radioBtnWoman";
-            this.radioBtnWoman.Size = new System.Drawing.Size(118, 35);
-            this.radioBtnWoman.TabIndex = 7;
-            this.radioBtnWoman.TabStop = true;
-            this.radioBtnWoman.Text = "Woman";
-            this.radioBtnWoman.UseVisualStyleBackColor = false;
-            // 
-            // radioBtnMan
-            // 
-            this.radioBtnMan.AutoSize = true;
-            this.radioBtnMan.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.radioBtnMan.Location = new System.Drawing.Point(938, 291);
-            this.radioBtnMan.MaximumSize = new System.Drawing.Size(500, 250);
-            this.radioBtnMan.Name = "radioBtnMan";
-            this.radioBtnMan.Size = new System.Drawing.Size(83, 35);
-            this.radioBtnMan.TabIndex = 6;
-            this.radioBtnMan.TabStop = true;
-            this.radioBtnMan.Text = "Man";
-            this.radioBtnMan.UseVisualStyleBackColor = true;
-            // 
             // pass
             // 
-            this.pass.Location = new System.Drawing.Point(340, 344);
+            this.pass.Location = new System.Drawing.Point(313, 378);
             this.pass.MaximumSize = new System.Drawing.Size(500, 250);
             this.pass.Name = "pass";
             this.pass.PlaceholderText = "password";
@@ -374,7 +425,7 @@ namespace BankaApp
             // phoneNum
             // 
             this.phoneNum.BackColor = System.Drawing.SystemColors.Control;
-            this.phoneNum.Location = new System.Drawing.Point(340, 265);
+            this.phoneNum.Location = new System.Drawing.Point(313, 299);
             this.phoneNum.MaximumSize = new System.Drawing.Size(500, 250);
             this.phoneNum.Name = "phoneNum";
             this.phoneNum.PlaceholderText = "phone";
@@ -383,7 +434,7 @@ namespace BankaApp
             // 
             // email
             // 
-            this.email.Location = new System.Drawing.Point(340, 174);
+            this.email.Location = new System.Drawing.Point(313, 208);
             this.email.MaximumSize = new System.Drawing.Size(500, 250);
             this.email.Name = "email";
             this.email.PlaceholderText = "email adress";
@@ -393,7 +444,7 @@ namespace BankaApp
             // username
             // 
             this.username.BackColor = System.Drawing.SystemColors.Control;
-            this.username.Location = new System.Drawing.Point(340, 79);
+            this.username.Location = new System.Drawing.Point(313, 113);
             this.username.MaximumSize = new System.Drawing.Size(500, 250);
             this.username.Name = "username";
             this.username.PlaceholderText = "Full Name";
@@ -459,6 +510,10 @@ namespace BankaApp
             this.panel2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -497,5 +552,9 @@ namespace BankaApp
         private System.Windows.Forms.Label fullNAme;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RadioButton rbEGN;
+        private System.Windows.Forms.RadioButton rbLNC;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }

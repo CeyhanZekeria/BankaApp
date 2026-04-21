@@ -73,6 +73,8 @@ namespace BankaApp
                     ["accounts"] = "Selected Account",
                     ["recent_transactions"] = "Recent Transactions",
                     ["ammount"] = "Total Balance:",
+                    ["egn"] = "EGN",
+                    ["idn"] = "IDN",
                 },
 
                 ["BG"] = new Dictionary<string, string>
@@ -136,6 +138,8 @@ namespace BankaApp
                     ["overview"] = "Преглед",
                     ["accounts"] = "Сметки",
                     ["recent_transactions"] = "Последни транзакции",
+                    ["egn"] = "ЕГН",
+                    ["idn"] = "ЛНЧ",
                 }
             };
 

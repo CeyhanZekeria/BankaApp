@@ -81,43 +81,19 @@ namespace BankaApp
             ApplyModernUi();
             ThemeManager.ApplyTheme(this);
         }
-     
+
         private void ApplyModernUi()
         {
-            BackColor = UiStyle.BgColor;
+            UiStyle.ApplyPageStyle(this);
 
-            // theme tags
-            panel1.Tag = "KeepColor";
-            panel2.Tag = "SoftPanel";
-            cmbTheme.Tag = "KeepColor";
+            UiStyle.StyleCard(panel1, 30);
+            UiStyle.StyleCard(panel2, 30);
 
-            homeBtn.Tag = "SecondaryButton";
-            profl.Tag = "SecondaryButton";
-            secrty.Tag = "SecondaryButton";
-
-            // sidebar
-            panel1.BackColor = UiStyle.SoftPanel;
-
-            // main content
-            panel2.BackColor = UiStyle.SoftPanel;
-            UiStyle.RoundControl(panel2, 30);
-
-            // combo
-            UiStyle.StyleComboBox(cmbTheme);
-
-            // nav buttons
             UiStyle.StyleSecondaryButton(homeBtn);
             UiStyle.StyleSecondaryButton(profl);
             UiStyle.StyleSecondaryButton(secrty);
 
-            UiStyle.RoundControl(homeBtn, 12);
-            UiStyle.RoundControl(profl, 12);
-            UiStyle.RoundControl(secrty, 12);
-
-            // optional: active one
-            homeBtn.BackColor = UiStyle.Primary;
-            homeBtn.ForeColor = Color.White;
-            homeBtn.FlatAppearance.BorderSize = 0;
+            UiStyle.SetActiveNavButton(null, homeBtn, profl, secrty);
         }
 
         private void cmbLanguage_SelectedIndexChanged(object sender, EventArgs e)

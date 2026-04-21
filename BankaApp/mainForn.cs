@@ -41,19 +41,29 @@ namespace BankaApp
             currentClientId = clientId;
             currentAppUserId = userId;
             currentUsername = username;
+            panelAccountDetails.Resize += panelAccountDetails_Resize;
             ThemeManager.ApplyTheme(this);
+            ApplyModernUi();
+            panel2.Tag = "KeepColor";
+            panelAccountDetails.Tag = "KeepColor";
+            panel3.Tag = "KeepColor";
+            panel4.Tag = "KeepColor";
+            panel5.Tag = "KeepColor";
+            panel6.Tag = "KeepColor";
+            panel12.Tag = "KeepColor";
+            panel13.Tag = "KeepColor";
             FormStateHelper.Attach(this);
-            LanguageManager.ToggleLanguage();
-            ApplyTranslations();
 
+            LanguageManager.LoadLanguage();
+            ApplyTranslations();
 
             usrName.Text = string.IsNullOrWhiteSpace(currentUsername)
                 ? "USER"
                 : currentUsername.ToUpper();
 
-            SetupApprovalsBell();
-            ApplyModernUi();
             WireEvents();
+
+            SetupApprovalsBell();
             SetupCvvButton();
             SetupCvvShow();
 
@@ -65,10 +75,7 @@ namespace BankaApp
             SetupTransactionFilters();
             LoadRecentTransactions();
             LoadUserAccountsList();
-            ApplyModernUi();
-          
-
-
+            LoadUserStatus();
             LoadApprovalBadge();
         }
         private void MakeCircularButton(Button btn)
@@ -79,110 +86,37 @@ namespace BankaApp
         }
         private void ApplyModernUi()
         {
-            BackColor = UiStyle.BgColor;
+            this.BackColor = Color.FromArgb(245, 247, 251);
 
-            // ===== TAGS FOR THEME =====
-            // само hero panel-ите пазят custom цвят
-            panelAccountDetails.Tag = "KeepColor";
-            panel14.Tag = "KeepColor";
+            panel2.BackColor = Color.White;
+            panel3.BackColor = Color.White;
+            panel4.BackColor = Color.White;
+            panel5.BackColor = Color.White;
+            panel6.BackColor = Color.White;
+            panel12.BackColor = Color.White;
 
-            // sidebar-а НЕ го пазим, за да може да се theme-ва
-            panel1.Tag = "SoftPanel";
+            SetRoundedPanel(panel2, 30);
+            SetRoundedPanel(panel3, 30);
+            SetRoundedPanel(panel4, 40);
+            SetRoundedPanel(panel5, 40);
+            SetRoundedPanel(panel6, 30);
+            SetRoundedPanel(panel12, 30);
+            SetRoundedPanel(panel13, 30);
 
-            panel3.Tag = "SoftPanel";
-            panel4.Tag = "SoftPanel";
-            panel5.Tag = "SoftPanel";
-            panel6.Tag = "SoftPanel";
-            panel12.Tag = "SoftPanel";
-            panel13.Tag = "SoftPanel";
-
-            AddMoney.Tag = "PrimaryButton";
-            sendMoney.Tag = "PrimaryButton";
-            btnExchange.Tag = "PrimaryButton";
-
-            filter.Tag = "SecondaryButton";
-            reset.Tag = "SecondaryButton";
-
-            // ===== BASE BACKGROUNDS =====
-            // не фиксирай light цветове тук
-            panel1.BackColor = UiStyle.SoftPanel;
-            panel2.BackColor = UiStyle.BgColor;
-
-            panel3.BackColor = UiStyle.SoftPanel;
-            panel4.BackColor = UiStyle.CardColor;
-            panel5.BackColor = UiStyle.CardColor;
-            panel6.BackColor = UiStyle.SoftPanel;
-            panel12.BackColor = UiStyle.CardColor;
-            panel13.BackColor = UiStyle.SoftPanel;
-
-            dgvTransactions.BackgroundColor = UiStyle.CardColor;
-            dgvTransactions.BorderStyle = BorderStyle.None;
-            dgvTransactions.GridColor = UiStyle.Border;
-            dgvTransactions.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dgvTransactions.EnableHeadersVisualStyles = false;
-            dgvTransactions.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dgvTransactions.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-
-            dgvTransactions.ColumnHeadersDefaultCellStyle.BackColor = UiStyle.SoftPanel;
-            dgvTransactions.ColumnHeadersDefaultCellStyle.ForeColor = UiStyle.TextDark;
-            dgvTransactions.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiStyle.SoftPanel;
-            dgvTransactions.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiStyle.TextDark;
-
-            dgvTransactions.DefaultCellStyle.BackColor = UiStyle.CardColor;
-            dgvTransactions.DefaultCellStyle.ForeColor = UiStyle.TextDark;
-            dgvTransactions.DefaultCellStyle.SelectionBackColor = Color.FromArgb(238, 242, 255);
-            dgvTransactions.DefaultCellStyle.SelectionForeColor = UiStyle.TextDark;
-
-            dgvTransactions.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(252, 252, 252);
-
-            // ===== BUTTONS =====
             UiStyle.StylePrimaryButton(AddMoney);
             UiStyle.StylePrimaryButton(sendMoney);
-            UiStyle.StylePrimaryButton(btnExchange);
 
             UiStyle.StyleSecondaryButton(filter);
             UiStyle.StyleSecondaryButton(reset);
 
-            UiStyle.RoundControl(AddMoney, 12);
-            UiStyle.RoundControl(sendMoney, 12);
-            UiStyle.RoundControl(btnExchange, 12);
-            UiStyle.RoundControl(filter, 10);
-            UiStyle.RoundControl(reset, 10);
+            UiStyle.StyleGrid(dgvTransactions);
 
-            AddHoverEffect(AddMoney, UiStyle.Primary, UiStyle.PrimaryDark);
-            AddHoverEffect(sendMoney, UiStyle.Primary, UiStyle.PrimaryDark);
-            AddHoverEffect(btnExchange, UiStyle.Primary, UiStyle.PrimaryDark);
+            UiStyle.StyleSectionTitle(label4);
+            UiStyle.StyleSectionTitle(label10);
+            UiStyle.StyleSectionTitle(label15);
 
-            // ===== SIDEBAR =====
-            StyleSidebarButton(homeBtn);
-            StyleSidebarButton(secrty);
-            StyleSidebarButton(profl);
-            StyleSidebarButton(button1);
-            SetActiveMenu(homeBtn);
-
-            // ===== ACCOUNTS LIST =====
-            listAccounts.DrawMode = DrawMode.OwnerDrawFixed;
-            listAccounts.ItemHeight = 38;
-            listAccounts.BorderStyle = BorderStyle.None;
-            listAccounts.BackColor = UiStyle.CardColor;
-            listAccounts.ForeColor = UiStyle.TextDark;
-            listAccounts.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            listAccounts.Padding = new Padding(4);
-
-            // ===== ROUNDED PANELS =====
-            SetRoundedPanel(panel2, 30);
-            SetRoundedPanel(panel3, 30);
-            SetRoundedPanel(panel4, 30);
-            SetRoundedPanel(panel5, 30);
-            SetRoundedPanel(panel6, 30);
-            SetRoundedPanel(panel12, 30);
-            SetRoundedPanel(panel13, 30);
-            SetRoundedPanel(panel14, 40);
-            SetRoundedPanel(panelAccountDetails, 40);
-
-            // ===== HERO PANELS =====
-            UiStyle.StyleColoredPanel(panelAccountDetails, Color.FromArgb(98, 70, 255));
-            UiStyle.StyleColoredPanel(panel14, Color.FromArgb(63, 114, 255));
+            panel12.Invalidate();
+            panel13.Invalidate();
         }
 
         private void WireEvents()
@@ -190,7 +124,7 @@ namespace BankaApp
             dgvTransactions.DataBindingComplete += dgvTransactions_DataBindingComplete;
             listAccounts.SelectedIndexChanged += listAccounts_SelectedIndexChanged;
             listAccounts.DrawItem += listAccounts_DrawItem;
-
+            panelAccountDetails.Resize += panelAccountDetails_Resize;
             panel2.Resize += panel2_Resize;
             panel3.Resize += panel3_Resize;
             panel4.Resize += panel4_Resize;
@@ -205,7 +139,13 @@ namespace BankaApp
             filter.Click += btnFilter_Click;
             reset.Click += btnReset_Click;
         }
+        private void panelAccountDetails_Resize(object sender, EventArgs e)
+        {
+            SetRoundedPanel(panelAccountDetails, 30);
 
+            btnCopyIBAN.Left = panelAccountDetails.Width - btnCopyIBAN.Width - 15;
+            lblAccountNumber.Width = btnCopyIBAN.Left - lblAccountNumber.Left - 8;
+        }
         private void SetActiveMenu(Button activeButton)
         {
             Button[] buttons = { homeBtn, secrty, profl, button1 };
@@ -234,28 +174,29 @@ namespace BankaApp
             btn.Cursor = Cursors.Hand;
         }
 
-        private bool CheckUserPassword(string enteredPassword)
+        private bool CheckUserPassword(string password)
         {
             try
             {
                 string query = @"
-            SELECT COUNT(*)
+            SELECT User_Password
             FROM App_User
-            WHERE ID_User = :userId
-              AND User_Password = :password";
+            WHERE ID_User = :userId";
 
-                object result = DatabaseHelper.ExecuteScalar(
+                DataTable dt = DatabaseHelper.ExecuteDataTable(
                     query,
-                    new OracleParameter("userId", OracleDbType.Int32) { Value = currentAppUserId },
-                    new OracleParameter("password", OracleDbType.Varchar2) { Value = enteredPassword }
+                    new OracleParameter("userId", OracleDbType.Int32) { Value = currentAppUserId }
                 );
 
-                int count = Convert.ToInt32(result);
-                return count > 0;
+                if (dt.Rows.Count == 0)
+                    return false;
+
+                string storedHash = dt.Rows[0]["User_Password"].ToString();
+
+                return PasswordHelper.VerifyPassword(password, storedHash);
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("Error checking password: " + ex.Message);
                 return false;
             }
         }
@@ -523,7 +464,6 @@ namespace BankaApp
                 MessageBox.Show("Error loading accounts: " + ex.Message);
             }
         }
-
         private void LoadExchangeRatesForChart(int fromCurrencyId, int toCurrencyId, string pairText)
         {
             exchangeRates.Clear();
@@ -548,7 +488,6 @@ namespace BankaApp
                 MessageBox.Show("Error loading exchange rates: " + ex.Message);
             }
         }
-
         private void SetupTransactionFilters()
         {
             cmbType.Items.Clear();
@@ -563,12 +502,10 @@ namespace BankaApp
             dtpFrom.Value = DateTime.Today.AddMonths(-3);
             dtpTo.Value = DateTime.Today;
         }
-
         private void dgvTransactions_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             ColorTypeColumn();
         }
-
         private void LoadRecentTransactions()
         {
             try
@@ -586,7 +523,6 @@ namespace BankaApp
                 MessageBox.Show("Error loading recent transactions: " + ex.Message);
             }
         }
-
         private void btnFilter_Click(object sender, EventArgs e)
         {
             if (dtpFrom.Value.Date > dtpTo.Value.Date)
@@ -624,7 +560,6 @@ namespace BankaApp
                 MessageBox.Show("Error filtering transactions: " + ex.Message);
             }
         }
-
         private void panel12_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -715,7 +650,6 @@ namespace BankaApp
                 }
             }
         }
-
         private void panel13_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -759,19 +693,28 @@ namespace BankaApp
                 g.DrawString(cardHldrName.Text, valueFont, whiteBrush, 150, 168);
             }
         }
-
         private void SetRoundedPanel(Panel panel, int radius)
         {
-            GraphicsPath path = new GraphicsPath();
-            path.StartFigure();
-            path.AddArc(0, 0, radius, radius, 180, 90);
-            path.AddArc(panel.Width - radius, 0, radius, radius, 270, 90);
-            path.AddArc(panel.Width - radius, panel.Height - radius, radius, radius, 0, 90);
-            path.AddArc(0, panel.Height - radius, radius, radius, 90, 90);
-            path.CloseFigure();
-            panel.Region = new Region(path);
-        }
+            if (panel.Width <= 1 || panel.Height <= 1)
+                return;
 
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                int d = radius * 2;
+
+                path.StartFigure();
+                path.AddArc(0, 0, d, d, 180, 90);
+                path.AddArc(panel.Width - d - 1, 0, d, d, 270, 90);
+                path.AddArc(panel.Width - d - 1, panel.Height - d - 1, d, d, 0, 90);
+                path.AddArc(0, panel.Height - d - 1, d, d, 90, 90);
+                path.CloseFigure();
+
+                if (panel.Region != null)
+                    panel.Region.Dispose();
+
+                panel.Region = new Region(path);
+            }
+        }
         private void panel2_Resize(object sender, EventArgs e) => SetRoundedPanel(panel2, 30);
         private void panel3_Resize(object sender, EventArgs e) => SetRoundedPanel(panel3, 30);
         private void panel4_Resize(object sender, EventArgs e) => SetRoundedPanel(panel4, 40);
@@ -845,23 +788,32 @@ namespace BankaApp
             cvvBtn.BackColor = Color.RoyalBlue;
             cvvBtn.ForeColor = Color.White;
 
-            UiStyle.RoundControl(cvvBtn, 25);
+            MakeCircularButton(cvvBtn);
 
             cvvBtn.Click -= cvvBtn_Click;
             cvvBtn.Click += cvvBtn_Click;
         }
+        private void cvvBtn_Resize(object sender, EventArgs e)
+        {
+            MakeCircularButton(cvvBtn);
+        }
+        private void cvvShow_Resize(object sender, EventArgs e)
+        {
+            MakeCircularButton(cvvShow);
+        }
         private void SetupCvvShow()
         {
             cvvShow.Text = "👁 Show";
-            cvvShow.Width = 50;
-            cvvShow.Height = 50;
+            cvvShow.Width = 70;
+            cvvShow.Height = 42;
             cvvShow.FlatStyle = FlatStyle.Flat;
             cvvShow.FlatAppearance.BorderSize = 0;
             cvvShow.BackColor = Color.RoyalBlue;
             cvvShow.ForeColor = Color.White;
 
-            UiStyle.RoundControl(cvvShow, 25);
-
+            MakeCircularButton(cvvShow);
+            cvvShow.Resize -= cvvShow_Resize;
+            cvvShow.Resize += cvvShow_Resize;
         }
         private void AddMoney_Click(object sender, EventArgs e)
         {
@@ -882,7 +834,16 @@ namespace BankaApp
             LoadApprovalBadge();
 
         }
-        private void sendMoney_Click(object sender, EventArgs e) { }
+        private void sendMoney_Click(object sender, EventArgs e)
+        {
+            SendMoneyForm form = new SendMoneyForm (currentClientId, currentAppUserId, currentUsername);
+            Hide();
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                RefreshDashboardData();
+            }
+        }
         private void btnApprovalsBell_Click(object sender, EventArgs e)
         {
             ApprovalsForm form = new ApprovalsForm(currentClientId, currentAppUserId, currentUsername);
@@ -939,17 +900,6 @@ namespace BankaApp
                 btnApprovalsBell.Left + btnApprovalsBell.Width - 12,
                 btnApprovalsBell.Top - 4
             );
-        }
-        private void StyleAddMoneyButton()
-        {
-            AddMoney.BackColor = Color.FromArgb(0, 120, 215);
-            AddMoney.ForeColor = Color.White;
-            AddMoney.FlatStyle = FlatStyle.Flat;
-            AddMoney.FlatAppearance.BorderSize = 0;
-            AddMoney.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-            AddMoney.Cursor = Cursors.Hand;
-
-            UiStyle.RoundControl(AddMoney, 12);
         }
         private void MakeCircularLabel(Label lbl)
         {
@@ -1028,11 +978,6 @@ namespace BankaApp
                 MessageBox.Show("IBAN copied!");
             }
         }
-        private void panelAccountDetails_Resize(object sender, EventArgs e)
-        {
-            btnCopyIBAN.Left = panelAccountDetails.Width - btnCopyIBAN.Width - 15;
-            lblAccountNumber.Width = btnCopyIBAN.Left - lblAccountNumber.Left - 8;
-        }
         private void ApplyTranslations()
         {
             homeBtn.Text = LanguageManager.GetText("home");
@@ -1042,7 +987,6 @@ namespace BankaApp
 
             AddMoney.Text = LanguageManager.GetText("add_money");
             sendMoney.Text = LanguageManager.GetText("send_money");
-            btnExchange.Text = LanguageManager.GetText("exchange");
 
             filter.Text = LanguageManager.GetText("filter");
             reset.Text = LanguageManager.GetText("reset");
@@ -1057,7 +1001,48 @@ namespace BankaApp
             lblBalanceAmount.Text = LanguageManager.GetText("amount");
 
         }
-     
-       
+        private void LoadUserStatus()
+        {
+            try
+            {
+                using (OracleConnection conn = DatabaseHelper.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = "SELECT Is_Active FROM Client WHERE Client_ID = :clientId";
+
+                    using (OracleCommand cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add("clientId", OracleDbType.Int32).Value = currentClientId;
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result == null || result == DBNull.Value)
+                        {
+                            status.Text = "Unknown";
+                            status.ForeColor = Color.Gray;
+                            return;
+                        }
+
+                        int isActive = Convert.ToInt32(result);
+
+                        if (isActive == 1)
+                        {
+                            status.Text = "Active";
+                            status.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            status.Text = "Blocked";
+                            status.ForeColor = Color.Red;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading status: " + ex.Message);
+            }
+        }
     }
 }

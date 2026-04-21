@@ -30,6 +30,7 @@ namespace BankaApp
         private void InitializeComponent()
         {
             this.panel6 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.secrty = new System.Windows.Forms.Button();
             this.panel13 = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -43,12 +44,13 @@ namespace BankaApp
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button();
             this.panel6.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel9.SuspendLayout();
             this.panel10.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel6
@@ -63,8 +65,20 @@ namespace BankaApp
             this.panel6.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(223, 633);
+            this.panel6.Size = new System.Drawing.Size(223, 755);
             this.panel6.TabIndex = 14;
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button1.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.button1.Location = new System.Drawing.Point(12, 232);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(200, 55);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "⚙️ SETTINGS";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // secrty
             // 
@@ -149,7 +163,7 @@ namespace BankaApp
             this.panel8.Controls.Add(this.label9);
             this.panel8.Location = new System.Drawing.Point(-788, 6);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(69, 2434);
+            this.panel8.Size = new System.Drawing.Size(69, 2556);
             this.panel8.TabIndex = 11;
             // 
             // panel9
@@ -162,7 +176,7 @@ namespace BankaApp
             this.panel9.Controls.Add(this.label8);
             this.panel9.Location = new System.Drawing.Point(-1262, 8);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(23, 6084);
+            this.panel9.Size = new System.Drawing.Size(23, 6206);
             this.panel9.TabIndex = 12;
             // 
             // panel10
@@ -174,7 +188,7 @@ namespace BankaApp
             this.panel10.Controls.Add(this.label7);
             this.panel10.Location = new System.Drawing.Point(-99, 0);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(0, 12134);
+            this.panel10.Size = new System.Drawing.Size(0, 12256);
             this.panel10.TabIndex = 12;
             // 
             // label7
@@ -219,30 +233,28 @@ namespace BankaApp
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.panel1.Controls.Add(this.btnLogout);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(223, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(794, 633);
+            this.panel1.Size = new System.Drawing.Size(1055, 755);
             this.panel1.TabIndex = 15;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // button1
+            // btnLogout
             // 
-            this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button1.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.button1.Location = new System.Drawing.Point(12, 232);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(200, 55);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "⚙️ SETTINGS";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnLogout.Location = new System.Drawing.Point(858, 677);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(156, 47);
+            this.btnLogout.TabIndex = 0;
+            this.btnLogout.Text = "Log out";
+            this.btnLogout.UseVisualStyleBackColor = true;
             // 
             // ProfileForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1017, 633);
+            this.ClientSize = new System.Drawing.Size(1278, 755);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel6);
             this.Name = "ProfileForm";
@@ -253,6 +265,7 @@ namespace BankaApp
             this.panel8.ResumeLayout(false);
             this.panel9.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -274,5 +287,6 @@ namespace BankaApp
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLogout;
     }
 }

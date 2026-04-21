@@ -63,7 +63,7 @@ namespace BankaApp
             this.panel6.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(223, 661);
+            this.panel6.Size = new System.Drawing.Size(223, 756);
             this.panel6.TabIndex = 14;
             this.panel6.Paint += new System.Windows.Forms.PaintEventHandler(this.panel6_Paint);
             // 
@@ -162,7 +162,7 @@ namespace BankaApp
             this.panel8.Controls.Add(this.label9);
             this.panel8.Location = new System.Drawing.Point(-788, 6);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(69, 2462);
+            this.panel8.Size = new System.Drawing.Size(69, 2557);
             this.panel8.TabIndex = 11;
             // 
             // panel9
@@ -175,7 +175,7 @@ namespace BankaApp
             this.panel9.Controls.Add(this.label8);
             this.panel9.Location = new System.Drawing.Point(-1262, 8);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(23, 6112);
+            this.panel9.Size = new System.Drawing.Size(23, 6207);
             this.panel9.TabIndex = 12;
             // 
             // panel10
@@ -187,7 +187,7 @@ namespace BankaApp
             this.panel10.Controls.Add(this.label7);
             this.panel10.Location = new System.Drawing.Point(-99, 0);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(0, 12162);
+            this.panel10.Size = new System.Drawing.Size(0, 12257);
             this.panel10.TabIndex = 12;
             // 
             // label7
@@ -235,7 +235,7 @@ namespace BankaApp
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(223, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(805, 661);
+            this.panel1.Size = new System.Drawing.Size(1088, 756);
             this.panel1.TabIndex = 16;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -243,7 +243,7 @@ namespace BankaApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1028, 661);
+            this.ClientSize = new System.Drawing.Size(1311, 756);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel6);
             this.Name = "securityForm";

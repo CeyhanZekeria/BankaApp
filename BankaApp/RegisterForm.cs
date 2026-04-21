@@ -40,7 +40,7 @@ namespace BankaApp
 
             LanguageManager.LoadLanguage();
             ApplyTranslations();
-           
+
 
         }
         private int GetOrCreateCountryId(OracleConnection conn, OracleTransaction transaction, string countryName)
@@ -187,6 +187,8 @@ namespace BankaApp
 
             radioBtnMan.Text = LanguageManager.GetText("male");
             radioBtnWoman.Text = LanguageManager.GetText("female");
+            rbEGN.Text = LanguageManager.GetText("egn");
+            rbLNC.Text = LanguageManager.GetText("idn");
 
             crtAccount.Text = LanguageManager.GetText("create_account");
             button1.Text = LanguageManager.GetText("back");
@@ -263,7 +265,7 @@ namespace BankaApp
         }
         private string GenerateValidThru()
         {
-            return DateTime.Now.AddYears(10).ToString("MM/yy");
+            return DateTime.Now.AddYears(10).ToString(@"MM\/yy");
         }
         private void LoadCountries()
         {
@@ -360,11 +362,13 @@ namespace BankaApp
             string addressValue = adress.Text.Trim();
             string cityValue = city.Text.Trim();
             string passwordValue = pass.Text.Trim();
+            string hashedPassword = PasswordHelper.HashPassword(passwordValue);
             string emailValue = email.Text.Trim();
             string phoneValue = phoneNum.Text.Trim();
             string countryValue = cmbCountry.SelectedItem != null ? cmbCountry.SelectedItem.ToString().Trim() : "";
             string genderValue = "";
             string generatedCVV = GenerateRandomCVV();
+            string identityType = rbLNC.Checked ? "LNC" : "EGN";
 
             int birthYear;
             int newClientId = 0;
@@ -417,8 +421,12 @@ namespace BankaApp
             if (!IsValidEGN(egnValue))
             {
                 label4.Text = LanguageManager.IsEnglish()
-                    ? "EGN must contain exactly 10 digits."
-                    : "ЕГН трябва да съдържа точно 10 цифри.";
+                    ? (identityType == "LNC"
+                        ? "LNC must contain exactly 10 digits."
+                        : "EGN must contain exactly 10 digits.")
+                    : (identityType == "LNC"
+                        ? "ЛНЧ трябва да съдържа точно 10 цифри."
+                        : "ЕГН трябва да съдържа точно 10 цифри.");
                 label4.Visible = true;
                 return;
             }
@@ -483,8 +491,12 @@ namespace BankaApp
                             if (RecordExists(conn, transaction, "SELECT COUNT(*) FROM Client WHERE EGN = :val", ":val", egnValue))
                             {
                                 label4.Text = LanguageManager.IsEnglish()
-                                    ? "This EGN is already registered."
-                                    : "Това ЕГН вече е регистрирано.";
+                                    ? (identityType == "LNC"
+                                        ? "This LNC is already registered."
+                                        : "This EGN is already registered.")
+                                    : (identityType == "LNC"
+                                        ? "Това ЛНЧ вече е регистрирано."
+                                        : "Това ЕГН вече е регистрирано.");
                                 label4.Visible = true;
                                 return;
                             }
@@ -508,7 +520,7 @@ namespace BankaApp
                                 cmdUser.BindByName = true;
 
                                 cmdUser.Parameters.Add(":username", OracleDbType.Varchar2).Value = usernameValue;
-                                cmdUser.Parameters.Add(":password", OracleDbType.Varchar2).Value = passwordValue;
+                                cmdUser.Parameters.Add(":password", OracleDbType.Varchar2).Value = hashedPassword;
                                 cmdUser.Parameters.Add(":email", OracleDbType.Varchar2).Value = emailValue;
                                 cmdUser.Parameters.Add(":role", OracleDbType.Varchar2).Value = "Client";
                                 cmdUser.Parameters.Add(":phone", OracleDbType.Varchar2).Value = phoneValue;
@@ -521,13 +533,12 @@ namespace BankaApp
 
                                 cmdUser.ExecuteNonQuery();
                             }
-
                             string clientQuery = @"
-                        INSERT INTO Client
-                        (Name, EGN, ID_Street, Street_Name, Adress, Phone_number, Is_Active, Email, Gender, Birth_Year, Country)
-                        VALUES
-                        (:name, :egn, :streetId, :streetName, :adress, :phone, 1, :email, :gender, :birthyear, :country)
-                        RETURNING Client_ID INTO :newClientId";
+    INSERT INTO Client
+    (Name, EGN, Identity_Type, ID_Street, Street_Name, Adress, Phone_number, Is_Active, Email, Gender, Birth_Year, Country)
+    VALUES
+    (:name, :egn, :identityType, :streetId, :streetName, :adress, :phone, 1, :email, :gender, :birthyear, :country)
+    RETURNING Client_ID INTO :newClientId";
 
                             using (OracleCommand cmdClient = new OracleCommand(clientQuery, conn))
                             {
@@ -536,6 +547,7 @@ namespace BankaApp
 
                                 cmdClient.Parameters.Add(":name", OracleDbType.Varchar2).Value = usernameValue;
                                 cmdClient.Parameters.Add(":egn", OracleDbType.Varchar2).Value = egnValue;
+                                cmdClient.Parameters.Add(":identityType", OracleDbType.Varchar2).Value = identityType;
                                 cmdClient.Parameters.Add(":streetId", OracleDbType.Int32).Value = streetIdDb;
                                 cmdClient.Parameters.Add(":streetName", OracleDbType.Varchar2).Value = streetNameValue;
                                 cmdClient.Parameters.Add(":adress", OracleDbType.Varchar2).Value = addressValue;
@@ -575,7 +587,7 @@ namespace BankaApp
 
                                         cmdAccount.Parameters.Add(":iban", OracleDbType.Varchar2).Value = generatedIban;
                                         cmdAccount.Parameters.Add(":clientId", OracleDbType.Int32).Value = newClientId;
-                                        cmdAccount.Parameters.Add(":currencyType", OracleDbType.Int32).Value = 1;
+                                        cmdAccount.Parameters.Add(":currencyType", OracleDbType.Int32).Value = 2;
                                         cmdAccount.Parameters.Add(":interest", OracleDbType.Int32).Value = 1;
                                         cmdAccount.Parameters.Add(":availibility", OracleDbType.Int32).Value = 0;
 
@@ -670,6 +682,11 @@ namespace BankaApp
             LoginForm form = new LoginForm();
             form.Show();
             this.Hide();
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

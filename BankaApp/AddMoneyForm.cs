@@ -178,8 +178,9 @@ namespace BankaApp
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            mainForn loginForm = new mainForn(currentClientId, currentAppUserId, currentUsername);
-            loginForm.Show();
+            this.Close();
+            mainForn mainForm = new mainForn(currentClientId, currentAppUserId, currentUsername);
+            mainForm.Show();
             this.Hide();
         }
         private void LoadCurrencies()
