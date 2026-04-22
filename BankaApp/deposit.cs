@@ -7,26 +7,24 @@ namespace BankaApp
 {
     public partial class deposit : Form
     {
-        private const int DefaultEmployeeId = 1;
-
         private int currentClientId;
         private int currentAccountId;
-        private int currentAppUserId;
+        private int currentEmployeeId;
 
         private string currentUsername;
         private string currentUserRole;
         private string currentAccountNo;
 
-        public deposit(int userId, string username, string userRole)
-            : this(userId, username, userRole, 0, 0, "")
+        public deposit(int employeeId, string username, string userRole)
+            : this(employeeId, username, userRole, 0, 0, "")
         {
         }
 
-        public deposit(int userId, string username, string userRole, int clientId, int accountId, string accountNo)
+        public deposit(int employeeId, string username, string userRole, int clientId, int accountId, string accountNo)
         {
             InitializeComponent();
 
-            currentAppUserId = userId;
+            currentEmployeeId = employeeId;
             currentUsername = username;
             currentUserRole = userRole;
 
@@ -42,7 +40,6 @@ namespace BankaApp
             this.btnConfirmDeposit.Click += btnConfirmDeposit_Click;
         }
 
-
         private void deposit_Load(object sender, EventArgs e)
         {
             UiStyle.ApplyPageStyle(this);
@@ -55,7 +52,11 @@ namespace BankaApp
             UiStyle.StyleInput(cmbCurrency);
 
             UiStyle.StyleSectionTitle(labelTitle);
+
+            LoadAccountInfo();
+            LoadCurrencies();
         }
+
         private void LoadAccountInfo()
         {
             if (currentAccountId <= 0)
@@ -66,15 +67,15 @@ namespace BankaApp
             }
 
             string query = @"
-        SELECT
-            c.Name AS CLIENT_NAME,
-            a.Account_NO AS ACCOUNT_NO,
-            a.Availibility AS AVAILIBILITY,
-            ct.Currency_type_Name AS CURRENCY_NAME
-        FROM Account a
-        JOIN Client c ON c.Client_ID = a.ID_Client
-        JOIN Currency_type ct ON ct.ID_Currency_type = a.ID_Currency_type
-        WHERE a.ID_Account = :accountId";
+                SELECT
+                    c.Name AS CLIENT_NAME,
+                    a.Account_NO AS ACCOUNT_NO,
+                    a.Availibility AS AVAILIBILITY,
+                    ct.Currency_type_Name AS CURRENCY_NAME
+                FROM Account a
+                JOIN Client c ON c.Client_ID = a.ID_Client
+                JOIN Currency_type ct ON ct.ID_Currency_type = a.ID_Currency_type
+                WHERE a.ID_Account = :accountId";
 
             using (OracleConnection conn = DatabaseHelper.GetConnection())
             {
@@ -109,9 +110,9 @@ namespace BankaApp
         private void LoadCurrencies()
         {
             string query = @"
-        SELECT ID_Currency_type, Currency_type_Name
-        FROM Currency_type
-        ORDER BY Currency_type_Name";
+                SELECT ID_Currency_type, Currency_type_Name
+                FROM Currency_type
+                ORDER BY Currency_type_Name";
 
             using (OracleConnection conn = DatabaseHelper.GetConnection())
             {
@@ -167,7 +168,7 @@ namespace BankaApp
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.Add("p_account_id", OracleDbType.Int32).Value = currentAccountId;
-                        cmd.Parameters.Add("p_employee_id", OracleDbType.Int32).Value = DefaultEmployeeId;
+                        cmd.Parameters.Add("p_employee_id", OracleDbType.Int32).Value = currentEmployeeId;
                         cmd.Parameters.Add("p_amount", OracleDbType.Decimal).Value = amount;
                         cmd.Parameters.Add("p_currency_id", OracleDbType.Int32).Value = currencyId;
                         cmd.Parameters.Add("p_description", OracleDbType.Varchar2).Value = description;

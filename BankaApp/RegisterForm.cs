@@ -11,9 +11,15 @@ namespace BankaApp
 {
     public partial class RegisterForm : Form
     {
-        private static readonly Random rnd = new Random();
-        public RegisterForm()
+        public RegisterForm() : this(0)
         {
+        }
+
+        private static readonly Random rnd = new Random();
+         private   int clientId = 0;
+        public RegisterForm(int currentClientId)
+        {
+             clientId = currentClientId;
             InitializeComponent();
             LoadCountries();
 
@@ -618,7 +624,7 @@ namespace BankaApp
                                 MessageBoxIcon.Information
                             );
 
-                            LoginForm loginForm = new LoginForm();
+                            LoginForm loginForm = new LoginForm(clientId);
                             loginForm.Show();
                             this.Hide();
                         }
@@ -679,7 +685,7 @@ namespace BankaApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            LoginForm form = new LoginForm();
+            LoginForm form = new LoginForm(clientId);
             form.Show();
             this.Hide();
         }

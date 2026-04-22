@@ -8,6 +8,7 @@ namespace BankaApp
     public partial class adminForm : Form
     {
         private int currentUserId;
+        private int currentEmployeeId;
         private string currentUsername;
         private string currentUserRole;
         private int selectedAccountId = 0;
@@ -16,27 +17,32 @@ namespace BankaApp
 
         private AdminService adminService = new AdminService();
 
-        public adminForm(int userId, string username, string userRole)
+        public adminForm(int userId, string username, string userRole, int employeeId)
         {
             InitializeComponent();
 
             currentUserId = userId;
             currentUsername = username;
             currentUserRole = userRole;
+            currentEmployeeId = employeeId;
 
             FormStateHelper.Attach(this);
             ThemeManager.ApplyTheme(this);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.adminForm_FormClosing);
-            this.Move += new System.EventHandler(this.adminForm_Move);
-            this.Resize += new System.EventHandler(this.adminForm_Resize);
-            this.dgvAccounts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAccounts_CellClick);
-            this.btnSearchClient.Click += new System.EventHandler(this.btnSearchClient_Click);
-            this.dgvClients.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClients_CellClick);
-            this.btnBlockClient.Click += new System.EventHandler(this.btnBlockClient_Click);
-            this.btnUnblockClient.Click += new System.EventHandler(this.btnUnblockClient_Click);
-            this.btnDeposit.Click += new System.EventHandler(this.btnDeposit_Click);
-            this.btnWithdraw.Click += new System.EventHandler(this.btnWithdraw_Click);
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+
+            this.FormClosing += adminForm_FormClosing;
+            this.Move += adminForm_Move;
+            this.Resize += adminForm_Resize;
+            this.Load += adminForm_Load;
+
+            this.dgvAccounts.CellClick += dgvAccounts_CellClick;
+            this.dgvClients.CellClick += dgvClients_CellClick;
+
+            this.btnSearchClient.Click += btnSearchClient_Click;
+            this.btnBlockClient.Click += btnBlockClient_Click;
+            this.btnUnblockClient.Click += btnUnblockClient_Click;
+            this.btnDeposit.Click += btnDeposit_Click;
+            this.btnWithdraw.Click += btnWithdraw_Click;
+            this.btnLogout.Click += btnLogout_Click;
         }
 
         private void adminForm_Load(object sender, EventArgs e)
@@ -84,7 +90,6 @@ namespace BankaApp
             cmbSearchBy.Items.Add("Username");
             cmbSearchBy.Items.Add("Account No");
             cmbSearchBy.SelectedIndex = 0;
-
         }
 
         private void SetupClientsGrid()
@@ -116,6 +121,7 @@ namespace BankaApp
             dgvAccounts.BackgroundColor = Color.White;
             dgvAccounts.BorderStyle = BorderStyle.None;
         }
+
         private void SetupTransactionsGrid()
         {
             dgvTransactions.AutoGenerateColumns = true;
@@ -163,17 +169,142 @@ namespace BankaApp
             dgvAccounts.DataSource = null;
             dgvTransactions.DataSource = null;
         }
+
         private void LoadTransactionHistory(int accountId)
         {
             DataTable dt = adminService.GetAccountHistory(accountId);
             dgvTransactions.DataSource = dt;
+            FormatTransactionsGrid();
+        }
 
+        private void FormatClientsGrid()
+        {
+            if (dgvClients.Columns["CLIENT_ID"] != null)
+                dgvClients.Columns["CLIENT_ID"].Visible = false;
+
+            if (dgvClients.Columns["IDENTITY_TYPE"] != null)
+                dgvClients.Columns["IDENTITY_TYPE"].Visible = false;
+
+            if (dgvClients.Columns["EMAIL"] != null)
+                dgvClients.Columns["EMAIL"].Visible = false;
+
+            if (dgvClients.Columns["PHONE_NUMBER"] != null)
+                dgvClients.Columns["PHONE_NUMBER"].Visible = false;
+
+            if (dgvClients.Columns["COUNTRY"] != null)
+                dgvClients.Columns["COUNTRY"].Visible = false;
+
+            if (dgvClients.Columns["IS_ACTIVE"] != null)
+                dgvClients.Columns["IS_ACTIVE"].Visible = false;
+
+            if (dgvClients.Columns["ID_STREET"] != null)
+                dgvClients.Columns["ID_STREET"].Visible = false;
+
+            if (dgvClients.Columns["ADRESS"] != null)
+                dgvClients.Columns["ADRESS"].Visible = false;
+
+            if (dgvClients.Columns["STREET_NAME"] != null)
+                dgvClients.Columns["STREET_NAME"].Visible = false;
+
+            if (dgvClients.Columns["BIRTH_YEAR"] != null)
+                dgvClients.Columns["BIRTH_YEAR"].Visible = false;
+
+            if (dgvClients.Columns["GENDER"] != null)
+                dgvClients.Columns["GENDER"].Visible = false;
+
+            if (dgvClients.Columns["NAME"] != null)
+            {
+                dgvClients.Columns["NAME"].HeaderText = "Name";
+                dgvClients.Columns["NAME"].DisplayIndex = 0;
+            }
+
+            if (dgvClients.Columns["EGN"] != null)
+            {
+                dgvClients.Columns["EGN"].HeaderText = "EGN / LNC";
+                dgvClients.Columns["EGN"].DisplayIndex = 1;
+            }
+        }
+
+        private void FormatAccountsGrid()
+        {
+            if (dgvAccounts.Columns["ID_ACCOUNT"] != null)
+                dgvAccounts.Columns["ID_ACCOUNT"].Visible = false;
+
+            if (dgvAccounts.Columns["INTEREST"] != null)
+                dgvAccounts.Columns["INTEREST"].Visible = false;
+
+            if (dgvAccounts.Columns["ID_CLIENT"] != null)
+                dgvAccounts.Columns["ID_CLIENT"].Visible = false;
+
+            if (dgvAccounts.Columns["ID_CURRENCY_TYPE"] != null)
+                dgvAccounts.Columns["ID_CURRENCY_TYPE"].Visible = false;
+
+            if (dgvAccounts.Columns["ACCOUNT_NO"] != null)
+            {
+                dgvAccounts.Columns["ACCOUNT_NO"].HeaderText = "Account";
+                dgvAccounts.Columns["ACCOUNT_NO"].DisplayIndex = 0;
+            }
+
+            if (dgvAccounts.Columns["CURRENCY_TYPE_NAME"] != null)
+            {
+                dgvAccounts.Columns["CURRENCY_TYPE_NAME"].HeaderText = "Currency";
+                dgvAccounts.Columns["CURRENCY_TYPE_NAME"].DisplayIndex = 1;
+            }
+            else if (dgvAccounts.Columns["CURRENCY"] != null)
+            {
+                dgvAccounts.Columns["CURRENCY"].HeaderText = "Currency";
+                dgvAccounts.Columns["CURRENCY"].DisplayIndex = 1;
+            }
+
+            if (dgvAccounts.Columns["AVAILIBILITY"] != null)
+            {
+                dgvAccounts.Columns["AVAILIBILITY"].HeaderText = "Balance";
+                dgvAccounts.Columns["AVAILIBILITY"].DisplayIndex = 2;
+                dgvAccounts.Columns["AVAILIBILITY"].DefaultCellStyle.Format = "N2";
+            }
+        }
+
+        private void FormatTransactionsGrid()
+        {
             if (dgvTransactions.Columns["ID_TRANSACTIONS"] != null)
                 dgvTransactions.Columns["ID_TRANSACTIONS"].Visible = false;
 
+            if (dgvTransactions.Columns["ID_ACCOUNT"] != null)
+                dgvTransactions.Columns["ID_ACCOUNT"].Visible = false;
+
+            if (dgvTransactions.Columns["TYPE"] != null)
+            {
+                dgvTransactions.Columns["TYPE"].HeaderText = "Type";
+                dgvTransactions.Columns["TYPE"].DisplayIndex = 0;
+            }
+
+            if (dgvTransactions.Columns["SUM_AMOUNT"] != null)
+            {
+                dgvTransactions.Columns["SUM_AMOUNT"].HeaderText = "Amount";
+                dgvTransactions.Columns["SUM_AMOUNT"].DisplayIndex = 1;
+                dgvTransactions.Columns["SUM_AMOUNT"].DefaultCellStyle.Format = "N2";
+            }
+
             if (dgvTransactions.Columns["DATE_TRAN"] != null)
+            {
+                dgvTransactions.Columns["DATE_TRAN"].HeaderText = "Date";
+                dgvTransactions.Columns["DATE_TRAN"].DisplayIndex = 2;
                 dgvTransactions.Columns["DATE_TRAN"].DefaultCellStyle.Format = "dd.MM.yyyy HH:mm";
+            }
+
+            if (dgvTransactions.Columns["DESCRIPTION"] != null)
+            {
+                dgvTransactions.Columns["DESCRIPTION"].HeaderText = "Description";
+                dgvTransactions.Columns["DESCRIPTION"].DisplayIndex = 3;
+            }
+
+            if (dgvTransactions.Columns["STAFF"] != null)
+            {
+                dgvTransactions.Columns["STAFF"].HeaderText = "Staff";
+                dgvTransactions.Columns["STAFF"].DisplayIndex = 4;
+            }
         }
+
         private void dgvAccounts_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
@@ -190,6 +321,7 @@ namespace BankaApp
                     selectedAccountNo = dgvAccounts.Rows[e.RowIndex].Cells["ACCOUNT_NO"].Value.ToString();
                 else
                     selectedAccountNo = "";
+
                 LoadTransactionHistory(selectedAccountId);
             }
             catch (Exception ex)
@@ -197,6 +329,7 @@ namespace BankaApp
                 MessageBox.Show("Error selecting account: " + ex.Message);
             }
         }
+
         private void btnSearchClient_Click(object sender, EventArgs e)
         {
             try
@@ -212,6 +345,7 @@ namespace BankaApp
 
                 DataTable dt = adminService.SearchClients(searchBy, searchText);
                 dgvClients.DataSource = dt;
+                FormatClientsGrid();
 
                 if (dt.Rows.Count == 0)
                 {
@@ -273,6 +407,7 @@ namespace BankaApp
         {
             DataTable dt = adminService.GetClientAccounts(clientId);
             dgvAccounts.DataSource = dt;
+            FormatAccountsGrid();
 
             selectedAccountId = 0;
             selectedAccountNo = "";
@@ -353,7 +488,7 @@ namespace BankaApp
             this.Hide();
 
             deposit depositForm = new deposit(
-                currentUserId,
+                currentEmployeeId,
                 currentUsername,
                 currentUserRole,
                 selectedClientId,
@@ -366,6 +501,8 @@ namespace BankaApp
                 this.Show();
                 LoadClientDetails(selectedClientId);
                 LoadClientAccounts(selectedClientId);
+                if (selectedAccountId > 0)
+                    LoadTransactionHistory(selectedAccountId);
             };
 
             depositForm.Show();
@@ -388,7 +525,7 @@ namespace BankaApp
             this.Hide();
 
             withdraw withdrawForm = new withdraw(
-                currentUserId,
+                currentEmployeeId,
                 currentUsername,
                 currentUserRole,
                 selectedClientId,
@@ -401,6 +538,8 @@ namespace BankaApp
                 this.Show();
                 LoadClientDetails(selectedClientId);
                 LoadClientAccounts(selectedClientId);
+                if (selectedAccountId > 0)
+                    LoadTransactionHistory(selectedAccountId);
             };
 
             withdrawForm.Show();
@@ -412,6 +551,7 @@ namespace BankaApp
             login.Show();
             this.Hide();
         }
+
         private void ApplyModernUi()
         {
             UiStyle.ApplyPageStyle(this);
@@ -428,6 +568,7 @@ namespace BankaApp
 
             UiStyle.StyleGrid(dgvClients);
             UiStyle.StyleGrid(dgvAccounts);
+            UiStyle.StyleGrid(dgvTransactions);
 
             UiStyle.StyleSectionTitle(label1);
             UiStyle.StyleSectionTitle(label2);

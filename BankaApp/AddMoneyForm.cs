@@ -27,7 +27,7 @@ namespace BankaApp
             LanguageManager.LoadLanguage();
             ApplyTranslations();
             FormStateHelper.Attach(this);
-            ThemeManager.ApplyTheme(this);
+            
         }
         private void AddMoneyForm_Load(object sender, EventArgs e)
         {
@@ -168,6 +168,9 @@ namespace BankaApp
                 MessageBox.Show("Request sent successfully. Waiting for approval.");
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+                mainForn mainForm = new mainForn(currentClientId, currentAppUserId, currentUsername);
+                mainForm.Show();
+                this.Hide();
             }
             catch (Exception ex)
             {

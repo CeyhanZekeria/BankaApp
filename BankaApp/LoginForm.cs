@@ -1,5 +1,4 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using Oracle.ManagedDataAccess.Types;
 using System;
 using System.Data;
 using System.Drawing;
@@ -10,7 +9,11 @@ namespace BankaApp
 {
     public partial class LoginForm : Form
     {
-        public LoginForm()
+        public LoginForm() : this(0)
+        {
+        }
+
+        public LoginForm(int currentClientId)
         {
             InitializeComponent();
 
@@ -30,14 +33,15 @@ namespace BankaApp
 
             LanguageManager.LoadLanguage();
             ApplyTranslations();
-
         }
+
         private void MakeButtonRound(Button btn)
         {
             GraphicsPath path = new GraphicsPath();
             path.AddEllipse(0, 0, btn.Width, btn.Height);
             btn.Region = new Region(path);
         }
+
         private void ApplyTranslations()
         {
             if (LanguageManager.IsEnglish())
@@ -67,17 +71,47 @@ namespace BankaApp
 
             button2.Text = LanguageManager.IsBulgarian() ? "EN" : "BG";
         }
+
         private void showbtn_Click(object sender, EventArgs e)
         {
             textBox2.UseSystemPasswordChar = !textBox2.UseSystemPasswordChar;
             showbtn.Text = textBox2.UseSystemPasswordChar ? "👁" : "🚫";
         }
+
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             RegisterForm form = new RegisterForm();
             form.Show();
             this.Hide();
         }
+
+        private int GetEmployeeId(string username, string userRole)
+        {
+            using (OracleConnection conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+
+                string query = @"
+                    SELECT ID_EMPLOYEE
+                    FROM EMPLOYEE
+                    WHERE UPPER(NAME) = UPPER(:username)
+                       OR UPPER(NAME) = UPPER(:userRole)";
+
+                using (OracleCommand cmd = new OracleCommand(query, conn))
+                {
+                    cmd.Parameters.Add("username", OracleDbType.Varchar2).Value = username;
+                    cmd.Parameters.Add("userRole", OracleDbType.Varchar2).Value = userRole;
+
+                    object result = cmd.ExecuteScalar();
+
+                    if (result == null || result == DBNull.Value)
+                        return 0;
+
+                    return Convert.ToInt32(result);
+                }
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             string loginValue = textBox1.Text.Trim();
@@ -99,16 +133,16 @@ namespace BankaApp
             try
             {
                 string query = @"
-            SELECT 
-                au.ID_USER AS USER_ID,
-                au.USERNAME AS USERNAME,
-                au.USER_ROLE AS USER_ROLE,
-                au.USER_PASSWORD AS PWD,
-                au.EMAIL AS EMAIL,
-                c.CLIENT_ID AS CLIENT_ID
-            FROM APP_USER au
-            LEFT JOIN CLIENT c ON c.EMAIL = au.EMAIL
-            WHERE (au.USERNAME = :loginValue OR au.EMAIL = :loginValue)";
+                    SELECT 
+                        au.ID_USER AS USER_ID,
+                        au.USERNAME AS USERNAME,
+                        au.USER_ROLE AS USER_ROLE,
+                        au.USER_PASSWORD AS PWD,
+                        au.EMAIL AS EMAIL,
+                        c.CLIENT_ID AS CLIENT_ID
+                    FROM APP_USER au
+                    LEFT JOIN CLIENT c ON c.EMAIL = au.EMAIL
+                    WHERE (au.USERNAME = :loginValue OR au.EMAIL = :loginValue)";
 
                 DataTable dt = DatabaseHelper.ExecuteDataTable(
                     query,
@@ -136,9 +170,7 @@ namespace BankaApp
 
                     int clientId = 0;
                     if (dt.Rows[0]["CLIENT_ID"] != DBNull.Value)
-                    {
                         clientId = Convert.ToInt32(dt.Rows[0]["CLIENT_ID"]);
-                    }
 
                     if (userRole.Equals("Client", StringComparison.OrdinalIgnoreCase) &&
                         IsClientBlocked(clientId, email))
@@ -159,8 +191,21 @@ namespace BankaApp
                     }
                     else
                     {
-                        adminForm adminForm = new adminForm(userId, username, userRole);
-                        adminForm.Show();
+                        int employeeId = GetEmployeeId(username, userRole);
+
+                        if (employeeId == 0)
+                        {
+                            MessageBox.Show(
+                                "Employee record was not found for this admin/cashier/manager account.",
+                                "Missing Employee",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning
+                            );
+                            return;
+                        }
+
+                        adminForm admin = new adminForm(userId, username, userRole, employeeId);
+                        admin.Show();
                         this.Hide();
                     }
                 }
@@ -192,6 +237,7 @@ namespace BankaApp
                 );
             }
         }
+
         private bool IsClientBlocked(int clientId, string email)
         {
             using (OracleConnection conn = DatabaseHelper.GetConnection())
@@ -226,11 +272,13 @@ namespace BankaApp
                 return Convert.ToInt32(result) == 0;
             }
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
             LanguageManager.ToggleLanguage();
             ApplyTranslations();
         }
+
         private void button2_Resize(object sender, EventArgs e)
         {
             MakeButtonRound(button2);

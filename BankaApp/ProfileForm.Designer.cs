@@ -98,7 +98,7 @@ namespace BankaApp
             this.panel13.Controls.Add(this.textBox1);
             this.panel13.Controls.Add(this.button2);
             this.panel13.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel13.Location = new System.Drawing.Point(3, 402);
+            this.panel13.Location = new System.Drawing.Point(6, 493);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(211, 209);
             this.panel13.TabIndex = 15;
@@ -243,12 +243,15 @@ namespace BankaApp
             // 
             // btnLogout
             // 
-            this.btnLogout.Location = new System.Drawing.Point(858, 677);
+            this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLogout.BackColor = System.Drawing.Color.Red;
+            this.btnLogout.Location = new System.Drawing.Point(859, 681);
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(156, 47);
+            this.btnLogout.Size = new System.Drawing.Size(184, 51);
             this.btnLogout.TabIndex = 0;
             this.btnLogout.Text = "Log out";
-            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.UseVisualStyleBackColor = false;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // ProfileForm
             // 

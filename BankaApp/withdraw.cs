@@ -7,27 +7,25 @@ namespace BankaApp
 {
     public partial class withdraw : Form
     {
-        private const int DefaultEmployeeId = 1;
-
         private int currentClientId;
         private int currentAccountId;
-        private int currentAppUserId;
+        private int currentEmployeeId;
         private int currentCurrencyId;
 
         private string currentUsername;
         private string currentUserRole;
         private string currentAccountNo;
 
-        public withdraw(int userId, string username, string userRole)
-            : this(userId, username, userRole, 0, 0, "")
+        public withdraw(int employeeId, string username, string userRole)
+            : this(employeeId, username, userRole, 0, 0, "")
         {
         }
 
-        public withdraw(int userId, string username, string userRole, int clientId, int accountId, string accountNo)
+        public withdraw(int employeeId, string username, string userRole, int clientId, int accountId, string accountNo)
         {
             InitializeComponent();
 
-            currentAppUserId = userId;
+            currentEmployeeId = employeeId;
             currentUsername = username;
             currentUserRole = userRole;
 
@@ -55,6 +53,8 @@ namespace BankaApp
             UiStyle.StyleInput(txtDescription);
 
             UiStyle.StyleSectionTitle(labelTitle);
+
+            LoadAccountInfo();
         }
 
         private void LoadAccountInfo()
@@ -67,16 +67,16 @@ namespace BankaApp
             }
 
             string query = @"
-        SELECT
-            c.Name AS CLIENT_NAME,
-            a.Account_NO AS ACCOUNT_NO,
-            a.Availibility AS AVAILIBILITY,
-            a.ID_Currency_type AS ID_CURRENCY_TYPE,
-            ct.Currency_type_Name AS CURRENCY_NAME
-        FROM Account a
-        JOIN Client c ON c.Client_ID = a.ID_Client
-        JOIN Currency_type ct ON ct.ID_Currency_type = a.ID_Currency_type
-        WHERE a.ID_Account = :accountId";
+                SELECT
+                    c.Name AS CLIENT_NAME,
+                    a.Account_NO AS ACCOUNT_NO,
+                    a.Availibility AS AVAILIBILITY,
+                    a.ID_Currency_type AS ID_CURRENCY_TYPE,
+                    ct.Currency_type_Name AS CURRENCY_NAME
+                FROM Account a
+                JOIN Client c ON c.Client_ID = a.ID_Client
+                JOIN Currency_type ct ON ct.ID_Currency_type = a.ID_Currency_type
+                WHERE a.ID_Account = :accountId";
 
             using (OracleConnection conn = DatabaseHelper.GetConnection())
             {
@@ -181,7 +181,7 @@ namespace BankaApp
                                 cmdInsert.Transaction = tx;
 
                                 cmdInsert.Parameters.Add("typeId", OracleDbType.Int32).Value = withdrawTypeId;
-                                cmdInsert.Parameters.Add("employeeId", OracleDbType.Int32).Value = DefaultEmployeeId;
+                                cmdInsert.Parameters.Add("employeeId", OracleDbType.Int32).Value = currentEmployeeId;
                                 cmdInsert.Parameters.Add("accountId", OracleDbType.Int32).Value = currentAccountId;
                                 cmdInsert.Parameters.Add("amount", OracleDbType.Decimal).Value = amount;
                                 cmdInsert.Parameters.Add("currencyId", OracleDbType.Int32).Value = currentCurrencyId;

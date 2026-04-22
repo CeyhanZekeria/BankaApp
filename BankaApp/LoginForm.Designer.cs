@@ -108,7 +108,7 @@ namespace BankaApp
             this.button1.BackColor = System.Drawing.SystemColors.HighlightText;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button1.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.button1.Location = new System.Drawing.Point(124, 467);
+            this.button1.Location = new System.Drawing.Point(133, 482);
             this.button1.MaximumSize = new System.Drawing.Size(271, 80);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(193, 52);
@@ -120,7 +120,7 @@ namespace BankaApp
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(139, 534);
+            this.label3.Location = new System.Drawing.Point(133, 550);
             this.label3.MaximumSize = new System.Drawing.Size(271, 80);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(169, 45);
@@ -130,7 +130,7 @@ namespace BankaApp
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(314, 534);
+            this.linkLabel1.Location = new System.Drawing.Point(308, 550);
             this.linkLabel1.MaximumSize = new System.Drawing.Size(271, 80);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(59, 20);

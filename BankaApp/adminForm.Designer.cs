@@ -68,7 +68,7 @@ namespace BankaApp
             // 
             this.lblUsername.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblUsername.AutoSize = true;
-            this.lblUsername.Location = new System.Drawing.Point(12, 729);
+            this.lblUsername.Location = new System.Drawing.Point(12, 743);
             this.lblUsername.Name = "lblUsername";
             this.lblUsername.Size = new System.Drawing.Size(50, 20);
             this.lblUsername.TabIndex = 0;
@@ -78,7 +78,7 @@ namespace BankaApp
             // 
             this.lblRole.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblRole.AutoSize = true;
-            this.lblRole.Location = new System.Drawing.Point(12, 698);
+            this.lblRole.Location = new System.Drawing.Point(12, 712);
             this.lblRole.Name = "lblRole";
             this.lblRole.Size = new System.Drawing.Size(50, 20);
             this.lblRole.TabIndex = 1;
@@ -87,16 +87,17 @@ namespace BankaApp
             // btnLogout
             // 
             this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLogout.Location = new System.Drawing.Point(1152, 709);
+            this.btnLogout.BackColor = System.Drawing.Color.Red;
+            this.btnLogout.Location = new System.Drawing.Point(1396, 718);
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(152, 40);
+            this.btnLogout.Size = new System.Drawing.Size(139, 40);
             this.btnLogout.TabIndex = 2;
             this.btnLogout.Text = "Log out";
-            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.UseVisualStyleBackColor = false;
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(87, 55);
+            this.txtSearch.Location = new System.Drawing.Point(387, 81);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(367, 27);
             this.txtSearch.TabIndex = 3;
@@ -104,16 +105,16 @@ namespace BankaApp
             // cmbSearchBy
             // 
             this.cmbSearchBy.FormattingEnabled = true;
-            this.cmbSearchBy.Location = new System.Drawing.Point(160, 89);
+            this.cmbSearchBy.Location = new System.Drawing.Point(113, 81);
             this.cmbSearchBy.Name = "cmbSearchBy";
             this.cmbSearchBy.Size = new System.Drawing.Size(229, 28);
             this.cmbSearchBy.TabIndex = 4;
             // 
             // btnSearchClient
             // 
-            this.btnSearchClient.Location = new System.Drawing.Point(486, 48);
+            this.btnSearchClient.Location = new System.Drawing.Point(781, 74);
             this.btnSearchClient.Name = "btnSearchClient";
-            this.btnSearchClient.Size = new System.Drawing.Size(130, 41);
+            this.btnSearchClient.Size = new System.Drawing.Size(103, 41);
             this.btnSearchClient.TabIndex = 5;
             this.btnSearchClient.Text = "Enter";
             this.btnSearchClient.UseVisualStyleBackColor = true;
@@ -121,11 +122,11 @@ namespace BankaApp
             // dgvClients
             // 
             this.dgvClients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvClients.Location = new System.Drawing.Point(109, 226);
+            this.dgvClients.Location = new System.Drawing.Point(374, 240);
             this.dgvClients.Name = "dgvClients";
             this.dgvClients.RowHeadersWidth = 51;
             this.dgvClients.RowTemplate.Height = 29;
-            this.dgvClients.Size = new System.Drawing.Size(476, 241);
+            this.dgvClients.Size = new System.Drawing.Size(476, 228);
             this.dgvClients.TabIndex = 6;
             // 
             // panel1
@@ -136,7 +137,7 @@ namespace BankaApp
             this.panel1.Controls.Add(this.lblClientEmail);
             this.panel1.Controls.Add(this.lblClientIdentity);
             this.panel1.Controls.Add(this.lblClientName);
-            this.panel1.Location = new System.Drawing.Point(754, 36);
+            this.panel1.Location = new System.Drawing.Point(981, 50);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(469, 229);
             this.panel1.TabIndex = 7;
@@ -198,25 +199,25 @@ namespace BankaApp
             // dgvAccounts
             // 
             this.dgvAccounts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAccounts.Location = new System.Drawing.Point(109, 524);
+            this.dgvAccounts.Location = new System.Drawing.Point(387, 520);
             this.dgvAccounts.Name = "dgvAccounts";
             this.dgvAccounts.RowHeadersWidth = 51;
             this.dgvAccounts.RowTemplate.Height = 29;
-            this.dgvAccounts.Size = new System.Drawing.Size(463, 194);
+            this.dgvAccounts.Size = new System.Drawing.Size(463, 217);
             this.dgvAccounts.TabIndex = 8;
             // 
             // btnDeposit
             // 
-            this.btnDeposit.Location = new System.Drawing.Point(52, 135);
+            this.btnDeposit.Location = new System.Drawing.Point(368, 137);
             this.btnDeposit.Name = "btnDeposit";
-            this.btnDeposit.Size = new System.Drawing.Size(110, 41);
+            this.btnDeposit.Size = new System.Drawing.Size(110, 40);
             this.btnDeposit.TabIndex = 9;
             this.btnDeposit.Text = "Deposit";
             this.btnDeposit.UseVisualStyleBackColor = true;
             // 
             // btnWithdraw
             // 
-            this.btnWithdraw.Location = new System.Drawing.Point(197, 135);
+            this.btnWithdraw.Location = new System.Drawing.Point(495, 137);
             this.btnWithdraw.Name = "btnWithdraw";
             this.btnWithdraw.Size = new System.Drawing.Size(99, 41);
             this.btnWithdraw.TabIndex = 10;
@@ -225,7 +226,7 @@ namespace BankaApp
             // 
             // btnBlockClient
             // 
-            this.btnBlockClient.Location = new System.Drawing.Point(342, 135);
+            this.btnBlockClient.Location = new System.Drawing.Point(621, 137);
             this.btnBlockClient.Name = "btnBlockClient";
             this.btnBlockClient.Size = new System.Drawing.Size(99, 41);
             this.btnBlockClient.TabIndex = 11;
@@ -234,7 +235,7 @@ namespace BankaApp
             // 
             // btnUnblockClient
             // 
-            this.btnUnblockClient.Location = new System.Drawing.Point(491, 135);
+            this.btnUnblockClient.Location = new System.Drawing.Point(741, 136);
             this.btnUnblockClient.Name = "btnUnblockClient";
             this.btnUnblockClient.Size = new System.Drawing.Size(94, 41);
             this.btnUnblockClient.TabIndex = 12;
@@ -258,7 +259,7 @@ namespace BankaApp
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label14.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label14.Location = new System.Drawing.Point(160, 4);
+            this.label14.Location = new System.Drawing.Point(12, 651);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(50, 41);
             this.label14.TabIndex = 14;
@@ -270,7 +271,7 @@ namespace BankaApp
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label10.Location = new System.Drawing.Point(905, 2);
+            this.label10.Location = new System.Drawing.Point(1132, 16);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(199, 31);
             this.label10.TabIndex = 15;
@@ -282,7 +283,7 @@ namespace BankaApp
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(302, 192);
+            this.label1.Location = new System.Drawing.Point(580, 206);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(87, 31);
             this.label1.TabIndex = 16;
@@ -294,7 +295,7 @@ namespace BankaApp
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(291, 490);
+            this.label2.Location = new System.Drawing.Point(563, 486);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(113, 31);
             this.label2.TabIndex = 17;
@@ -306,7 +307,7 @@ namespace BankaApp
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(263, 9);
+            this.label3.Location = new System.Drawing.Point(545, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 31);
             this.label3.TabIndex = 18;
@@ -315,11 +316,11 @@ namespace BankaApp
             // dgvTransactions
             // 
             this.dgvTransactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTransactions.Location = new System.Drawing.Point(760, 342);
+            this.dgvTransactions.Location = new System.Drawing.Point(937, 356);
             this.dgvTransactions.Name = "dgvTransactions";
             this.dgvTransactions.RowHeadersWidth = 51;
             this.dgvTransactions.RowTemplate.Height = 29;
-            this.dgvTransactions.Size = new System.Drawing.Size(482, 356);
+            this.dgvTransactions.Size = new System.Drawing.Size(563, 356);
             this.dgvTransactions.TabIndex = 19;
             // 
             // label4
@@ -328,7 +329,7 @@ namespace BankaApp
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(935, 308);
+            this.label4.Location = new System.Drawing.Point(1162, 322);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(147, 31);
             this.label4.TabIndex = 20;
@@ -339,7 +340,7 @@ namespace BankaApp
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.ClientSize = new System.Drawing.Size(1316, 758);
+            this.ClientSize = new System.Drawing.Size(1547, 767);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dgvTransactions);
             this.Controls.Add(this.label3);

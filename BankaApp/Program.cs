@@ -12,13 +12,15 @@ namespace BankaApp
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
+
         static void Main()
         {
+            int currentClientId =0;
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             LanguageManager.LoadLanguage();
-            Application.Run(new LoginForm());
+            Application.Run(new LoginForm(currentClientId));
         }
     }
 }

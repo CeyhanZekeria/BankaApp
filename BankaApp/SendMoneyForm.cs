@@ -26,7 +26,7 @@ namespace BankaApp
             currentUsername = username;
             LanguageManager.LoadLanguage();
             FormStateHelper.Attach(this);
-            ThemeManager.ApplyTheme(this);
+          
             LoadMyAccounts();
             LoadCurrencies();
         }
@@ -171,6 +171,9 @@ namespace BankaApp
 
                 MessageBox.Show("Transfer completed successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
+                mainForn mainForm = new mainForn(currentClientId, currentAppUserId, currentUsername);
+                mainForm.Show();
+                this.Hide();
             }
             catch (OracleException ex)
             {

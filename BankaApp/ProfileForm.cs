@@ -22,7 +22,6 @@ namespace BankaApp
             currentUsername = username;
 
             FormStateHelper.Attach(this);
-            ThemeManager.ApplyTheme(this);
 
 
         }
@@ -50,6 +49,13 @@ namespace BankaApp
         {
             securityForm loginForm = new securityForm(currentClientId, currentAppUserId, currentUsername);
             loginForm.Show();
+            this.Hide();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            LoginForm loginFor = new LoginForm(currentClientId);
+            loginFor.Show();
             this.Hide();
         }
     }
